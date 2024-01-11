@@ -1,5 +1,7 @@
 package chess;
 
+import java.lang.reflect.Array;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -8,6 +10,7 @@ package chess;
  */
 public class ChessBoard {
 
+    ChessPiece[][] pieces = new ChessPiece[8][8];
     public ChessBoard() {
         
     }
@@ -19,7 +22,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        pieces[position.getRow()][position.getColumn()] = piece;
     }
 
     /**
@@ -30,7 +33,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        return pieces[position.getRow()][position.getColumn()];
     }
 
     /**
@@ -38,6 +41,10 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+
+        //White Pawns
+        for (int i = 0; i < 8; i++ ) {
+            pieces[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        }
     }
 }
