@@ -5,8 +5,8 @@ import java.util.Collection;
 public abstract class ChessPieceMoves {
 
     private Collection<ChessMove> moves;
-    private ChessBoard chessBoard;
-    private ChessPosition position;
+    private final ChessBoard chessBoard;
+    private final ChessPosition position;
     public ChessPieceMoves(ChessBoard chessBoard, ChessPosition chessPosition) {
         this.chessBoard = chessBoard;
         this.position = chessPosition;
