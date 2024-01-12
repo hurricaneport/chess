@@ -66,6 +66,17 @@ public class PawnMoves extends ChessPieceMoves{
             }
         }
 
+        if (chessBoard.getPiece(rightDiagonal) != null && rightDiagonal != null) {
+            if (chessBoard.getPiece(rightDiagonal).getTeamColor() != piece.getTeamColor()) {
+                if (rightDiagonal.getRow() == endingRow) {
+                    addPromotionMoves(rightDiagonal);
+                }
+                else {
+                    moves.add(new ChessMove(position, leftDiagonal));
+                }
+            }
+        }
+
     }
 
     private void addPromotionMoves(ChessPosition endPosition) {

@@ -1,15 +1,17 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Vector;
 
 public abstract class ChessPieceMoves {
 
-    Collection<ChessMove> moves;
+    Collection<ChessMove> moves = new Vector<>();
     final ChessBoard chessBoard;
     final ChessPosition position;
     public ChessPieceMoves(ChessBoard chessBoard, ChessPosition chessPosition) {
         this.chessBoard = chessBoard;
         this.position = chessPosition;
+        findMoves();
     }
 
     /**
