@@ -16,10 +16,23 @@ public class PawnMoves extends ChessPieceMoves{
             endingRow = 1;
         }
         //positions to check later
+        //No need to check forward positions, as a double forward can only happen on the first row, and a single forward would only result in an error on the last row, where a pawn cannot exist
         ChessPosition front = new ChessPosition(position.getRow() + colorInt, position.getColumn());
         ChessPosition doubleFront = new ChessPosition(position.getRow() + 2 * colorInt, position.getColumn());
-        ChessPosition leftDiagonal = new ChessPosition(position.getRow() + colorInt, position.getColumn() - 1);
-        ChessPosition rightDiagonal = new ChessPosition(position.getRow() + colorInt, position.getColumn() + 1);
+
+        if (position.getColumn() > 1) {
+            ChessPosition leftDiagonal = new ChessPosition(position.getRow() + colorInt, position.getColumn() - 1);
+        }
+        else {
+            ChessPosition leftDiagonal = null;
+        }
+
+        if (position.getColumn() < 8) {
+            ChessPosition rightDiagonal = new ChessPosition(position.getRow() + colorInt, position.getColumn() + 1);
+        }
+        else {
+            ChessPosition rightDiagonal = null;
+        }
 
         //check if pawn is in starting position and offer first move
         if (position.getRow() == startingRow) {
@@ -41,7 +54,7 @@ public class PawnMoves extends ChessPieceMoves{
         }
 
         //add diagonals
-        if
+
 
     }
 

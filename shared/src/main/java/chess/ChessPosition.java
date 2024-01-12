@@ -11,6 +11,10 @@ public class ChessPosition {
     private final int row;
     private final int col;
     public ChessPosition(int row, int col) {
+        if (row > 8 || row < 1 || col > 8 || col < 0) {
+            throw new IllegalArgumentException("Not a valid chess position");
+        }
+
         this.row = row;
         this.col = col;
     }
