@@ -60,6 +60,18 @@ public class ChessPiece {
                 chessPieceMoves = new PawnMoves(board, myPosition);
                 moves = chessPieceMoves.getMoves();
                 break;
+            case KING:
+                break;
+            case QUEEN:
+                break;
+            case BISHOP:
+                chessPieceMoves = new BishopMoves(board, myPosition);
+                moves = chessPieceMoves.getMoves();
+                break;
+            case KNIGHT:
+                break;
+            case ROOK:
+                break;
         }
 
         return moves;
