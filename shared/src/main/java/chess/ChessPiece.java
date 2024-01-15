@@ -65,15 +65,17 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
+        if (piece != this) {
+            throw new IllegalArgumentException("Chess Piece at given position is not piece method was called on");
+        }
         Collection<ChessMove> moves;
-        ChessPieceMoves chessPieceMoves = switch (piece.getPieceType()) {
+        ChessPieceMoves chessPieceMoves = switch (type) {
             case PAWN -> new PawnMoves(board, myPosition);
             case KING -> new KingMoves(board, myPosition);
             case QUEEN -> new QueenMoves(board, myPosition);
             case BISHOP -> new BishopMoves(board, myPosition);
             case KNIGHT -> new KnightMoves(board, myPosition);
             case ROOK -> new RookMoves(board, myPosition);
-            case null -> throw new IllegalArgumentException("No Chess Piece at that board location");
         };
 
         moves = chessPieceMoves.getMoves();

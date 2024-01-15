@@ -20,6 +20,7 @@ public class PawnMoves extends ChessPieceMoves{
         ChessPosition doubleFront;
         ChessPosition leftDiagonal = null;
         ChessPosition rightDiagonal = null;
+
         //No need to check forward positions, as a double forward can only happen on the first row, and a single forward would only result in an error on the last row, where a pawn cannot exist
         front = new ChessPosition(position.getRow() + colorInt, position.getColumn());
 
