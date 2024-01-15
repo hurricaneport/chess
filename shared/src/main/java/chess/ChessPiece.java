@@ -67,27 +67,18 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
-        Collection<ChessMove> moves = new Vector<>();
-        ChessPieceMoves chessPieceMoves;
-        switch (piece.getPieceType()) {
-            case PAWN:
-                chessPieceMoves = new PawnMoves(board, myPosition);
-                moves = chessPieceMoves.getMoves();
-                break;
-            case KING:
-                break;
-            case QUEEN:
-                break;
-            case BISHOP:
-                chessPieceMoves = new BishopMoves(board, myPosition);
-                moves = chessPieceMoves.getMoves();
-                break;
-            case KNIGHT:
-                break;
-            case ROOK:
-                break;
-        }
+        Collection<ChessMove> moves;
+        ChessPieceMoves chessPieceMoves = switch (piece.getPieceType()) {
+            case PAWN -> new PawnMoves(board, myPosition);
+            case KING -> new KingMoves(board, myPosition);
+            case QUEEN -> new QueenMoves(board, myPosition);
+            case BISHOP -> new BishopMoves(board, myPosition);
+            case KNIGHT -> new KnightMoves(board, myPosition);
+            case ROOK -> new RookMoves(board, myPosition);
+            case null -> throw new IllegalArgumentException("No Chess Piece at that board location");
+        };
 
+        moves = chessPieceMoves.getMoves();
         return moves;
     }
 }
