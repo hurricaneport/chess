@@ -71,7 +71,7 @@ public class PawnMoves extends ChessPieceMoves{
                     addPromotionMoves(rightDiagonal);
                 }
                 else {
-                    moves.add(new ChessMove(position, leftDiagonal));
+                    moves.add(new ChessMove(position, rightDiagonal));
                 }
             }
         }
