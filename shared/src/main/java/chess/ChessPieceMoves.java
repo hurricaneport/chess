@@ -1,11 +1,12 @@
 package chess;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Vector;
 
 public abstract class ChessPieceMoves {
 
-    Collection<ChessMove> moves = new Vector<>();
+    Collection<ChessMove> moves = new HashSet<>();
     final ChessBoard chessBoard;
     final ChessPosition position;
     public ChessPieceMoves(ChessBoard chessBoard, ChessPosition chessPosition) {
