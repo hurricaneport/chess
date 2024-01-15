@@ -7,14 +7,14 @@ public class BishopMoves extends ChessPieceMoves {
 
     @Override
     public void findMoves() {
-        int curentRow = position.getRow();
+        int currentRow = position.getRow();
         int currentCol = position.getColumn();
 
         //Upper-Right Diagonal
-        while (curentRow < 8 && currentCol < 8) {
-            curentRow++;
+        while (currentRow < 8 && currentCol < 8) {
+            currentRow++;
             currentCol++;
-            ChessPosition nextPosition = new ChessPosition(curentRow, currentCol);
+            ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
                 if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
@@ -27,13 +27,13 @@ public class BishopMoves extends ChessPieceMoves {
 
         }
 
-        //Lower-Right DIagonal
-        curentRow = position.getRow();
+        //Lower-Right Diagonal
+        currentRow = position.getRow();
         currentCol = position.getColumn();
-        while (curentRow > 1 && currentCol < 8) {
-            curentRow--;
+        while (currentRow > 1 && currentCol < 8) {
+            currentRow--;
             currentCol++;
-            ChessPosition nextPosition = new ChessPosition(curentRow, currentCol);
+            ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
                 if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
@@ -47,12 +47,12 @@ public class BishopMoves extends ChessPieceMoves {
         }
 
         //Lower-Left Diagonal
-        curentRow = position.getRow();
+        currentRow = position.getRow();
         currentCol = position.getColumn();
-        while (curentRow > 1 && currentCol > 1) {
-            curentRow--;
+        while (currentRow > 1 && currentCol > 1) {
+            currentRow--;
             currentCol--;
-            ChessPosition nextPosition = new ChessPosition(curentRow, currentCol);
+            ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
                 if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
@@ -66,12 +66,12 @@ public class BishopMoves extends ChessPieceMoves {
         }
 
         //Upper-Left Diagonal
-        curentRow = position.getRow();
+        currentRow = position.getRow();
         currentCol = position.getColumn();
-        while (curentRow < 8 && currentCol > 1) {
-            curentRow++;
+        while (currentRow < 8 && currentCol > 1) {
+            currentRow++;
             currentCol--;
-            ChessPosition nextPosition = new ChessPosition(curentRow, currentCol);
+            ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
                 if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
