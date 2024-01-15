@@ -1,9 +1,7 @@
 package chess;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
-import java.util.Vector;
 
 /**
  * Represents a single chess piece

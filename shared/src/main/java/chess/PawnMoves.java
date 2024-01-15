@@ -16,8 +16,8 @@ public class PawnMoves extends ChessPieceMoves{
             endingRow = 1;
         }
         //positions to check later
-        ChessPosition front = null;
-        ChessPosition doubleFront = null;
+        ChessPosition front;
+        ChessPosition doubleFront;
         ChessPosition leftDiagonal = null;
         ChessPosition rightDiagonal = null;
         //No need to check forward positions, as a double forward can only happen on the first row, and a single forward would only result in an error on the last row, where a pawn cannot exist
