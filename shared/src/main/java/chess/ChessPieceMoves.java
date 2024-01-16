@@ -11,7 +11,6 @@ public abstract class ChessPieceMoves {
     public ChessPieceMoves(ChessBoard chessBoard, ChessPosition position) {
         this.chessBoard = chessBoard;
         this.position = position;
-        findMoves();
     }
 
     /**
@@ -19,6 +18,9 @@ public abstract class ChessPieceMoves {
      * @return Collection of moves for given piece
      */
     public Collection<ChessMove> getMoves() {
+        if(moves.isEmpty()) {
+            findMoves();
+        }
         return moves;
     }
 
