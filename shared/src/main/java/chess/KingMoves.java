@@ -30,13 +30,13 @@ public class KingMoves extends ChessPieceMoves{
 
     }
 
-    public static final int[][] KING_MOVES = {{1,1},
-        {1,0},
-        {1,-1},
-        {0,-1},
-        {-1,-1},
-        {-1,0},
-        {-1,1},
-        {0,1}};
+    public static final int[][] KING_MOVES = {{1, 1},
+            {1, 0},
+            {1, -1},
+            {0, -1},
+            {-1, -1},
+            {-1, 0},
+            {-1, 1},
+            {0, 1}};
 
 }
