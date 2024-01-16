@@ -53,6 +53,18 @@ public class ChessBoard {
     }
 
     /**
+     * Updates the board to make a given chess move.
+     * @param move Chess Move to be made
+     * @throws InvalidMoveException If no piece found at starting location. This function does not check if Chess Move is otherwise valid, and moves should be checked before passing
+     */
+    public void makeMove(ChessMove move) throws InvalidMoveException{
+        if (getPiece(move.startPosition) == null) {
+            throw (new InvalidMoveException("Invalid move from " + move.getStartPosition().getAlgebraicNotation() + " to " + move.getEndPosition().getAlgebraicNotation() + ". No piece at start location"));
+        }
+        pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = getPiece(move.startPosition);
+        pieces[move.getStartPosition().getRow() - 1][move.getStartPosition().getColumn() - 1] = null;
+    }
+    /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
