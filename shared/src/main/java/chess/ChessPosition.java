@@ -26,8 +26,16 @@ public class ChessPosition {
         return Objects.hash(row, col);
     }
 
+    @Override
+    public String toString() {
+        return "ChessPosition{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
+    }
+
     public ChessPosition(int row, int col) {
-        if (row > 8 || row < 1 || col > 8 || col < 0) {
+        if (row > 8 || row < 1 || col > 8 || col < 1) {
             throw new IllegalArgumentException("Not a valid chess position");
         }
 
