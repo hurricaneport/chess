@@ -10,15 +10,20 @@ import java.util.Collection;
  */
 public class ChessGame {
 
-    public ChessGame() {
+    private TeamColor currentTurn;
+    ChessBoard chessBoard;
 
+    public ChessGame() {
+        currentTurn = TeamColor.WHITE;
+        chessBoard = new ChessBoard();
+        chessBoard.resetBoard();
     }
 
     /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+    return currentTurn;
     }
 
     /**
@@ -27,7 +32,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        currentTurn = team;
     }
 
     /**
@@ -46,7 +51,16 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        if (chessBoard.getPiece(startPosition) == null ) {
+            return null;
+        }
+        Collection<ChessMove> moves = chessBoard.getPiece(startPosition).pieceMoves(chessBoard, startPosition);
+
+        for (ChessMove move : moves) {
+            //TODO: Check that move does not put king in danger
+        }
+
+        return moves;
     }
 
     /**
@@ -56,7 +70,12 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        if (!validMoves(move.getStartPosition()).contains(move)) {
+            throw (new InvalidMoveException("Move from" + move.getStartPosition().getAlgebraicNotation() + " to " + move.getEndPosition().getAlgebraicNotation() + " is not valid."));
+        }
+        else {
+            chessBoard.makeMove(move);
+        }
     }
 
     /**
