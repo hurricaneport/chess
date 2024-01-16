@@ -1,7 +1,5 @@
 package chess;
 
-import java.util.Collection;
-
 public class QueenMoves extends ChessPieceMoves{
     public QueenMoves(ChessBoard board, ChessPosition position) {
         super(board, position);
