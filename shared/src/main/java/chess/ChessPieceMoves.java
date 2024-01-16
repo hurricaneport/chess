@@ -3,6 +3,9 @@ package chess;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * Represents all moves a given piece can make at a certain position on the board
+ */
 public abstract class ChessPieceMoves {
 
     Collection<ChessMove> moves = new HashSet<>();
@@ -14,6 +17,7 @@ public abstract class ChessPieceMoves {
     }
 
     /**
+     * Gets all moves that piece can make given its current position and the layout of the board
      *
      * @return Collection of moves for given piece
      */

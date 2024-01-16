@@ -29,7 +29,8 @@ public class KnightMoves extends ChessPieceMoves {
         }
     }
 
-    public static final int[][] KNIGHT_MOVES = {{2, -1},
+    public static final int[][] KNIGHT_MOVES = {
+            {2, -1},
             {2, 1},
             {1, 2},
             {-1, 2},

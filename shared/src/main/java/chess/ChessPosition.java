@@ -12,7 +12,14 @@ public class ChessPosition {
 
     private final int row;
     private final int col;
+    public ChessPosition(int row, int col) {
+        if (row > 8 || row < 1 || col > 8 || col < 1) {
+            throw new IllegalArgumentException("Not a valid chess position");
+        }
 
+        this.row = row;
+        this.col = col;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,14 +41,7 @@ public class ChessPosition {
                 '}';
     }
 
-    public ChessPosition(int row, int col) {
-        if (row > 8 || row < 1 || col > 8 || col < 1) {
-            throw new IllegalArgumentException("Not a valid chess position");
-        }
 
-        this.row = row;
-        this.col = col;
-    }
     /**
      * @return which row this position is in
      * 1 codes for the bottom row
