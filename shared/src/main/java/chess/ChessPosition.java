@@ -56,4 +56,9 @@ public class ChessPosition {
     public int getColumn() {
         return col;
     }
+
+    public String getAlgebraicNotation() {
+        char colChar = (char)(col + 96);
+        return colChar + "" + row;
+    }
 }
