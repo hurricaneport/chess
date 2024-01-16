@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Collection;
+
 public class QueenMoves extends ChessPieceMoves{
     public QueenMoves(ChessBoard board, ChessPosition position) {
         super(board, position);
@@ -7,6 +9,10 @@ public class QueenMoves extends ChessPieceMoves{
 
     @Override
     public void findMoves() {
+        BishopMoves bishopMoves = new BishopMoves(chessBoard, position);
+        moves.addAll(bishopMoves.getMoves());
 
+        RookMoves rookMoves = new RookMoves(chessBoard, position);
+        moves.addAll(rookMoves.getMoves());
     }
 }
