@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class ChessBoard {
 
-    ChessPiece[][] pieces = new ChessPiece[8][8];
+    private ChessPiece[][] pieces = new ChessPiece[8][8];
     public ChessBoard() {
         
     }
@@ -58,10 +58,10 @@ public class ChessBoard {
      * @throws InvalidMoveException If no piece found at starting location. This function does not check if Chess Move is otherwise valid, and moves should be checked before passing
      */
     public void makeMove(ChessMove move) throws InvalidMoveException{
-        if (getPiece(move.startPosition) == null) {
+        if (getPiece(move.getStartPosition()) == null) {
             throw (new InvalidMoveException("Invalid move from " + move.getStartPosition().getAlgebraicNotation() + " to " + move.getEndPosition().getAlgebraicNotation() + ". No piece at start location"));
         }
-        pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = getPiece(move.startPosition);
+        pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = getPiece(move.getStartPosition());
         pieces[move.getStartPosition().getRow() - 1][move.getStartPosition().getColumn() - 1] = null;
     }
     /**

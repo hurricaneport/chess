@@ -11,7 +11,7 @@ import java.util.Collection;
 public class ChessGame {
 
     private TeamColor currentTurn;
-    ChessBoard chessBoard;
+    private ChessBoard chessBoard;
 
     public ChessGame() {
         currentTurn = TeamColor.WHITE;
@@ -115,7 +115,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        chessBoard = board;
     }
 
     /**
@@ -124,6 +124,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return chessBoard;
     }
 }

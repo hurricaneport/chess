@@ -9,9 +9,9 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessMove {
-    ChessPosition startPosition;
-    ChessPosition endPosition;
-    ChessPiece.PieceType promotionPiece;
+    private final ChessPosition startPosition;
+    private final ChessPosition endPosition;
+    private final ChessPiece.PieceType promotionPiece;
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
         this.startPosition = startPosition;
@@ -20,9 +20,7 @@ public class ChessMove {
     }
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition) {
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
-        this.promotionPiece = null;
+        this(startPosition, endPosition, null);
     }
 
     @Override
