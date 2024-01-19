@@ -3,6 +3,16 @@ package chess;
 import java.util.ArrayList;
 
 public class KingMoves extends ChessPieceMoves{
+
+    public static final int[][] KING_MOVES = {
+            {1, 1},
+            {1, 0},
+            {1, -1},
+            {0, -1},
+            {-1, -1},
+            {-1, 0},
+            {-1, 1},
+            {0, 1}};
     public KingMoves(ChessBoard board, ChessPosition position) {
         super(board, position);
     }
@@ -29,15 +39,4 @@ public class KingMoves extends ChessPieceMoves{
         }
 
     }
-
-    public static final int[][] KING_MOVES = {
-            {1, 1},
-            {1, 0},
-            {1, -1},
-            {0, -1},
-            {-1, -1},
-            {-1, 0},
-            {-1, 1},
-            {0, 1}};
-
 }
