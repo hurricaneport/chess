@@ -16,7 +16,7 @@ public class BishopMoves extends ChessPieceMoves {
             currentCol++;
             ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
-                if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
+                if (chessBoard.getPiece(nextPosition).getTeamColor() != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
                 }
                 break;
@@ -35,7 +35,7 @@ public class BishopMoves extends ChessPieceMoves {
             currentCol++;
             ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
-                if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
+                if (chessBoard.getPiece(nextPosition).getTeamColor() != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
                 }
                 break;
@@ -54,7 +54,7 @@ public class BishopMoves extends ChessPieceMoves {
             currentCol--;
             ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
-                if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
+                if (chessBoard.getPiece(nextPosition).getTeamColor() != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
                 }
                 break;
@@ -73,7 +73,7 @@ public class BishopMoves extends ChessPieceMoves {
             currentCol--;
             ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
             if (chessBoard.getPiece(nextPosition) != null) {
-                if (chessBoard.getPiece(nextPosition).pieceColor != chessBoard.getPiece(position).getTeamColor()) {
+                if (chessBoard.getPiece(nextPosition).getTeamColor() != chessBoard.getPiece(position).getTeamColor()) {
                     moves.add(new ChessMove(position, nextPosition));
                 }
                 break;
