@@ -13,6 +13,14 @@ public class ChessGame {
     private TeamColor currentTurn;
     private ChessBoard chessBoard;
 
+    /**
+     * Enum identifying the 2 possible teams in a chess game
+     */
+    public enum TeamColor {
+        WHITE,
+        BLACK
+    }
+
     public ChessGame() {
         currentTurn = TeamColor.WHITE;
         chessBoard = new ChessBoard();
@@ -33,14 +41,6 @@ public class ChessGame {
      */
     public void setTeamTurn(TeamColor team) {
         currentTurn = team;
-    }
-
-    /**
-     * Enum identifying the 2 possible teams in a chess game
-     */
-    public enum TeamColor {
-        WHITE,
-        BLACK
     }
 
     /**
@@ -73,8 +73,19 @@ public class ChessGame {
         if (!validMoves(move.getStartPosition()).contains(move)) {
             throw (new InvalidMoveException("Move from" + move.getStartPosition().getAlgebraicNotation() + " to " + move.getEndPosition().getAlgebraicNotation() + " is not valid."));
         }
+        else if (chessBoard.getPiece(move.getStartPosition()).getTeamColor() != currentTurn) {
+            throw new InvalidMoveException(chessBoard.getPiece(move.getStartPosition()).getTeamColor() + " cannot move, it is not their turn");
+        }
         else {
             chessBoard.makeMove(move);
+        }
+
+        //progress turn
+        if (currentTurn == TeamColor.BLACK) {
+            currentTurn = TeamColor.WHITE;
+        }
+        else {
+            currentTurn = TeamColor.BLACK;
         }
     }
 

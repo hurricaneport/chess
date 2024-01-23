@@ -63,6 +63,10 @@ public class ChessBoard {
         }
         pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = getPiece(move.getStartPosition());
         pieces[move.getStartPosition().getRow() - 1][move.getStartPosition().getColumn() - 1] = null;
+
+        if (move.getPromotionPiece() != null) {
+            pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = new ChessPiece(getPiece(move.getEndPosition()).getTeamColor(), move.getPromotionPiece());
+        }
     }
     /**
      * Sets the board to the default starting board
