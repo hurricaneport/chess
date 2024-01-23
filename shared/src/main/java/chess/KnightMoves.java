@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class KnightMoves extends ChessPieceMoves {
 
-    public static final int[][] KNIGHT_MOVES = {
+    private static final int[][] KNIGHT_MOVES = {
             {2, -1},
             {2, 1},
             {1, 2},
@@ -22,11 +22,9 @@ public class KnightMoves extends ChessPieceMoves {
         ArrayList<ChessPosition> possiblePositions = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
-            try {
-                ChessPosition currentPosition = new ChessPosition(position.getRow() + KNIGHT_MOVES[i][0], position.getColumn() + KNIGHT_MOVES[i][1]);
+            ChessPosition currentPosition = ChessPosition.createValidPosition(position.getRow() + KNIGHT_MOVES[i][0], position.getColumn() + KNIGHT_MOVES[i][1]);
+            if (currentPosition != null) {
                 possiblePositions.add(currentPosition);
-            } catch (IllegalArgumentException e) {
-                System.out.println("IllegalArgumentException " + e.getMessage());
             }
         }
 
