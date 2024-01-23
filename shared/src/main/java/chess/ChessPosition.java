@@ -12,13 +12,28 @@ public class ChessPosition {
 
     private final int row;
     private final int col;
-    public ChessPosition(int row, int col) {
+    public ChessPosition(int row, int col) throws IllegalArgumentException {
         if (row > 8 || row < 1 || col > 8 || col < 1) {
             throw new IllegalArgumentException("Not a valid chess position");
         }
 
         this.row = row;
         this.col = col;
+    }
+
+    /**
+     * Returns a chess position if position is valid, otherwise returns null
+     * @param row row to add to created ChessPosition
+     * @param col column to add to created ChessPosition
+     * @return ChessPosition if positions valid, otherwise null
+     */
+    public static ChessPosition createValidPosition(int row, int col) {
+        if (!(row > 8 || row < 1 || col > 8 || col < 1)) {
+            return new ChessPosition(row, col);
+        }
+        else {
+            return null;
+        }
     }
     @Override
     public boolean equals(Object o) {
