@@ -110,6 +110,16 @@ public class ChessGame {
     }
 
     /**
+     * Returns if a given position on the board would be in check if the king of the given TeamColor were there
+     * @param teamColor
+     * @param chessPosition
+     * @return
+     */
+    private boolean positionIsInCheck(TeamColor teamColor, ChessPosition chessPosition) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    /**
      * Determines if the given team is in stalemate, which here is defined as having
      * no valid moves
      *
