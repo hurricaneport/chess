@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -57,7 +58,7 @@ public class ChessGame {
         Collection<ChessMove> moves = chessBoard.getPiece(startPosition).pieceMoves(chessBoard, startPosition);
 
         for (ChessMove move : moves) {
-            //TODO: Check that move does not put king in danger
+            ChessBoard testBoard = null; //copy current board
         }
 
         return moves;
@@ -80,13 +81,12 @@ public class ChessGame {
             chessBoard.makeMove(move);
         }
 
-        //progress turn
-        if (currentTurn == TeamColor.BLACK) {
-            currentTurn = TeamColor.WHITE;
-        }
-        else {
-            currentTurn = TeamColor.BLACK;
-        }
+        nextTurn();
+    }
+
+    private void nextTurn() {
+        if (currentTurn == TeamColor.BLACK) currentTurn = TeamColor.WHITE;
+        else currentTurn = TeamColor.BLACK;
     }
 
     /**
@@ -110,13 +110,33 @@ public class ChessGame {
     }
 
     /**
-     * Returns if a given position on the board would be in check if the king of the given TeamColor were there
-     * @param teamColor
-     * @param chessPosition
-     * @return
+     * Returns if a given position on the provided board is in check. If the given position does not have a king of the provided color, throws InvalidMoveException
+     * @param teamColor Color of the King to check against
+     * @param chessPosition Position to check
+     * @param chessBoard given board to check
+     * @throws InvalidMoveException when the given position does not have a king of the provided color
+     * @return True if position would be in check with the given board, false otherwise
      */
-    private boolean positionIsInCheck(TeamColor teamColor, ChessPosition chessPosition) {
-        throw new RuntimeException("Not implemented");
+    private boolean positionIsInCheck(TeamColor teamColor, ChessPosition chessPosition, ChessBoard chessBoard) throws InvalidMoveException {
+        if (chessBoard.getPiece(chessPosition).getPieceType() != ChessPiece.PieceType.KING || chessBoard.getPiece(chessPosition).getTeamColor() != teamColor) {
+            throw new InvalidMoveException("Square does not contain a king of the given color");
+        }
+        HashMap<ChessPosition, ChessPiece> pieces = chessBoard.getPieces();
+
+        for (ChessPosition position : pieces.keySet()) {
+            ChessPiece currentPiece = pieces.get(position);
+            if (currentPiece.getTeamColor() != teamColor) {
+                Collection<ChessMove> moves = currentPiece.pieceMoves(chessBoard, position);
+                for (ChessMove move : moves) {
+                    if (move.getEndPosition().equals(chessPosition)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+
     }
 
     /**
