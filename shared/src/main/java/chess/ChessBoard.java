@@ -11,9 +11,16 @@ import java.util.HashMap;
  */
 public class ChessBoard {
 
-    private final ChessPiece[][] pieces = new ChessPiece[8][8];
+    private final ChessPiece[][] pieces;
     public ChessBoard() {
-        
+        pieces = new ChessPiece[8][8];
+    }
+
+    public ChessBoard(ChessPiece[][] pieces) {
+        if (pieces.length != 8 && pieces[0].length != 8) {
+            throw new IllegalArgumentException("Array wrong size");
+        }
+        this.pieces = pieces;
     }
 
     @Override
@@ -30,11 +37,26 @@ public class ChessBoard {
     }
 
     /**
+     * Creates a copy of the Chessboard with the same pieces. Pieces are not copies as ChessPiece is immutable
+     * @return copy of ChessBoard on which the method was called
+     */
+    public ChessBoard copy() {
+        ChessPiece[][] piecesCopy = new ChessPiece[8][];
+        for (int i = 0; i < 8; i++) {
+            piecesCopy[i] = pieces[i].clone();
+        }
+
+        return new ChessBoard(piecesCopy);
+    }
+
+    /**
      * Adds a chess piece to the chessboard
      *
      * @param position where to add the piece to
      * @param piece    the piece to add
      */
+
+
     public void addPiece(ChessPosition position, ChessPiece piece) {
         pieces[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
