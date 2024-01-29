@@ -2,6 +2,8 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -56,9 +58,16 @@ public class ChessGame {
             return null;
         }
         Collection<ChessMove> moves = chessBoard.getPiece(startPosition).pieceMoves(chessBoard, startPosition);
+        TeamColor pieceColor = chessBoard.getPiece(startPosition).getTeamColor();
+        Iterator<ChessMove> movesIterator = moves.iterator();
+        while (movesIterator.hasNext()) {
+            ChessMove currentMove = movesIterator.next();
+            chessBoard.makeMove(currentMove);
+            if (isInCheck(pieceColor)) {
+                movesIterator.remove();
+            }
+            chessBoard.undoMove();
 
-        for (ChessMove move : moves) {
-            ChessBoard testBoard = null; //copy current board
         }
 
         return moves;
@@ -96,7 +105,32 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        Map<ChessPosition,ChessPiece> testBoardPieces = chessBoard.getPieces(teamColor);
+        ChessPosition kingPosition = null;
+        for (ChessPosition p : testBoardPieces.keySet()) {
+            if (testBoardPieces.get(p).getPieceType() == ChessPiece.PieceType.KING) {
+                kingPosition = p;
+                break;
+            }
+        }
+        TeamColor opponentColor = TeamColor.BLACK;
+        if (teamColor == TeamColor.BLACK) {
+            opponentColor = TeamColor.WHITE;
+        }
+        HashMap<ChessPosition, ChessPiece> pieces = chessBoard.getPieces(opponentColor);
+
+        for (ChessPosition p : pieces.keySet()) {
+
+            ChessPiece currentPiece = pieces.get(p);
+            Collection<ChessMove> moves = currentPiece.pieceMoves(chessBoard, p);
+            for (ChessMove move : moves) {
+                if (move.getEndPosition().equals(kingPosition)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -110,27 +144,29 @@ public class ChessGame {
     }
 
     /**
-     * Returns if a given position on the provided board is in check. If the given position does not have a king of the provided color, throws InvalidMoveException
+     * Returns if a given position is in check. If the given position does not have a king of the provided color, throws InvalidMoveException
      * @param teamColor Color of the King to check against
      * @param chessPosition Position to check
-     * @param chessBoard given board to check
      * @throws InvalidMoveException when the given position does not have a king of the provided color
      * @return True if position would be in check with the given board, false otherwise
      */
-    private boolean positionIsInCheck(TeamColor teamColor, ChessPosition chessPosition, ChessBoard chessBoard) throws InvalidMoveException {
+    private boolean positionIsInCheck(TeamColor teamColor, ChessPosition chessPosition) throws InvalidMoveException {
         if (chessBoard.getPiece(chessPosition).getPieceType() != ChessPiece.PieceType.KING || chessBoard.getPiece(chessPosition).getTeamColor() != teamColor) {
             throw new InvalidMoveException("Square does not contain a king of the given color");
         }
-        HashMap<ChessPosition, ChessPiece> pieces = chessBoard.getPieces();
+        TeamColor opponentColor = TeamColor.BLACK;
+        if (teamColor == TeamColor.BLACK) {
+            opponentColor = TeamColor.WHITE;
+        }
+        HashMap<ChessPosition, ChessPiece> pieces = chessBoard.getPieces(opponentColor);
 
         for (ChessPosition position : pieces.keySet()) {
+
             ChessPiece currentPiece = pieces.get(position);
-            if (currentPiece.getTeamColor() != teamColor) {
-                Collection<ChessMove> moves = currentPiece.pieceMoves(chessBoard, position);
-                for (ChessMove move : moves) {
-                    if (move.getEndPosition().equals(chessPosition)) {
-                        return true;
-                    }
+            Collection<ChessMove> moves = currentPiece.pieceMoves(chessBoard, position);
+            for (ChessMove move : moves) {
+                if (move.getEndPosition().equals(chessPosition)) {
+                    return true;
                 }
             }
         }
