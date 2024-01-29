@@ -1,7 +1,9 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -12,6 +14,8 @@ import java.util.HashMap;
 public class ChessBoard {
 
     private final ChessPiece[][] pieces;
+    private final Deque<ChessMove> movesStack = new LinkedList<>();
+    private final Deque<ChessPiece> piecesStack = new LinkedList<>();
     public ChessBoard() {
         pieces = new ChessPiece[8][8];
     }
@@ -37,8 +41,8 @@ public class ChessBoard {
     }
 
     /**
-     * Creates a copy of the Chessboard with the same pieces. Pieces are not copies as ChessPiece is immutable
-     * @return copy of ChessBoard on which the method was called
+     * Creates a copy of the Chessboard with the same pieces. Copy is shallow since ChessPiece is immutable.
+     * @return shallow copy of ChessBoard on which the method was called
      */
     public ChessBoard copy() {
         ChessPiece[][] piecesCopy = new ChessPiece[8][];
@@ -84,12 +88,33 @@ public class ChessBoard {
         if (getPiece(move.getStartPosition()) == null) {
             throw (new InvalidMoveException("Invalid move from " + move.getStartPosition().getAlgebraicNotation() + " to " + move.getEndPosition().getAlgebraicNotation() + ". No piece at start location"));
         }
+        //Add captured piece to pieces stack. Adds null if not piece captured.
+        piecesStack.addFirst(getPiece(move.getEndPosition()));
+        movesStack.addFirst(move);
         pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = getPiece(move.getStartPosition());
         pieces[move.getStartPosition().getRow() - 1][move.getStartPosition().getColumn() - 1] = null;
 
         if (move.getPromotionPiece() != null) {
             pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = new ChessPiece(getPiece(move.getEndPosition()).getTeamColor(), move.getPromotionPiece());
         }
+    }
+
+    /**
+     * Undoes the last made move on the chessboard. Supports indefinite amount of moves
+     */
+    public void undoMove() {
+        ChessMove undoneMove = movesStack.removeFirst();
+        ChessPiece capturedPiece = piecesStack.removeFirst();
+
+        ChessPiece movedPiece = getPiece(undoneMove.getEndPosition());
+        if (undoneMove.getPromotionPiece() != null) {
+            movedPiece = new ChessPiece(movedPiece.getTeamColor(), ChessPiece.PieceType.PAWN);
+        }
+
+        pieces[undoneMove.getStartPosition().getRow() - 1][undoneMove.getStartPosition().getColumn() - 1] = movedPiece;
+        pieces[undoneMove.getEndPosition().getRow() - 1][undoneMove.getEndPosition().getColumn() - 1] = capturedPiece;
+
+
     }
     /**
      * Sets the board to the default starting board
@@ -127,7 +152,24 @@ public class ChessBoard {
         }
     }
 
-    public HashMap<ChessPosition,ChessPiece> getPieces() {
+    /** Gets a Map of all chess pieces with their position on the board.
+     *
+     * @param teamColor Which color to return pieces of. Returns peaces from both teams if left blank
+     * @return HashMap of all ChessPieces on board keyed to their ChessPosition
+     */
+    public HashMap<ChessPosition,ChessPiece> getPieces(ChessGame.TeamColor teamColor) {
+        HashMap<ChessPosition, ChessPiece> piecesMap = new HashMap<>();
+        for (int i = 0; i < 8; i++) {
+            for (int k = 0; k < 8; k++) {
+                if (pieces[i][k] != null && pieces[i][k].getTeamColor() == teamColor) {
+                    piecesMap.put(new ChessPosition(i + 1, k + 1), pieces[i][k]);
+                }
+            }
+        }
+        return piecesMap;
+    }
+
+    public HashMap<ChessPosition, ChessPiece> getPieces() {
         HashMap<ChessPosition, ChessPiece> piecesMap = new HashMap<>();
         for (int i = 0; i < 8; i++) {
             for (int k = 0; k < 8; k++) {
