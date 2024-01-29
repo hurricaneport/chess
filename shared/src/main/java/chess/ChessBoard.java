@@ -152,15 +152,4 @@ public class ChessBoard {
         return piecesMap;
     }
 
-    public HashMap<ChessPosition, ChessPiece> getPieces() {
-        HashMap<ChessPosition, ChessPiece> piecesMap = new HashMap<>();
-        for (int i = 0; i < 8; i++) {
-            for (int k = 0; k < 8; k++) {
-                if (pieces[i][k] != null) {
-                    piecesMap.put(new ChessPosition(i + 1, k + 1), pieces[i][k]);
-                }
-            }
-        }
-        return piecesMap;
-    }
 }
