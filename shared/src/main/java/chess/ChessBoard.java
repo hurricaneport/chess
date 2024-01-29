@@ -41,19 +41,6 @@ public class ChessBoard {
     }
 
     /**
-     * Creates a copy of the Chessboard with the same pieces. Copy is shallow since ChessPiece is immutable.
-     * @return shallow copy of ChessBoard on which the method was called
-     */
-    public ChessBoard copy() {
-        ChessPiece[][] piecesCopy = new ChessPiece[8][];
-        for (int i = 0; i < 8; i++) {
-            piecesCopy[i] = pieces[i].clone();
-        }
-
-        return new ChessBoard(piecesCopy);
-    }
-
-    /**
      * Adds a chess piece to the chessboard
      *
      * @param position where to add the piece to
@@ -82,7 +69,6 @@ public class ChessBoard {
     /**
      * Updates the board to make a given chess move.
      * @param move Chess Move to be made
-     * @throws InvalidMoveException If no piece found at starting location. This function does not check if Chess Move is otherwise valid, and moves should be checked before passing
      */
     public void makeMove(ChessMove move){
         //Add captured piece to pieces stack. Adds null if not piece captured.

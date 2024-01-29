@@ -144,38 +144,6 @@ public class ChessGame {
     }
 
     /**
-     * Returns if a given position is in check. If the given position does not have a king of the provided color, throws InvalidMoveException
-     * @param teamColor Color of the King to check against
-     * @param chessPosition Position to check
-     * @throws InvalidMoveException when the given position does not have a king of the provided color
-     * @return True if position would be in check with the given board, false otherwise
-     */
-    private boolean positionIsInCheck(TeamColor teamColor, ChessPosition chessPosition) throws InvalidMoveException {
-        if (chessBoard.getPiece(chessPosition).getPieceType() != ChessPiece.PieceType.KING || chessBoard.getPiece(chessPosition).getTeamColor() != teamColor) {
-            throw new InvalidMoveException("Square does not contain a king of the given color");
-        }
-        TeamColor opponentColor = TeamColor.BLACK;
-        if (teamColor == TeamColor.BLACK) {
-            opponentColor = TeamColor.WHITE;
-        }
-        HashMap<ChessPosition, ChessPiece> pieces = chessBoard.getPieces(opponentColor);
-
-        for (ChessPosition position : pieces.keySet()) {
-
-            ChessPiece currentPiece = pieces.get(position);
-            Collection<ChessMove> moves = currentPiece.pieceMoves(chessBoard, position);
-            for (ChessMove move : moves) {
-                if (move.getEndPosition().equals(chessPosition)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-
-    }
-
-    /**
      * Determines if the given team is in stalemate, which here is defined as having
      * no valid moves
      *
