@@ -1,88 +1,62 @@
 package chess;
 
 public class PawnMoves extends ChessPieceMoves{
-    public PawnMoves(ChessBoard chessBoard, ChessPosition position) {
-        super(chessBoard, position);
+    public PawnMoves(ChessBoard board, ChessPosition position) {
+        super(board, position);
     }
+
     @Override
     public void findMoves() {
-        ChessPiece piece = chessBoard.getPiece(position);
         int colorInt = 1;
-        int startingRow = 2;
-        int endingRow = 8;
-        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+        int startRow = 2;
+        int endRow = 8;
+        if (chessBoard.getPiece(position).getTeamColor() == ChessGame.TeamColor.BLACK) {
             colorInt = -1;
-            startingRow = 7;
-            endingRow = 1;
+            startRow = 7;
+            endRow = 1;
         }
-        //positions to check later
-        ChessPosition front;
-        ChessPosition doubleFront;
-        ChessPosition leftDiagonal = null;
-        ChessPosition rightDiagonal = null;
+        //forward move
+        ChessPosition forward = ChessPosition.createValidPosition(position.getRow() + colorInt, position.getColumn());
+        if (forward != null && chessBoard.getPiece(forward) == null) {
+            if (forward.getRow() == endRow) {
+                addPromotionMoves(forward);
+            } else {
+                moves.add(new ChessMove(position, forward));
+            }
+            //double forward
+            ChessPosition doubleForward = ChessPosition.createValidPosition(position.getRow() + 2 * colorInt, position.getColumn());
+            if (doubleForward != null && position.getRow() == startRow && chessBoard.getPiece(doubleForward) == null) {
+                moves.add(new ChessMove(position, doubleForward));
+            }
 
-        //No need to check forward positions, as a double forward can only happen on the first row, and a single forward would only result in an error on the last row, where a pawn cannot exist
-        front = new ChessPosition(position.getRow() + colorInt, position.getColumn());
-
-
-        if (position.getColumn() > 1) {
-            leftDiagonal = new ChessPosition(position.getRow() + colorInt, position.getColumn() - 1);
-        }
-
-        if (position.getColumn() < 8) {
-            rightDiagonal = new ChessPosition(position.getRow() + colorInt, position.getColumn() + 1);
         }
 
-        //check if pawn is in starting position and offer first move
-        if (position.getRow() == startingRow) {
-
-            doubleFront = new ChessPosition(position.getRow() + 2 * colorInt, position.getColumn());
-            //check that both destination and passing square are empty
-            if (chessBoard.getPiece(front) == null && chessBoard.getPiece(doubleFront) == null) {
-                moves.add(new ChessMove(position, doubleFront));
+        //left diagonal
+        ChessPosition leftDiagonal = ChessPosition.createValidPosition(position.getRow() + colorInt, position.getColumn() - 1);
+        if (leftDiagonal != null && chessBoard.getPiece(leftDiagonal) != null && chessBoard.getPiece(leftDiagonal).getTeamColor() != chessBoard.getPiece(position).getTeamColor()) {
+            if (leftDiagonal.getRow() == endRow) {
+                addPromotionMoves(leftDiagonal);
+            } else {
+                moves.add(new ChessMove(position, leftDiagonal));
             }
         }
 
-        //add normal forward move
-        if (chessBoard.getPiece(front) == null) {
-            //if move results in promotion, generate all
-            if (front.getRow() == endingRow) {
-                addPromotionMoves(front);
-            }
-            else {
-                moves.add(new ChessMove(position, front));
-            }
-        }
-
-        //add diagonals
-        if (chessBoard.getPiece(leftDiagonal) != null && leftDiagonal != null) {
-            if (chessBoard.getPiece(leftDiagonal).getTeamColor() != piece.getTeamColor()) {
-                if (leftDiagonal.getRow() == endingRow) {
-                    addPromotionMoves(leftDiagonal);
-                }
-                else {
-                    moves.add(new ChessMove(position, leftDiagonal));
-                }
-            }
-        }
-
-        if (chessBoard.getPiece(rightDiagonal) != null && rightDiagonal != null) {
-            if (chessBoard.getPiece(rightDiagonal).getTeamColor() != piece.getTeamColor()) {
-                if (rightDiagonal.getRow() == endingRow) {
-                    addPromotionMoves(rightDiagonal);
-                }
-                else {
-                    moves.add(new ChessMove(position, rightDiagonal));
-                }
+        //right diagonal
+        ChessPosition rightDiagonal = ChessPosition.createValidPosition(position.getRow() + colorInt, position.getColumn() + 1);
+        if (rightDiagonal != null && chessBoard.getPiece(rightDiagonal) != null && chessBoard.getPiece(rightDiagonal).getTeamColor() != chessBoard.getPiece(position).getTeamColor()) {
+            if (rightDiagonal.getRow() == endRow) {
+                addPromotionMoves(rightDiagonal);
+            } else {
+                moves.add(new ChessMove(position, rightDiagonal));
             }
         }
 
     }
 
-    private void addPromotionMoves(ChessPosition endPosition) {
-        moves.add(new ChessMove(position, endPosition, ChessPiece.PieceType.BISHOP));
-        moves.add(new ChessMove(position, endPosition, ChessPiece.PieceType.ROOK));
-        moves.add(new ChessMove(position, endPosition, ChessPiece.PieceType.KNIGHT));
+    private void addPromotionMoves (ChessPosition endPosition) {
         moves.add(new ChessMove(position, endPosition, ChessPiece.PieceType.QUEEN));
+        moves.add(new ChessMove(position, endPosition, ChessPiece.PieceType.KNIGHT));
+        moves.add(new ChessMove(position, endPosition, ChessPiece.PieceType.ROOK));
+        moves.add(new ChessMove(position, endPosition, ChessPiece.PieceType.BISHOP));
     }
 }
