@@ -14,8 +14,6 @@ import java.util.LinkedList;
 public class ChessBoard {
 
     private final ChessPiece[][] pieces;
-    private final Deque<ChessMove> movesStack = new LinkedList<>();
-    private final Deque<ChessPiece> piecesStack = new LinkedList<>();
     public ChessBoard() {
         pieces = new ChessPiece[8][8];
     }
