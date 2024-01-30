@@ -67,39 +67,6 @@ public class ChessBoard {
     }
 
     /**
-     * Updates the board to make a given chess move.
-     * @param move Chess Move to be made
-     */
-    public void makeMove(ChessMove move){
-        //Add captured piece to pieces stack. Adds null if not piece captured.
-        piecesStack.addFirst(getPiece(move.getEndPosition()));
-        movesStack.addFirst(move);
-        pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = getPiece(move.getStartPosition());
-        pieces[move.getStartPosition().getRow() - 1][move.getStartPosition().getColumn() - 1] = null;
-
-        if (move.getPromotionPiece() != null) {
-            pieces[move.getEndPosition().getRow() - 1][move.getEndPosition().getColumn() - 1] = new ChessPiece(getPiece(move.getEndPosition()).getTeamColor(), move.getPromotionPiece());
-        }
-    }
-
-    /**
-     * Undoes the last made move on the chessboard. Supports indefinite amount of moves
-     */
-    public void undoMove() {
-        ChessMove undoneMove = movesStack.removeFirst();
-        ChessPiece capturedPiece = piecesStack.removeFirst();
-
-        ChessPiece movedPiece = getPiece(undoneMove.getEndPosition());
-        if (undoneMove.getPromotionPiece() != null) {
-            movedPiece = new ChessPiece(movedPiece.getTeamColor(), ChessPiece.PieceType.PAWN);
-        }
-
-        pieces[undoneMove.getStartPosition().getRow() - 1][undoneMove.getStartPosition().getColumn() - 1] = movedPiece;
-        pieces[undoneMove.getEndPosition().getRow() - 1][undoneMove.getEndPosition().getColumn() - 1] = capturedPiece;
-
-
-    }
-    /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
