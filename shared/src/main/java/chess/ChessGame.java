@@ -1,9 +1,6 @@
 package chess;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -15,6 +12,9 @@ public class ChessGame {
 
     private TeamColor currentTurn;
     private ChessBoard chessBoard;
+
+    private final Deque<ChessMove> movesStack = new LinkedList<>();
+    private final Deque<ChessPiece> piecesStack = new LinkedList<>();
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -62,22 +62,24 @@ public class ChessGame {
         Iterator<ChessMove> movesIterator = moves.iterator();
         while (movesIterator.hasNext()) {
             ChessMove currentMove = movesIterator.next();
-            chessBoard.makeMove(currentMove);
+            makeTestMove(currentMove);
             if (isInCheck(pieceColor)) {
                 movesIterator.remove();
             }
-            chessBoard.undoMove();
+            undoMove();
 
         }
 
         return moves;
     }
 
+
+
     /**
-     * Makes a move in a chess game
+     * Make valid move in a chess game
      *
      * @param move chess move to preform
-     * @throws InvalidMoveException if move is invalid
+     * @throws InvalidMoveException when move is not valid.
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         if (!validMoves(move.getStartPosition()).contains(move)) {
@@ -87,10 +89,40 @@ public class ChessGame {
             throw new InvalidMoveException(chessBoard.getPiece(move.getStartPosition()).getTeamColor() + " cannot move, it is not their turn");
         }
         else {
-            chessBoard.makeMove(move);
+            makeTestMove(move);
+            nextTurn();
         }
+    }
 
-        nextTurn();
+    /**
+     * makes a move to be tested. Must be undone after with exeption of being called from makeMove()
+     * @param move move to be made
+     */
+    public void makeTestMove(ChessMove move) {
+        movesStack.addFirst(move);
+        piecesStack.addFirst(chessBoard.getPiece(move.getEndPosition()));
+        chessBoard.addPiece(move.getEndPosition(),chessBoard.getPiece(move.getStartPosition()));
+        chessBoard.addPiece(move.getStartPosition(), null);
+
+        TeamColor pieceColor = chessBoard.getPiece(move.getEndPosition()).getTeamColor();
+        if (move.getPromotionPiece() != null) {
+            chessBoard.addPiece(move.getEndPosition(), new ChessPiece(pieceColor,move.getPromotionPiece()));
+        }
+    }
+
+    /**
+     * Undoes the last made move. Used in conjunction with makeMove() to check moves.
+     */
+    public void undoMove() {
+        ChessMove undoneMove = movesStack.removeFirst();
+        ChessPiece capturedPiece = piecesStack.removeFirst();
+
+        chessBoard.addPiece(undoneMove.getStartPosition(), chessBoard.getPiece(undoneMove.getEndPosition()));
+        chessBoard.addPiece(undoneMove.getEndPosition(), capturedPiece);
+        TeamColor pieceColor = chessBoard.getPiece(undoneMove.getStartPosition()).getTeamColor();
+        if (undoneMove.getPromotionPiece() != null) {
+            chessBoard.addPiece(undoneMove.getStartPosition(),new ChessPiece(pieceColor, ChessPiece.PieceType.PAWN));
+        }
     }
 
     private void nextTurn() {
