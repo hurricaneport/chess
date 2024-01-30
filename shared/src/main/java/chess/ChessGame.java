@@ -98,7 +98,7 @@ public class ChessGame {
      * makes a move to be tested. Must be undone after with exeption of being called from makeMove()
      * @param move move to be made
      */
-    public void makeTestMove(ChessMove move) {
+    private void makeTestMove(ChessMove move) {
         movesStack.addFirst(move);
         piecesStack.addFirst(chessBoard.getPiece(move.getEndPosition()));
         chessBoard.addPiece(move.getEndPosition(),chessBoard.getPiece(move.getStartPosition()));
@@ -113,7 +113,7 @@ public class ChessGame {
     /**
      * Undoes the last made move. Used in conjunction with makeMove() to check moves.
      */
-    public void undoMove() {
+    private void undoMove() {
         ChessMove undoneMove = movesStack.removeFirst();
         ChessPiece capturedPiece = piecesStack.removeFirst();
 
@@ -126,8 +126,7 @@ public class ChessGame {
     }
 
     private void nextTurn() {
-        if (currentTurn == TeamColor.BLACK) currentTurn = TeamColor.WHITE;
-        else currentTurn = TeamColor.BLACK;
+        currentTurn = currentTurn == TeamColor.BLACK ? TeamColor.WHITE : TeamColor.BLACK;
     }
 
     /**
