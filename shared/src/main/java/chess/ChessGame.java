@@ -15,6 +15,10 @@ public class ChessGame {
 
     private final Deque<ChessMove> movesStack = new LinkedList<>();
     private final Deque<ChessPiece> piecesStack = new LinkedList<>();
+    private boolean whiteCanCastleLeft;
+    private boolean whiteCanCastleRight;
+    private boolean blackCanCastleLeft;
+    private boolean blackCanCastleRight;
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -28,6 +32,11 @@ public class ChessGame {
         currentTurn = TeamColor.WHITE;
         chessBoard = new ChessBoard();
         chessBoard.resetBoard();
+
+        whiteCanCastleLeft = true;
+        whiteCanCastleRight = true;
+        blackCanCastleLeft = true;
+        blackCanCastleRight = true;
     }
 
     /**
@@ -73,8 +82,6 @@ public class ChessGame {
         return moves;
     }
 
-
-
     /**
      * Make valid move in a chess game
      *
@@ -89,13 +96,53 @@ public class ChessGame {
             throw new InvalidMoveException(chessBoard.getPiece(move.getStartPosition()).getTeamColor() + " cannot move, it is not their turn");
         }
         else {
+            updateCastleLogic(move);
             makeTestMove(move);
             nextTurn();
+
+        }
+    }
+
+    private void updateCastleLogic(ChessMove move) {
+        //Check if king is moving
+        if (chessBoard.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.KING
+                && chessBoard.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.WHITE) {
+            whiteCanCastleRight = false;
+            whiteCanCastleLeft = false;
+        }
+        if (chessBoard.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.KING
+                && chessBoard.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.BLACK) {
+            blackCanCastleLeft = false;
+            blackCanCastleRight = false;
+        }
+        //check each rook
+        if (chessBoard.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.ROOK
+                && chessBoard.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.WHITE
+                && move.getStartPosition().equals(new ChessPosition(1,1))) {
+            whiteCanCastleLeft = false;
+        }
+
+        if (chessBoard.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.ROOK
+                && chessBoard.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.WHITE
+                && move.getStartPosition().equals(new ChessPosition(1,8))) {
+            whiteCanCastleRight = false;
+        }
+
+        if (chessBoard.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.ROOK
+                && chessBoard.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.BLACK
+                && move.getStartPosition().equals(new ChessPosition(8,1))) {
+            blackCanCastleLeft = false;
+        }
+
+        if (chessBoard.getPiece(move.getStartPosition()).getPieceType() == ChessPiece.PieceType.ROOK
+                && chessBoard.getPiece(move.getStartPosition()).getTeamColor() == TeamColor.BLACK
+                && move.getStartPosition().equals(new ChessPosition(8,8))) {
+            whiteCanCastleLeft = false;
         }
     }
 
     /**
-     * makes a move to be tested. Must be undone after with exeption of being called from makeMove()
+     * makes a move to be tested. Must be undone after with the exception of being called from makeMove()
      * @param move move to be made
      */
     private void makeTestMove(ChessMove move) {
