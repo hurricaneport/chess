@@ -81,7 +81,6 @@ public class BishopMoves extends ChessPieceMoves {
             else {
                 moves.add(new ChessMove(position, nextPosition));
             }
-
         }
     }
 }
