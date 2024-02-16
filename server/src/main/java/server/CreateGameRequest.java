@@ -1,4 +1,4 @@
 package server;
 
-public record CreateGameRequest(String gameName) {
+public record CreateGameRequest(String gameName) implements Request {
 }
