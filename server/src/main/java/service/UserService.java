@@ -3,17 +3,19 @@ package service;
 import dataAccess.*;
 import model.AuthData;
 import model.UserData;
+import server.ErrorResponse;
 import server.RegisterRequest;
 import server.RegisterResponse;
+import server.Response;
 
 import java.util.UUID;
 
 public class UserService extends Service {
     UserDAO userDAO = new MemoryUserDAO();
     AuthDAO authDAO = new MemoryAuthDAO();
-    public RegisterResponse register(RegisterRequest registerRequest) {
+    public Response register(RegisterRequest registerRequest) {
         if (userExists(registerRequest.username())) {
-            return new RegisterResponse(null,null);
+            return new ErrorResponse("Error: already taken", 402);
         }
 
         UserData userData = new UserData(registerRequest.username(),registerRequest.password(),registerRequest.email());
@@ -22,7 +24,7 @@ public class UserService extends Service {
         }
         catch (DataAccessException e) {
             System.out.println("Exception" + e);
-            return new RegisterResponse(null, null);
+            return new ErrorResponse("Error: internal database error", 500);
         }
 
         AuthData authdata = createAuth(registerRequest.username());
