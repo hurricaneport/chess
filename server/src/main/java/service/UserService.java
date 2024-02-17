@@ -8,6 +8,7 @@ import server.RegisterRequest;
 import server.RegisterResponse;
 import server.Response;
 
+import javax.xml.crypto.Data;
 import java.util.UUID;
 
 public class UserService extends Service {
@@ -43,7 +44,13 @@ public class UserService extends Service {
     private AuthData createAuth(String username) {
         String authToken = UUID.randomUUID().toString();
         AuthData authData = new AuthData(authToken, username);
-        authDAO.addAuthData(authData);
+        try {
+            authDAO.addAuthData(authData);
+        }
+        catch (DataAccessException e) {
+            System.out.println("Error" + e);
+            authData = null;
+        }
         return authData;
     }
 }
