@@ -14,7 +14,7 @@ public interface AuthDAO {
      * Adds given authdata to the database
      * @param authData AuthData to be added to database
      */
-    void addAuthData(AuthData authData);
+    void addAuthData(AuthData authData) throws DataAccessException;
 
     /**
      * Clears Auth Table of DB

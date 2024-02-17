@@ -2,6 +2,7 @@ package dataAccess;
 
 import model.AuthData;
 
+import javax.xml.crypto.Data;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
-    public void addAuthData(AuthData authData) {
+    public void addAuthData(AuthData authData) throws DataAccessException {
         authTable.add(authData);
     }
 
