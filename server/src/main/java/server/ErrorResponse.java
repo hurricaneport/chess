@@ -1,4 +1,4 @@
 package server;
 
-public record ErrorResponse(String message, int status) implements Response {
+public record ErrorResponse(String message, Integer status) implements Response {
 }

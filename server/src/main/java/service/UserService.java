@@ -13,8 +13,13 @@ import java.util.UUID;
 public class UserService extends Service {
     UserDAO userDAO = new MemoryUserDAO();
     AuthDAO authDAO = new MemoryAuthDAO();
+    static UserService staticUserService = new UserService();
+    public static UserService getInstance() {
+        return staticUserService;
+    }
     public Response register(RegisterRequest registerRequest) {
         if (userExists(registerRequest.username())) {
+            System.out.println("Error: user " + registerRequest.username() + " already taken.");
             return new ErrorResponse("Error: already taken", 402);
         }
 
