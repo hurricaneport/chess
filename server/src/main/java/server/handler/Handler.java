@@ -2,8 +2,6 @@ package server.handler;
 
 import com.google.gson.Gson;
 import server.ErrorResponse;
-import server.RegisterResponse;
-import server.Request;
 import server.Response;
 
 public abstract class Handler {
