@@ -8,7 +8,6 @@ import server.RegisterRequest;
 import server.RegisterResponse;
 import server.Response;
 
-import javax.xml.crypto.Data;
 import java.util.UUID;
 
 public class UserService extends Service {
@@ -18,10 +17,16 @@ public class UserService extends Service {
     public static UserService getInstance() {
         return staticUserService;
     }
+
+    /**
+     * Service to register a user
+     * @param registerRequest Request object containing the registration information
+     * @return Response object containing response information
+     */
     public Response register(RegisterRequest registerRequest) {
         if (userExists(registerRequest.username())) {
             System.out.println("Error: user " + registerRequest.username() + " already taken.");
-            return new ErrorResponse("Error: already taken", 402);
+            return new ErrorResponse("Error: already taken", 403);
         }
 
         UserData userData = new UserData(registerRequest.username(),registerRequest.password(),registerRequest.email());
@@ -37,10 +42,19 @@ public class UserService extends Service {
         return new RegisterResponse(registerRequest.username(), authdata.authToken());
     }
 
+    /**
+     * @param username username to check
+     * @return true if user exists
+     */
     private boolean userExists(String username) {
         return userDAO.getUser(username) != null;
     }
 
+    /**
+     * Creates an authToken for given user and adds it to authTable
+     * @param username username to create authToken for
+     * @return authToken for user
+     */
     private AuthData createAuth(String username) {
         String authToken = UUID.randomUUID().toString();
         AuthData authData = new AuthData(authToken, username);
