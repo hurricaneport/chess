@@ -1,8 +1,6 @@
 package server.handler;
 
-import server.RegisterRequest;
-import server.RegisterResponse;
-import server.Response;
+import server.*;
 import service.UserService;
 
 public class RegisterHandler extends Handler {
@@ -11,9 +9,16 @@ public class RegisterHandler extends Handler {
 
         RegisterRequest registerRequest = deserialize(request, RegisterRequest.class);
 
-        Response serviceResponse = UserService.getInstance().register(registerRequest);
+        Response serviceResponse = null;
+        try {
+            serviceResponse = UserService.getInstance().register(registerRequest);
+            serialize(serviceResponse, response);
+        } catch (AlreadyTakenException e) {
+            serializeError(e, 403, response);
+        } catch (ServerErrorException e) {
+            serializeError(e, 500, response);
+        }
 
-        serializeResponse(serviceResponse, response, RegisterResponse.class);
 
     }
 }

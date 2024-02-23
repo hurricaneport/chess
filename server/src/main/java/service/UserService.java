@@ -3,11 +3,9 @@ package service;
 import dataAccess.*;
 import model.AuthData;
 import model.UserData;
-import server.ErrorResponse;
-import server.RegisterRequest;
-import server.RegisterResponse;
-import server.Response;
+import server.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class UserService extends Service {
@@ -23,10 +21,10 @@ public class UserService extends Service {
      * @param registerRequest Request object containing the registration information
      * @return Response object containing response information
      */
-    public Response register(RegisterRequest registerRequest) {
+    public Response register(RegisterRequest registerRequest) throws AlreadyTakenException, ServerErrorException {
         if (userExists(registerRequest.username())) {
             System.out.println("Error: user " + registerRequest.username() + " already taken.");
-            return new ErrorResponse("Error: already taken", 403);
+            throw new AlreadyTakenException("Error: already taken");
         }
 
         UserData userData = new UserData(registerRequest.username(),registerRequest.password(),registerRequest.email());
@@ -35,10 +33,15 @@ public class UserService extends Service {
         }
         catch (DataAccessException e) {
             System.out.println("Exception" + e);
-            return new ErrorResponse("Error: internal database error", 500);
+            throw new ServerErrorException("Error: internal database error");
         }
 
-        AuthData authdata = createAuth(registerRequest.username());
+        AuthData authdata = null;
+        try {
+            authdata = createAuth(registerRequest.username());
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: internal database error");
+        }
         return new RegisterResponse(registerRequest.username(), authdata.authToken());
     }
 
@@ -55,16 +58,11 @@ public class UserService extends Service {
      * @param username username to create authToken for
      * @return authToken for user
      */
-    private AuthData createAuth(String username) {
+    private AuthData createAuth(String username) throws DataAccessException{
         String authToken = UUID.randomUUID().toString();
         AuthData authData = new AuthData(authToken, username);
-        try {
-            authDAO.addAuthData(authData);
-        }
-        catch (DataAccessException e) {
-            System.out.println("Error" + e);
-            authData = null;
-        }
+        authDAO.addAuthData(authData);
+
         return authData;
     }
 }

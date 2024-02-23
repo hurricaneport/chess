@@ -16,31 +16,26 @@ public abstract class Handler {
     }
 
     /**
-     * turns server.Response object into JSON body and puts it into HTTP response body
+     * turns server.Response object into JSON body and puts it into HTTP response body. Adds status 200.
      * @param serviceResponse response from service to be converted to JSON
      * @param serverResponse HTTP response with body to be set with JSON string
      */
     public static void serialize(Response serviceResponse, spark.Response serverResponse) {
         String responseBody = gson.toJson(serviceResponse);
         serverResponse.body(responseBody);
+        serverResponse.status(200);
     }
 
     /**
-     * Serializes response and adds proper status
-     * @param serviceResponse response from the server
-     * @param serverResponse response to send to client
-     * @param expectedType expected type of serviceResponse (THIS SHOULD BE FIXED WITH EXCEPTIONS
-     * @param <T>
+     * serializes error with given status and adds it to response body
+     * @param e HTTP Exception
+     * @param status status code
+     * @param serverResponse response to add body and status to
      */
-    public static <T> void serializeResponse(Response serviceResponse, spark.Response serverResponse, Class<T> expectedType) {
-        if (serviceResponse.getClass() == expectedType) {
-            serverResponse.status(200);
-            serialize(serviceResponse, serverResponse);
-        }
-        else if(serviceResponse.getClass() == ErrorResponse.class) {
-            serverResponse.status(((ErrorResponse) serviceResponse).status());
-            ErrorResponse errorResponse = new ErrorResponse(((ErrorResponse) serviceResponse).message(), null);
-            serialize(errorResponse, serverResponse);
-        }
+    public static void serializeError(Exception e, int status, spark.Response serverResponse) {
+        String responseBody = gson.toJson(new ErrorResponse(e.getMessage()));
+        serverResponse.body(responseBody);
+        serverResponse.status(status);
+
     }
 }
