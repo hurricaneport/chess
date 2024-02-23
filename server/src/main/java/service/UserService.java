@@ -45,7 +45,7 @@ public class UserService extends Service {
         return new RegisterResponse(registerRequest.username(), authdata.authToken());
     }
 
-    Response login(LoginRequest loginRequest) throws UnauthorizedException, ServerErrorException {
+    public Response login(LoginRequest loginRequest) throws UnauthorizedException, ServerErrorException {
         UserData user = userDAO.getUser(loginRequest.username());
         if (user == null) {
             throw new UnauthorizedException("Error: unauthorized");
