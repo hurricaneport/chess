@@ -18,7 +18,5 @@ public class RegisterHandler extends Handler {
         } catch (ServerErrorException e) {
             serializeError(e, 500, response);
         }
-
-
     }
 }
