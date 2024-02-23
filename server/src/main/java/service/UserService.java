@@ -45,6 +45,25 @@ public class UserService extends Service {
         return new RegisterResponse(registerRequest.username(), authdata.authToken());
     }
 
+    Response login(LoginRequest loginRequest) throws UnauthorizedException, ServerErrorException {
+        UserData user = userDAO.getUser(loginRequest.username());
+        if (user == null) {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+
+        if (!Objects.equals(user.password(), loginRequest.password())) {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+        AuthData authData = null;
+        try {
+            authData = createAuth(loginRequest.username());
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: internal database error");
+        }
+
+        return new LoginResponse(authData.username(), authData.authToken());
+    }
+
     /**
      * @param username username to check
      * @return true if user exists
