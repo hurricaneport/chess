@@ -9,7 +9,7 @@ public class RegisterHandler extends Handler {
 
         RegisterRequest registerRequest = deserialize(request, RegisterRequest.class);
 
-        Response serviceResponse = null;
+        Response serviceResponse;
         try {
             serviceResponse = UserService.getInstance().register(registerRequest);
             serialize(serviceResponse, response);

@@ -9,7 +9,7 @@ public class LoginHandler extends Handler {
 
         LoginRequest serviceRequest = deserialize(request, LoginRequest.class);
 
-        Response serviceResponse = null;
+        Response serviceResponse;
         try {
             serviceResponse = UserService.getInstance().login(serviceRequest);
             serialize(serviceResponse, response);

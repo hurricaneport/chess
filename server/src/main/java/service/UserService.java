@@ -36,7 +36,7 @@ public class UserService extends Service {
             throw new ServerErrorException("Error: internal database error");
         }
 
-        AuthData authdata = null;
+        AuthData authdata;
         try {
             authdata = createAuth(registerRequest.username());
         } catch (DataAccessException e) {
@@ -54,7 +54,7 @@ public class UserService extends Service {
         if (!Objects.equals(user.password(), loginRequest.password())) {
             throw new UnauthorizedException("Error: unauthorized");
         }
-        AuthData authData = null;
+        AuthData authData;
         try {
             authData = createAuth(loginRequest.username());
         } catch (DataAccessException e) {
