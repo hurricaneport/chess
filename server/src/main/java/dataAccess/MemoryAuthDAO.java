@@ -8,7 +8,13 @@ import java.util.Objects;
 
 public class MemoryAuthDAO implements AuthDAO{
 
+    private static final MemoryAuthDAO authDAO = new MemoryAuthDAO();
+
     private HashSet<AuthData> authTable = new HashSet<>();
+
+    public static MemoryAuthDAO getAuthDAO() {
+        return authDAO;
+    }
     @Override
     public AuthData getAuthData(String authToken) {
         for (AuthData authData : authTable) {

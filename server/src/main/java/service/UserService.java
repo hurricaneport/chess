@@ -9,8 +9,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class UserService extends Service {
-    UserDAO userDAO = new MemoryUserDAO();
-    AuthDAO authDAO = new MemoryAuthDAO();
+    UserDAO userDAO = MemoryUserDAO.getUserDAO();
+    AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
     static UserService staticUserService = new UserService();
     public static UserService getInstance() {
         return staticUserService;
@@ -22,7 +22,7 @@ public class UserService extends Service {
      * @return Response object containing response information
      */
     public Response register(RegisterRequest registerRequest) throws AlreadyTakenException, ServerErrorException {
-        if (userExists(registerRequest.username())) {
+        if (userExists(registerRequest.username(),registerRequest.email())) {
             System.out.println("Error: user " + registerRequest.username() + " already taken.");
             throw new AlreadyTakenException("Error: already taken");
         }
@@ -66,8 +66,13 @@ public class UserService extends Service {
 
     /**
      * @param username username to check
+     * @param email email to check
      * @return true if user exists
      */
+    private boolean userExists(String username, String email) {
+        return userDAO.getUser(username) != null || userDAO.getUserByEmail(email) != null;
+    }
+
     private boolean userExists(String username) {
         return userDAO.getUser(username) != null;
     }
