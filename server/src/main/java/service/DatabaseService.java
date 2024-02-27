@@ -4,6 +4,7 @@ import dataAccess.AuthDAO;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryUserDAO;
 import dataAccess.UserDAO;
+import server.ServerErrorException;
 
 import javax.xml.crypto.Data;
 
@@ -15,7 +16,7 @@ public class DatabaseService extends Service {
     public static DatabaseService getInstance() {
         return databaseService;
     }
-    public void clear() {
+    public void clear() throws ServerErrorException {
         authDAO.clear();
         userDAO.clear();
 

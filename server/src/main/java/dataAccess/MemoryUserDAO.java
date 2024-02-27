@@ -45,4 +45,9 @@ public class MemoryUserDAO implements UserDAO{
     public void clear() {
         userTable = new HashSet<>();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return userTable.isEmpty();
+    }
 }

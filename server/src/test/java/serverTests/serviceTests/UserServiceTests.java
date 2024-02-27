@@ -11,7 +11,7 @@ public class UserServiceTests {
     DatabaseService databaseService = DatabaseService.getInstance();
 
     @BeforeEach
-    public void clearDB() {
+    public void clearDB() throws Exception {
         databaseService.clear();
     }
 

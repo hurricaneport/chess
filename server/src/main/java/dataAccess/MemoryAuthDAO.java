@@ -32,7 +32,17 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
+    public void deleteAuthData(AuthData authData) throws DataAccessException {
+        authTable.remove(authData);
+    }
+
+    @Override
     public void clear() {
         authTable = new HashSet<>();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return authTable.isEmpty();
     }
 }

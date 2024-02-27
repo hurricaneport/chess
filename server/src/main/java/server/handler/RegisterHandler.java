@@ -13,9 +13,14 @@ public class RegisterHandler extends Handler {
         try {
             serviceResponse = UserService.getInstance().register(registerRequest);
             serialize(serviceResponse, response);
-        } catch (AlreadyTakenException e) {
+        }
+        catch (BadRequestException e) {
+            serializeError(e, 400, response);
+        }
+        catch (AlreadyTakenException e) {
             serializeError(e, 403, response);
-        } catch (ServerErrorException e) {
+        }
+        catch (ServerErrorException e) {
             serializeError(e, 500, response);
         }
     }

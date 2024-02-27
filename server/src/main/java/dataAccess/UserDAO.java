@@ -27,4 +27,9 @@ public interface UserDAO {
      * Clears User table of DB
      */
     void clear();
+
+    /**
+     * @return true if user table is empty, false otherwise
+     */
+    boolean isEmpty();
 }

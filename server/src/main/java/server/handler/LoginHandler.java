@@ -5,7 +5,7 @@ import service.UserService;
 
 public class LoginHandler extends Handler {
     public void handleLogin(spark.Request request, spark.Response response) {
-        System.out.println("Created new Register Handler");
+        System.out.println("Created new Login Handler");
 
         LoginRequest serviceRequest = deserialize(request, LoginRequest.class);
 
@@ -13,9 +13,14 @@ public class LoginHandler extends Handler {
         try {
             serviceResponse = UserService.getInstance().login(serviceRequest);
             serialize(serviceResponse, response);
-        } catch (UnauthorizedException e) {
+        }
+        catch (BadRequestException e) {
+            serializeError(e, 400, response);
+        }
+        catch (UnauthorizedException e) {
             serializeError(e, 401, response);
-        } catch (ServerErrorException e) {
+        }
+        catch (ServerErrorException e) {
             serializeError(e, 500, response);
         }
     }
