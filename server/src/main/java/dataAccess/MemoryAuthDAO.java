@@ -2,7 +2,6 @@ package dataAccess;
 
 import model.AuthData;
 
-import javax.xml.crypto.Data;
 import java.util.HashSet;
 import java.util.Objects;
 

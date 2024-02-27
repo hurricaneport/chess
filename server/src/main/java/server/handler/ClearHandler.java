@@ -5,7 +5,7 @@ import service.DatabaseService;
 
 public class ClearHandler extends Handler{
     DatabaseService databaseService = DatabaseService.getInstance();
-    public void handleClear(spark.Request request, spark.Response response) {
+    public void handleClear(spark.Response response) {
         System.out.println("Created new clear handler");
 
         try {

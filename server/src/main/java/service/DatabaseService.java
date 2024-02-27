@@ -6,7 +6,6 @@ import dataAccess.MemoryUserDAO;
 import dataAccess.UserDAO;
 import server.ServerErrorException;
 
-import javax.xml.crypto.Data;
 
 public class DatabaseService extends Service {
     private static final DatabaseService databaseService = new DatabaseService();

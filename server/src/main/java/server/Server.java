@@ -32,7 +32,7 @@ public class Server {
         }));
 
         Spark.delete("/db", ((request, response) -> {
-            (new ClearHandler()).handleClear(request, response);
+            (new ClearHandler()).handleClear(response);
             return response.body();
         }));
 
