@@ -35,12 +35,16 @@ public class UserService extends Service {
 
         UserData userData = new UserData(registerRequest.username(),registerRequest.password(),registerRequest.email());
         try {
-            userDAO.addUser(userData);
+            boolean userAdded = userDAO.addUser(userData);
+            if (!userAdded) {
+                throw new AlreadyTakenException("Error: already taken");
+            }
         }
         catch (DataAccessException e) {
             System.out.println("Exception" + e);
             throw new ServerErrorException("Error: internal database error");
         }
+
 
         AuthData authdata = createAuth(registerRequest.username());
 
