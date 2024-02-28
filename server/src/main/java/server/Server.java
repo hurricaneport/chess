@@ -9,7 +9,6 @@ public class Server {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
-        Spark.get("/game", ((request, response) -> "Hello World"));
         // Register your endpoints and handle exceptions here.
         createRoutes();
 
@@ -45,6 +44,11 @@ public class Server {
 
         Spark.get("/game", ((request, response) -> {
             (new ListGamesHandler()).handleListGames(request, response);
+            return response.body();
+        }));
+
+        Spark.put("/game", ((request, response) -> {
+            (new JoinGameHandler()).handleJoinGame(request, response);
             return response.body();
         }));
     }

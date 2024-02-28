@@ -27,4 +27,6 @@ public interface GameDAO {
      * @param gameData GameData of game to be added
      */
     void createGame(GameData gameData);
+
+    void updateGame(int gameID, GameData gameData) throws DataAccessException;
 }

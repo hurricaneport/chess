@@ -44,4 +44,15 @@ public class MemoryGameDAO implements GameDAO {
     public void createGame(GameData gameData) {
         gameTable.add(gameData);
     }
+
+    @Override
+    public void updateGame(int gameID, GameData gameData) throws DataAccessException {
+        GameData oldGameData = getGame(gameID);
+        if (oldGameData == null) {
+            throw new DataAccessException("Game does not exist");
+        }
+
+        gameTable.remove(oldGameData);
+        gameTable.add(gameData);
+    }
 }

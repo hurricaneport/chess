@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.AuthData;
 import model.GameData;
@@ -44,5 +45,46 @@ public class GameService extends Service {
         currentGameID++;
 
         return createGameResponse;
+    }
+
+    public void joinGame(String authToken, JoinGameRequest joinGameRequest) throws BadRequestException, ServerErrorException, UnauthorizedException, AlreadyTakenException {
+        GameData gameData = gameDAO.getGame(joinGameRequest.gameID());
+        if (gameData == null) {
+            throw new BadRequestException("Error: bad request");
+        }
+
+        AuthData authData = authorize(authToken);
+        if (authData == null) {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+
+        String whiteUsername = gameData.whiteUsername();
+        String blackUsername = gameData.blackUsername();
+        if (!"WHITE".equals(joinGameRequest.playerColor()) && !"BLACK".equals(joinGameRequest.playerColor()) && joinGameRequest.playerColor() != null) {
+            throw new BadRequestException("Error: bad request");
+        }
+        else if ("WHITE".equals(joinGameRequest.playerColor())) {
+            if (whiteUsername == null || whiteUsername.equals(authData.username())) {
+                whiteUsername = authData.username();
+            }
+            else {
+                throw new AlreadyTakenException("Error: already taken");
+            }
+        }
+        else if ("BLACK".equals(joinGameRequest.playerColor())) {
+            if (blackUsername == null || blackUsername.equals(authData.username())) {
+                blackUsername = authData.username();
+            }
+            else {
+                throw new AlreadyTakenException("Error: already taken");
+            }
+        }
+
+        GameData newGameData = new GameData(gameData.gameID(), whiteUsername, blackUsername, gameData.gameName(), gameData.game());
+        try {
+            gameDAO.updateGame(gameData.gameID(), newGameData);
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: database error");
+        }
     }
 }
