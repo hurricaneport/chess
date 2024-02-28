@@ -3,6 +3,7 @@ package serverTests.serviceTests;
 import dataAccess.GameDAO;
 import dataAccess.MemoryGameDAO;
 import model.AuthData;
+import model.GameData;
 import org.junit.jupiter.api.*;
 import server.*;
 import service.DatabaseService;
@@ -49,5 +50,11 @@ public class GameServiceTests {
     @DisplayName("Create invalid game")
     public void createInvalidGame() {
         Assertions.assertThrows(BadRequestException.class, () -> gameService.createGame(authData.authToken(), new CreateGameRequest(null)));
+    }
+
+    @Test
+    @DisplayName("List all games")
+    public void listALlGames() {
+
     }
 }

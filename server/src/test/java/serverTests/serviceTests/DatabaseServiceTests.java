@@ -1,9 +1,6 @@
 package serverTests.serviceTests;
 
-import dataAccess.AuthDAO;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryUserDAO;
-import dataAccess.UserDAO;
+import dataAccess.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +18,7 @@ public class DatabaseServiceTests {
 
     AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
     UserDAO userDAO = MemoryUserDAO.getUserDAO();
+    GameDAO gameDAO = MemoryGameDAO.getGameDAO();
     @BeforeEach
     public void clear() throws Exception {
         databaseService.clear();
@@ -34,5 +32,6 @@ public class DatabaseServiceTests {
         Assertions.assertThrows(UnauthorizedException.class, () -> userService.login(new LoginRequest("username", "password")));
         Assertions.assertTrue(authDAO.isEmpty());
         Assertions.assertTrue(userDAO.isEmpty());
+        Assertions.assertTrue(gameDAO.isEmpty());
     }
 }
