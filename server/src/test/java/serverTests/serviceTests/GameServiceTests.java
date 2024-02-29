@@ -1,5 +1,6 @@
 package serverTests.serviceTests;
 
+import chess.ChessGame;
 import dataAccess.GameDAO;
 import dataAccess.MemoryGameDAO;
 import model.AuthData;
@@ -9,6 +10,8 @@ import server.*;
 import service.DatabaseService;
 import service.GameService;
 import service.UserService;
+
+import java.util.ArrayList;
 
 public class GameServiceTests {
     private final DatabaseService databaseService = DatabaseService.getInstance();
@@ -54,7 +57,56 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("List all games")
-    public void listALlGames() {
+    public void listALlGames() throws Exception {
+        CreateGameResponse createGameResponse1 = (CreateGameResponse) gameService.createGame(authData.authToken(), new CreateGameRequest("game 1"));
+        CreateGameResponse createGameResponse2 = (CreateGameResponse) gameService.createGame(authData.authToken(), new CreateGameRequest("game 2"));
+        CreateGameResponse createGameResponse3 = (CreateGameResponse) gameService.createGame(authData.authToken(), new CreateGameRequest("game 3"));
+        GameData gameData1 = new GameData(createGameResponse1.gameID(), null, null, "game 1", new ChessGame());
+        GameData gameData2 = new GameData(createGameResponse2.gameID(), null, null, "game 2", new ChessGame());
+        GameData gameData3 = new GameData(createGameResponse3.gameID(), null, null, "game 3", new ChessGame());
+
+        ArrayList<GameData> gameDataArrayList = new ArrayList<>();
+
+        gameDataArrayList.add(gameData1);
+        gameDataArrayList.add(gameData2);
+        gameDataArrayList.add(gameData3);
+
+        ListGamesResponse listGamesResponse = (ListGamesResponse) gameService.listGames(authData.authToken());
+
+        Assertions.assertEquals(gameDataArrayList, listGamesResponse.games());
+
+
+
 
     }
+    @Test
+    @DisplayName("List games when no games added")
+    public void listGamesWhenNoGames() throws Exception {
+        ListGamesResponse listGamesResponse = (ListGamesResponse) gameService.listGames(authData.authToken());
+        Assertions.assertEquals(listGamesResponse.games(), new ArrayList<>());
+    }
+
+    @Test
+    @DisplayName("List games when unauthorized")
+    public void listGamesUnauthorized() {
+        Assertions.assertThrows(UnauthorizedException.class, () -> gameService.listGames("1234"));
+    }
+
+    @Test
+    @DisplayName("Join a game as a player")
+    public void joinGameAsPlayer() throws Exception {
+        CreateGameResponse createGameResponse = (CreateGameResponse) gameService.createGame(authData.authToken(), new CreateGameRequest("game"));
+        gameService.joinGame(authData.authToken(), new JoinGameRequest("WHITE", createGameResponse.gameID()));
+        ListGamesResponse listGamesResponse = (ListGamesResponse) gameService.listGames(authData.authToken());
+        Assertions.assertEquals(listGamesResponse.games().getFirst(), new GameData(createGameResponse.gameID(), authData.username(), null, "game", new ChessGame()));
+    }
+
+    @Test
+    @DisplayName("Join a game that doesn't exist")
+    public void joinGameThatDoesNotExist() {
+        Assertions.assertThrows(BadRequestException.class, () -> gameService.joinGame(authData.authToken(), new JoinGameRequest("WHITE", 99)));
+    }
 }
+
+
+

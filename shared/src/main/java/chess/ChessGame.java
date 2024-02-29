@@ -24,6 +24,19 @@ public class ChessGame {
         BLACK
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame = (ChessGame) o;
+        return currentTurn == chessGame.currentTurn && Objects.equals(chessBoard, chessGame.chessBoard) && Objects.equals(movesStack, chessGame.movesStack) && Objects.equals(piecesStack, chessGame.piecesStack);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentTurn, chessBoard, movesStack, piecesStack);
+    }
+
     public ChessGame() {
         currentTurn = TeamColor.WHITE;
         chessBoard = new ChessBoard();
