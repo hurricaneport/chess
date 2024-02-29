@@ -7,6 +7,7 @@ import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.*;
 import server.*;
+import server.requestResponse.*;
 import service.DatabaseService;
 import service.GameService;
 import service.UserService;

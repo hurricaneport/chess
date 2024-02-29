@@ -1,6 +1,7 @@
 package server.handler;
 
 import server.*;
+import server.requestResponse.JoinGameRequest;
 import service.GameService;
 
 public class JoinGameHandler extends Handler{

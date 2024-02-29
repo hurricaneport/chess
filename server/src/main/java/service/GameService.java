@@ -7,6 +7,7 @@ import model.AuthData;
 import model.GameData;
 import server.*;
 import dataAccess.MemoryGameDAO;
+import server.requestResponse.*;
 
 public class GameService extends Service {
     private static final GameService staticGameService = new GameService();

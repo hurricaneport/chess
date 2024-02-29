@@ -1,19 +1,23 @@
-package chess;
+package chess.pieceMoves;
+
+import chess.ChessBoard;
+import chess.ChessMove;
+import chess.ChessPosition;
 
 import java.util.ArrayList;
 
-public class KnightMoves extends ChessPieceMoves {
+public class KingMoves extends ChessPieceMoves{
 
-    private static final int[][] KNIGHT_MOVES = {
-            {2, -1},
-            {2, 1},
-            {1, 2},
-            {-1, 2},
-            {-2, 1},
-            {-2, -1},
-            {1, -2},
-            {-1, -2}};
-    public KnightMoves(ChessBoard board, ChessPosition position) {
+    private static final int[][] KING_MOVES = {
+            {1, 1},
+            {1, 0},
+            {1, -1},
+            {0, -1},
+            {-1, -1},
+            {-1, 0},
+            {-1, 1},
+            {0, 1}};
+    public KingMoves(ChessBoard board, ChessPosition position) {
         super(board, position);
     }
 
@@ -22,7 +26,7 @@ public class KnightMoves extends ChessPieceMoves {
         ArrayList<ChessPosition> possiblePositions = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
-            ChessPosition currentPosition = ChessPosition.createValidPosition(position.getRow() + KNIGHT_MOVES[i][0], position.getColumn() + KNIGHT_MOVES[i][1]);
+            ChessPosition currentPosition = ChessPosition.createValidPosition(position.getRow() + KING_MOVES[i][0], position.getColumn() + KING_MOVES[i][1]);
             if (currentPosition != null) {
                 possiblePositions.add(currentPosition);
             }
@@ -35,7 +39,6 @@ public class KnightMoves extends ChessPieceMoves {
                 moves.add(new ChessMove(position, possiblePosition));
             }
         }
+
     }
-
-
 }

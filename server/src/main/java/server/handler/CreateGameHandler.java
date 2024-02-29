@@ -1,6 +1,8 @@
 package server.handler;
 
 import server.*;
+import server.requestResponse.CreateGameRequest;
+import server.requestResponse.Response;
 import service.GameService;
 
 public class CreateGameHandler extends Handler {

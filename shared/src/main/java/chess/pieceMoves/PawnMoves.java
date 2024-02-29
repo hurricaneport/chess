@@ -1,4 +1,6 @@
-package chess;
+package chess.pieceMoves;
+
+import chess.*;
 
 public class PawnMoves extends ChessPieceMoves{
     public PawnMoves(ChessBoard board, ChessPosition position) {

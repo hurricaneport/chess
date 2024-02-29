@@ -4,6 +4,10 @@ import dataAccess.AuthDAO;
 import dataAccess.MemoryAuthDAO;
 import org.junit.jupiter.api.*;
 import server.*;
+import server.requestResponse.LoginRequest;
+import server.requestResponse.LoginResponse;
+import server.requestResponse.RegisterRequest;
+import server.requestResponse.RegisterResponse;
 import service.DatabaseService;
 import service.UserService;
 

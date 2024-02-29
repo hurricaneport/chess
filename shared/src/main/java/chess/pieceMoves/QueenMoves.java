@@ -1,4 +1,7 @@
-package chess;
+package chess.pieceMoves;
+
+import chess.ChessBoard;
+import chess.ChessPosition;
 
 public class QueenMoves extends ChessPieceMoves{
     public QueenMoves(ChessBoard board, ChessPosition position) {
