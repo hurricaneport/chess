@@ -7,7 +7,10 @@ import model.AuthData;
 import model.GameData;
 import server.*;
 import dataAccess.MemoryGameDAO;
-import server.requestResponse.*;
+import server.request.*;
+import server.response.CreateGameResponse;
+import server.response.ListGamesResponse;
+import server.response.Response;
 
 public class GameService extends Service {
     private static final GameService staticGameService = new GameService();

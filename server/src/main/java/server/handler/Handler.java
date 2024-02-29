@@ -1,8 +1,8 @@
 package server.handler;
 
 import com.google.gson.Gson;
-import server.requestResponse.ErrorResponse;
-import server.requestResponse.Response;
+import server.response.ErrorResponse;
+import server.response.Response;
 
 public abstract class Handler {
     private static final Gson gson = new Gson();
@@ -16,7 +16,7 @@ public abstract class Handler {
     }
 
     /**
-     * turns server.requestResponse.Response object into JSON body and puts it into HTTP response body. Adds status 200.
+     * turns server.response.Response object into JSON body and puts it into HTTP response body. Adds status 200.
      * @param serviceResponse response from service to be converted to JSON
      * @param serverResponse HTTP response with body to be set with JSON string
      */

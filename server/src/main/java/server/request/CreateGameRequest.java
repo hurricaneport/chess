@@ -1,4 +1,4 @@
-package server.requestResponse;
+package server.request;
 
 public record CreateGameRequest(String gameName) implements Request {
 }

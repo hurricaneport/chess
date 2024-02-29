@@ -1,6 +1,6 @@
 package server.handler;
 
-import server.requestResponse.Response;
+import server.response.Response;
 import server.ServerErrorException;
 import server.UnauthorizedException;
 import service.GameService;

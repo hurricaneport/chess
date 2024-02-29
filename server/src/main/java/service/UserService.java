@@ -4,7 +4,10 @@ import dataAccess.*;
 import model.AuthData;
 import model.UserData;
 import server.*;
-import server.requestResponse.*;
+import server.request.*;
+import server.response.LoginResponse;
+import server.response.RegisterResponse;
+import server.response.Response;
 
 import java.util.Objects;
 import java.util.UUID;

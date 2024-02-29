@@ -1,8 +1,8 @@
 package server.handler;
 
 import server.*;
-import server.requestResponse.LoginRequest;
-import server.requestResponse.Response;
+import server.request.LoginRequest;
+import server.response.Response;
 import service.UserService;
 
 public class LoginHandler extends Handler {
