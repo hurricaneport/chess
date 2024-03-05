@@ -1,8 +1,8 @@
 package handler;
 
 import service.response.Response;
-import server.exceptions.ServerErrorException;
-import server.exceptions.UnauthorizedException;
+import service.exceptions.ServerErrorException;
+import service.exceptions.UnauthorizedException;
 import service.GameService;
 
 public class ListGamesHandler extends Handler {

@@ -1,8 +1,8 @@
 package handler;
 
-import server.exceptions.BadRequestException;
-import server.exceptions.ServerErrorException;
-import server.exceptions.UnauthorizedException;
+import service.exceptions.BadRequestException;
+import service.exceptions.ServerErrorException;
+import service.exceptions.UnauthorizedException;
 import service.request.CreateGameRequest;
 import service.response.Response;
 import service.GameService;

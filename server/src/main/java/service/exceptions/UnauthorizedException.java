@@ -1,4 +1,4 @@
-package server.exceptions;
+package service.exceptions;
 
 public class UnauthorizedException extends Exception {
 

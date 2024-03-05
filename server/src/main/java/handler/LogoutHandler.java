@@ -1,7 +1,7 @@
 package handler;
 
-import server.exceptions.ServerErrorException;
-import server.exceptions.UnauthorizedException;
+import service.exceptions.ServerErrorException;
+import service.exceptions.UnauthorizedException;
 import service.UserService;
 
 public class LogoutHandler extends Handler {

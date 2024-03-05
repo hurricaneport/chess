@@ -4,7 +4,7 @@ import dataAccess.*;
 import dataAccess.memory.MemoryAuthDAO;
 import dataAccess.memory.MemoryGameDAO;
 import dataAccess.memory.MemoryUserDAO;
-import server.exceptions.ServerErrorException;
+import service.exceptions.ServerErrorException;
 
 
 public class DatabaseService extends Service {

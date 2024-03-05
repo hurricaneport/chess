@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import service.request.LoginRequest;
 import service.request.RegisterRequest;
 import service.response.RegisterResponse;
-import server.exceptions.UnauthorizedException;
+import service.exceptions.UnauthorizedException;
 import service.DatabaseService;
 import service.UserService;
 

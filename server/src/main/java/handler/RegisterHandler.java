@@ -1,8 +1,8 @@
 package handler;
 
-import server.exceptions.AlreadyTakenException;
-import server.exceptions.BadRequestException;
-import server.exceptions.ServerErrorException;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
+import service.exceptions.ServerErrorException;
 import service.request.RegisterRequest;
 import service.response.Response;
 import service.UserService;

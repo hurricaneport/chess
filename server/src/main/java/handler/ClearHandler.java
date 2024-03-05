@@ -1,6 +1,6 @@
 package handler;
 
-import server.exceptions.ServerErrorException;
+import service.exceptions.ServerErrorException;
 import service.DatabaseService;
 
 public class ClearHandler extends Handler{

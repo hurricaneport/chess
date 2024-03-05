@@ -1,9 +1,9 @@
 package handler;
 
-import server.exceptions.AlreadyTakenException;
-import server.exceptions.BadRequestException;
-import server.exceptions.ServerErrorException;
-import server.exceptions.UnauthorizedException;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
+import service.exceptions.ServerErrorException;
+import service.exceptions.UnauthorizedException;
 import service.request.JoinGameRequest;
 import service.GameService;
 
