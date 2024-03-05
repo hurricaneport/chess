@@ -10,7 +10,6 @@ import server.exceptions.AlreadyTakenException;
 import server.exceptions.BadRequestException;
 import server.exceptions.ServerErrorException;
 import server.exceptions.UnauthorizedException;
-import server.request.*;
 import service.request.CreateGameRequest;
 import service.request.JoinGameRequest;
 import service.response.CreateGameResponse;

@@ -9,7 +9,6 @@ import server.exceptions.AlreadyTakenException;
 import server.exceptions.BadRequestException;
 import server.exceptions.ServerErrorException;
 import server.exceptions.UnauthorizedException;
-import server.request.*;
 import service.request.LoginRequest;
 import service.request.RegisterRequest;
 import service.response.LoginResponse;

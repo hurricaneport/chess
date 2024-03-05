@@ -8,7 +8,6 @@ import model.GameData;
 import org.junit.jupiter.api.*;
 import server.exceptions.BadRequestException;
 import server.exceptions.UnauthorizedException;
-import server.request.*;
 import service.request.CreateGameRequest;
 import service.request.JoinGameRequest;
 import service.request.RegisterRequest;
