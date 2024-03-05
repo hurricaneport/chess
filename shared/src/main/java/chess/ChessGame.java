@@ -237,8 +237,5 @@ public class ChessGame {
         return chessBoard;
     }
 
-    public String serializeGame() {
-        Gson serializer = new Gson();
-        return serializer.toJson(this);
-    }
+
 }
