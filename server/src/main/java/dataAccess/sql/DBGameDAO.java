@@ -3,6 +3,7 @@ package dataAccess.sql;
 import dataAccess.DataAccessException;
 import dataAccess.DatabaseManager;
 import dataAccess.GameDAO;
+import dataAccess.util.JsonUtils;
 import model.GameData;
 
 import java.sql.Connection;
@@ -86,7 +87,7 @@ public class DBGameDAO implements GameDAO {
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(createGameString, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, gameData.gameName());
-                preparedStatement.setString(2, gameData.game().serializeGame());
+                preparedStatement.setString(2, JsonUtils.serializeChessGame(gameData.game()));
 
                 preparedStatement.executeUpdate();
 
