@@ -28,12 +28,12 @@ public class MemoryAuthDAO implements AuthDAO {
     }
 
     @Override
-    public void addAuthData(AuthData authData) throws DataAccessException {
+    public void addAuthData(AuthData authData)  {
         authTable.add(authData);
     }
 
     @Override
-    public void deleteAuthData(AuthData authData) throws DataAccessException {
+    public void deleteAuthData(AuthData authData) {
         authTable.remove(authData);
     }
 

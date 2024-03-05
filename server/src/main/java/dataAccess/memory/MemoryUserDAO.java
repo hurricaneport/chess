@@ -17,7 +17,7 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean addUser(UserData userData) throws DataAccessException {
+    public boolean addUser(UserData userData) {
         return userTable.add(userData);
     }
 

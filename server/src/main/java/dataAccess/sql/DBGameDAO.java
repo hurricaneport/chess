@@ -18,7 +18,7 @@ public class DBGameDAO implements GameDAO {
     public static GameDAO getGameDAO() {
         return gameDAO;
     }
-    private boolean createTable() throws DataAccessException {
+    private void createTable() throws DataAccessException {
 
         String createTable = "CREATE TABLE IF NOT EXISTS `game` (\n" +
                 "  `game_id` int NOT NULL AUTO_INCREMENT,\n" +
@@ -30,9 +30,8 @@ public class DBGameDAO implements GameDAO {
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;\n";
 
         try (Connection connection = DatabaseManager.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(createTable);) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(createTable)) {
                 int updateCount = preparedStatement.executeUpdate();
-                return updateCount != 0;
             } catch (SQLException e) {
                 throw new DataAccessException("Could not create table: game");
             }
