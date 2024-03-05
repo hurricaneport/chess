@@ -32,7 +32,6 @@ public class RookMoves extends ChessPieceMoves{
 
         //Right Line
         currentRow = position.getRow();
-        currentCol = position.getColumn();
         while(currentCol < 8) {
             currentCol++;
             ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
@@ -49,7 +48,6 @@ public class RookMoves extends ChessPieceMoves{
         }
 
         //Bottom Line
-        currentRow = position.getRow();
         currentCol = position.getColumn();
         while(currentRow > 1) {
             currentRow--;
@@ -68,7 +66,6 @@ public class RookMoves extends ChessPieceMoves{
 
         //Left Line
         currentRow = position.getRow();
-        currentCol = position.getColumn();
         while(currentCol > 1) {
             currentCol--;
             ChessPosition nextPosition = new ChessPosition(currentRow, currentCol);
