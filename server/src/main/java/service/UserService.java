@@ -1,13 +1,20 @@
 package service;
 
 import dataAccess.*;
+import dataAccess.memory.MemoryAuthDAO;
+import dataAccess.memory.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
-import server.*;
+import server.exceptions.AlreadyTakenException;
+import server.exceptions.BadRequestException;
+import server.exceptions.ServerErrorException;
+import server.exceptions.UnauthorizedException;
 import server.request.*;
-import server.response.LoginResponse;
-import server.response.RegisterResponse;
-import server.response.Response;
+import service.request.LoginRequest;
+import service.request.RegisterRequest;
+import service.response.LoginResponse;
+import service.response.RegisterResponse;
+import service.response.Response;
 
 import java.util.Objects;
 import java.util.UUID;

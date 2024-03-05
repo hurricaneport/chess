@@ -8,7 +8,7 @@ public interface GameDAO {
     /**
      * Clears Games Table of DB
      */
-    void clear();
+    void clear() throws DataAccessException;
 
     /**
      * @return true if auth table is empty, false otherwise
@@ -25,8 +25,9 @@ public interface GameDAO {
     /**
      * Creates a new game in the database
      * @param gameData GameData of game to be added
+     * @return returns game_id
      */
-    void createGame(GameData gameData);
+    int createGame(GameData gameData) throws DataAccessException;
 
     void updateGame(int gameID, GameData gameData) throws DataAccessException;
 }

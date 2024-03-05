@@ -1,14 +1,17 @@
 package serverTests.serviceTests;
 
 import dataAccess.*;
+import dataAccess.memory.MemoryAuthDAO;
+import dataAccess.memory.MemoryGameDAO;
+import dataAccess.memory.MemoryUserDAO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import server.request.LoginRequest;
-import server.request.RegisterRequest;
-import server.response.RegisterResponse;
-import server.UnauthorizedException;
+import service.request.LoginRequest;
+import service.request.RegisterRequest;
+import service.response.RegisterResponse;
+import server.exceptions.UnauthorizedException;
 import service.DatabaseService;
 import service.UserService;
 

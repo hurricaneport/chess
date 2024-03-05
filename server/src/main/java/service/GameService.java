@@ -5,12 +5,17 @@ import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.AuthData;
 import model.GameData;
-import server.*;
-import dataAccess.MemoryGameDAO;
+import dataAccess.memory.MemoryGameDAO;
+import server.exceptions.AlreadyTakenException;
+import server.exceptions.BadRequestException;
+import server.exceptions.ServerErrorException;
+import server.exceptions.UnauthorizedException;
 import server.request.*;
-import server.response.CreateGameResponse;
-import server.response.ListGamesResponse;
-import server.response.Response;
+import service.request.CreateGameRequest;
+import service.request.JoinGameRequest;
+import service.response.CreateGameResponse;
+import service.response.ListGamesResponse;
+import service.response.Response;
 
 public class GameService extends Service {
     private static final GameService staticGameService = new GameService();
@@ -44,7 +49,11 @@ public class GameService extends Service {
         }
 
 
-        gameDAO.createGame(new GameData(currentGameID, null, null, createGameRequest.gameName(), new ChessGame()));
+        try {
+            gameDAO.createGame(new GameData(currentGameID, null, null, createGameRequest.gameName(), new ChessGame()));
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: " + e);
+        }
         CreateGameResponse createGameResponse = new CreateGameResponse(currentGameID);
         currentGameID++;
 

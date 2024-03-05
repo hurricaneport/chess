@@ -2,9 +2,9 @@ package service;
 
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
-import dataAccess.MemoryAuthDAO;
+import dataAccess.memory.MemoryAuthDAO;
 import model.AuthData;
-import server.ServerErrorException;
+import server.exceptions.ServerErrorException;
 
 public abstract class Service {
     private final AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();

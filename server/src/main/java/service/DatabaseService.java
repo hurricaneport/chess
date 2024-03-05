@@ -1,7 +1,10 @@
 package service;
 
 import dataAccess.*;
-import server.ServerErrorException;
+import dataAccess.memory.MemoryAuthDAO;
+import dataAccess.memory.MemoryGameDAO;
+import dataAccess.memory.MemoryUserDAO;
+import server.exceptions.ServerErrorException;
 
 
 public class DatabaseService extends Service {
@@ -14,9 +17,14 @@ public class DatabaseService extends Service {
         return databaseService;
     }
     public void clear() throws ServerErrorException {
-        authDAO.clear();
-        userDAO.clear();
-        gameDAO.clear();
+        try {
+            authDAO.clear();
+            userDAO.clear();
+            gameDAO.clear();
+        }
+        catch (DataAccessException e) {
+            throw new ServerErrorException("Error: " + e);
+        }
 
     }
 }
