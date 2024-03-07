@@ -34,7 +34,7 @@ public class DatabaseManager {
     /**
      * Creates the database if it does not already exist.
      */
-    static void createDatabase() throws DataAccessException {
+    public static void createDatabase() throws DataAccessException {
         try {
             var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
             var conn = DriverManager.getConnection(connectionUrl, user, password);
@@ -43,6 +43,34 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
+        }
+
+        createTables();
+    }
+
+    /**
+     * Creates all tables in the database
+     * @throws DataAccessException when an SQL error occurs
+     */
+    private static void createTables() throws DataAccessException {
+        String sql = "CREATE TABLE IF NOT EXISTS `game` (" +
+                "  `game_id` int NOT NULL AUTO_INCREMENT," +
+                "  `game_name` varchar(45) NOT NULL," +
+                "  `white_username` varchar(45) DEFAULT NULL," +
+                "  `black_username` varchar(45) DEFAULT NULL," +
+                "  `game` mediumtext NOT NULL," +
+                "  PRIMARY KEY (`game_id`)" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new DataAccessException("Could not create table: game");
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException("Could not open database");
         }
     }
 

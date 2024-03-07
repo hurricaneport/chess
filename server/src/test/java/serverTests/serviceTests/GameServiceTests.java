@@ -19,6 +19,7 @@ import service.GameService;
 import service.UserService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GameServiceTests {
     private final DatabaseService databaseService = DatabaseService.getInstance();
@@ -72,15 +73,15 @@ public class GameServiceTests {
         GameData gameData2 = new GameData(createGameResponse2.gameID(), null, null, "game 2", new ChessGame());
         GameData gameData3 = new GameData(createGameResponse3.gameID(), null, null, "game 3", new ChessGame());
 
-        ArrayList<GameData> gameDataArrayList = new ArrayList<>();
+        HashSet<GameData> gameDataHashSet = new HashSet<>();
 
-        gameDataArrayList.add(gameData1);
-        gameDataArrayList.add(gameData2);
-        gameDataArrayList.add(gameData3);
+        gameDataHashSet.add(gameData1);
+        gameDataHashSet.add(gameData2);
+        gameDataHashSet.add(gameData3);
 
         ListGamesResponse listGamesResponse = (ListGamesResponse) gameService.listGames(authData.authToken());
 
-        Assertions.assertEquals(gameDataArrayList, listGamesResponse.games());
+        Assertions.assertEquals(gameDataHashSet, listGamesResponse.games());
 
 
 
@@ -90,7 +91,7 @@ public class GameServiceTests {
     @DisplayName("List games when no games added")
     public void listGamesWhenNoGames() throws Exception {
         ListGamesResponse listGamesResponse = (ListGamesResponse) gameService.listGames(authData.authToken());
-        Assertions.assertEquals(listGamesResponse.games(), new ArrayList<>());
+        Assertions.assertEquals(listGamesResponse.games(), new HashSet<>());
     }
 
     @Test
@@ -105,7 +106,7 @@ public class GameServiceTests {
         CreateGameResponse createGameResponse = (CreateGameResponse) gameService.createGame(authData.authToken(), new CreateGameRequest("game"));
         gameService.joinGame(authData.authToken(), new JoinGameRequest("WHITE", createGameResponse.gameID()));
         ListGamesResponse listGamesResponse = (ListGamesResponse) gameService.listGames(authData.authToken());
-        Assertions.assertEquals(listGamesResponse.games().getFirst(), new GameData(createGameResponse.gameID(), authData.username(), null, "game", new ChessGame()));
+        Assertions.assertEquals(listGamesResponse.games().iterator().next(), new GameData(createGameResponse.gameID(), authData.username(), null, "game", new ChessGame()));
     }
 
     @Test

@@ -35,7 +35,11 @@ public class GameService extends Service {
         if (authData == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
-        return new ListGamesResponse(gameDAO.getGames());
+        try {
+            return new ListGamesResponse(gameDAO.getGames());
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: " + e);
+        }
     }
 
     public Response createGame(String authToken, CreateGameRequest createGameRequest) throws ServerErrorException, UnauthorizedException, BadRequestException {
@@ -60,7 +64,13 @@ public class GameService extends Service {
     }
 
     public void joinGame(String authToken, JoinGameRequest joinGameRequest) throws BadRequestException, ServerErrorException, UnauthorizedException, AlreadyTakenException {
-        GameData gameData = gameDAO.getGame(joinGameRequest.gameID());
+        GameData gameData = null;
+        try {
+            gameData = gameDAO.getGame(joinGameRequest.gameID());
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: " + e);
+        }
+
         if (gameData == null) {
             throw new BadRequestException("Error: bad request");
         }

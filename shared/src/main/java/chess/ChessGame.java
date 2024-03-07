@@ -15,8 +15,8 @@ public class ChessGame {
     private TeamColor currentTurn;
     private ChessBoard chessBoard;
 
-    private final Deque<ChessMove> movesStack = new LinkedList<>();
-    private final Deque<ChessPiece> piecesStack = new LinkedList<>();
+    private ChessMove lastMove = null;
+    private ChessPiece lastPiece = null;
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -31,12 +31,22 @@ public class ChessGame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessGame chessGame = (ChessGame) o;
-        return currentTurn == chessGame.currentTurn && Objects.equals(chessBoard, chessGame.chessBoard) && Objects.equals(movesStack, chessGame.movesStack) && Objects.equals(piecesStack, chessGame.piecesStack);
+        return currentTurn == chessGame.currentTurn && Objects.equals(chessBoard, chessGame.chessBoard) && Objects.equals(lastMove, chessGame.lastMove) && Objects.equals(lastPiece, chessGame.lastPiece);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(currentTurn, chessBoard, movesStack, piecesStack);
+        return Objects.hash(currentTurn, chessBoard, lastMove, lastPiece);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "currentTurn=" + currentTurn +
+                ", chessBoard=" + chessBoard +
+                ", lastMove=" + lastMove +
+                ", lastPiece=" + lastPiece +
+                '}';
     }
 
     public ChessGame() {
@@ -114,8 +124,8 @@ public class ChessGame {
      * @param move move to be made
      */
     public void makeTestMove(ChessMove move) {
-        movesStack.addFirst(move);
-        piecesStack.addFirst(chessBoard.getPiece(move.getEndPosition()));
+        lastMove = move;
+        lastPiece = chessBoard.getPiece(move.getEndPosition());
         chessBoard.addPiece(move.getEndPosition(),chessBoard.getPiece(move.getStartPosition()));
         chessBoard.addPiece(move.getStartPosition(), null);
 
@@ -129,8 +139,10 @@ public class ChessGame {
      * Undoes the last made move. Used in conjunction with makeMove() to check moves.
      */
     public void undoMove() {
-        ChessMove undoneMove = movesStack.removeFirst();
-        ChessPiece capturedPiece = piecesStack.removeFirst();
+        ChessMove undoneMove = lastMove;
+        lastMove = null;
+        ChessPiece capturedPiece = lastPiece;
+        lastPiece = null;
 
         chessBoard.addPiece(undoneMove.getStartPosition(), chessBoard.getPiece(undoneMove.getEndPosition()));
         chessBoard.addPiece(undoneMove.getEndPosition(), capturedPiece);

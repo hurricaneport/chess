@@ -3,6 +3,7 @@ package dataAccess;
 import model.GameData;
 
 import java.util.List;
+import java.util.Set;
 
 public interface GameDAO {
     /**
@@ -18,9 +19,16 @@ public interface GameDAO {
     /**
      * @return returns list of all currently stored games
      */
-    List<GameData> getGames();
+    Set<GameData> getGames() throws DataAccessException;
 
-    GameData getGame(int gameID);
+    /**
+     * Gets GameData for a given ID
+     * @param gameID gameID to be searched
+     * @return GameData of given ID or null if no game was found
+     * @throws DataAccessException for database errors.
+     */
+
+    GameData getGame(int gameID) throws DataAccessException;
 
     /**
      * Creates a new game in the database
