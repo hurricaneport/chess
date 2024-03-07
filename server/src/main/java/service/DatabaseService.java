@@ -9,9 +9,9 @@ import service.exceptions.ServerErrorException;
 
 public class DatabaseService extends Service {
     private static final DatabaseService databaseService = new DatabaseService();
-    AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
-    UserDAO userDAO = MemoryUserDAO.getUserDAO();
-    GameDAO gameDAO = MemoryGameDAO.getGameDAO();
+    final AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
+    final UserDAO userDAO = MemoryUserDAO.getUserDAO();
+    final GameDAO gameDAO = MemoryGameDAO.getGameDAO();
 
     public static DatabaseService getInstance() {
         return databaseService;

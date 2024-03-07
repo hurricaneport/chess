@@ -8,13 +8,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import service.DatabaseService;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class GameDAOTests {
-    GameDAO gameDAO = DBGameDAO.getGameDAO();
+    final GameDAO gameDAO = DBGameDAO.getGameDAO();
 
     @BeforeEach
     public void clearDatabase() throws Exception{

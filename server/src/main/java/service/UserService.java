@@ -19,9 +19,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class UserService extends Service {
-    UserDAO userDAO = MemoryUserDAO.getUserDAO();
-    AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
-    static UserService staticUserService = new UserService();
+    final UserDAO userDAO = MemoryUserDAO.getUserDAO();
+    final AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
+    static final UserService staticUserService = new UserService();
     public static UserService getInstance() {
         return staticUserService;
     }

@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DBGameDAO implements GameDAO {
-    static GameDAO gameDAO = new DBGameDAO();
+    static final GameDAO gameDAO = new DBGameDAO();
 
     public static GameDAO getGameDAO() {
         return gameDAO;

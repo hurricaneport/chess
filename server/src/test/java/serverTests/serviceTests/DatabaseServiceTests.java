@@ -16,12 +16,12 @@ import service.DatabaseService;
 import service.UserService;
 
 public class DatabaseServiceTests {
-    DatabaseService databaseService = DatabaseService.getInstance();
-    UserService userService = UserService.getInstance();
+    final DatabaseService databaseService = DatabaseService.getInstance();
+    final UserService userService = UserService.getInstance();
 
-    AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
-    UserDAO userDAO = MemoryUserDAO.getUserDAO();
-    GameDAO gameDAO = MemoryGameDAO.getGameDAO();
+    final AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
+    final UserDAO userDAO = MemoryUserDAO.getUserDAO();
+    final GameDAO gameDAO = MemoryGameDAO.getGameDAO();
     @BeforeEach
     public void clear() throws Exception {
         databaseService.clear();

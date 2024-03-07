@@ -15,10 +15,10 @@ import service.UserService;
 
 public class UserServiceTests {
 
-    UserService userService = UserService.getInstance();
-    DatabaseService databaseService = DatabaseService.getInstance();
+    final UserService userService = UserService.getInstance();
+    final DatabaseService databaseService = DatabaseService.getInstance();
 
-    AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
+    final AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
 
     @BeforeEach
     public void clearDB() throws Exception {

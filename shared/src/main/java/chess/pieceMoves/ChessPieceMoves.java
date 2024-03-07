@@ -12,7 +12,7 @@ import java.util.HashSet;
  */
 public abstract class ChessPieceMoves {
 
-    Collection<ChessMove> moves = new HashSet<>();
+    final Collection<ChessMove> moves = new HashSet<>();
     final ChessBoard chessBoard;
     final ChessPosition position;
     public ChessPieceMoves(ChessBoard chessBoard, ChessPosition position) {
