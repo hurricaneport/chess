@@ -30,7 +30,7 @@ public class DatabaseServiceTests {
     @Test
     @DisplayName("Clear Database with entries in all tables")
     public void clearDatabase() throws Exception {
-        RegisterResponse registerResponse = (RegisterResponse) userService.register(new RegisterRequest("username", "password", "email"));
+        userService.register(new RegisterRequest("username", "password", "email"));
         databaseService.clear();
         Assertions.assertThrows(UnauthorizedException.class, () -> userService.login(new LoginRequest("username", "password")));
         Assertions.assertTrue(authDAO.isEmpty());
