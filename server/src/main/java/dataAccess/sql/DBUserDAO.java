@@ -6,8 +6,8 @@ import model.UserData;
 
 public class DBUserDAO implements UserDAO {
     @Override
-    public boolean addUser(UserData userData) throws DataAccessException {
-        return false;
+    public void addUser(UserData userData) throws DataAccessException {
+        
     }
 
     @Override

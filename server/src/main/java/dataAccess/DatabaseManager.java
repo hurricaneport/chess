@@ -53,7 +53,7 @@ public class DatabaseManager {
      * @throws DataAccessException when an SQL error occurs
      */
     private static void createTables() throws DataAccessException {
-        String sql = "CREATE TABLE IF NOT EXISTS `game` (" +
+        String gameTable = "CREATE TABLE IF NOT EXISTS `game` (" +
                 "  `game_id` int NOT NULL AUTO_INCREMENT," +
                 "  `game_name` varchar(45) NOT NULL," +
                 "  `white_username` varchar(45) DEFAULT NULL," +
@@ -62,11 +62,27 @@ public class DatabaseManager {
                 "  PRIMARY KEY (`game_id`)" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
+        String userTable = "CREATE TABLE `user` (" +
+                "  `username` varchar(45) NOT NULL," +
+                "  `email` varchar(45) NOT NULL," +
+                "  `password` varchar(60) NOT NULL," +
+                "  PRIMARY KEY (`username`)," +
+                "  UNIQUE KEY `email_UNIQUE` (`email`)" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+
         try (Connection connection = getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(gameTable)) {
                 preparedStatement.executeUpdate();
-            } catch (SQLException e) {
+            }
+            catch (SQLException e) {
                 throw new DataAccessException("Could not create table: game");
+            }
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(userTable)) {
+                preparedStatement.executeUpdate();
+            }
+            catch (SQLException e) {
+                throw new DataAccessException("Could not create table: user");
             }
         }
         catch (SQLException e) {

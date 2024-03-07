@@ -6,11 +6,11 @@ public interface UserDAO {
 
     /**
      * Adds a user to the database
+     *
      * @param userData UserData to be added
-     * @return true if new user created, false otherwise
      * @throws DataAccessException if user with username or email already exists
      */
-    boolean addUser(UserData userData) throws DataAccessException;
+    void addUser(UserData userData) throws DataAccessException;
 
     /**
      * Gets a user by username
