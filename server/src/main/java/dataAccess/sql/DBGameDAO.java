@@ -7,6 +7,7 @@ import dataAccess.GameDAO;
 import dataAccess.util.JsonUtils;
 import model.GameData;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,8 +42,21 @@ public class DBGameDAO implements GameDAO {
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isEmpty() throws DataAccessException {
+        String sql = "SELECT * FROM `game`";
 
+        try(Connection connection = DatabaseManager.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                return !resultSet.next();
+            }
+            catch (SQLException e) {
+                throw new DataAccessException("Could not execute query");
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException("Could not connect to database");
+        }
     }
 
     @Override

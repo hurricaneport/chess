@@ -81,4 +81,42 @@ public class GameDAOTests {
 
         Assertions.assertEquals(expectedGames, games);
     }
+
+    @Test
+    @DisplayName("Test isEmpty on full database")
+    public void isEmptyFull() throws Exception {
+        GameData game1 = new GameData(null, null, null, "game1", new ChessGame());
+        GameData game2 = new GameData(null, null, null, "game2", new ChessGame());
+        GameData game3 = new GameData(null, null, null, "game3", new ChessGame());
+        GameData game4 = new GameData(null, null, null, "game4", new ChessGame());
+
+        gameDAO.createGame(game1);
+        gameDAO.createGame(game2);
+        gameDAO.createGame(game3);
+        gameDAO.createGame(game4);
+
+        Assertions.assertFalse(gameDAO.isEmpty());
+
+
+    }
+
+    @Test
+    @DisplayName("Test isEmpty on empty database")
+    public void isEmptyEmpty() throws Exception {
+        GameData game1 = new GameData(null, null, null, "game1", new ChessGame());
+        GameData game2 = new GameData(null, null, null, "game2", new ChessGame());
+        GameData game3 = new GameData(null, null, null, "game3", new ChessGame());
+        GameData game4 = new GameData(null, null, null, "game4", new ChessGame());
+
+        gameDAO.createGame(game1);
+        gameDAO.createGame(game2);
+        gameDAO.createGame(game3);
+        gameDAO.createGame(game4);
+
+        gameDAO.clear();
+
+        Assertions.assertTrue(gameDAO.isEmpty());
+
+
+    }
 }

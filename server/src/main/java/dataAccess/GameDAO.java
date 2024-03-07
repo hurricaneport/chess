@@ -14,7 +14,7 @@ public interface GameDAO {
     /**
      * @return true if auth table is empty, false otherwise
      */
-    boolean isEmpty();
+    boolean isEmpty() throws DataAccessException;
 
     /**
      * @return returns list of all currently stored games
