@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import service.request.LoginRequest;
 import service.request.RegisterRequest;
-import service.response.RegisterResponse;
 import service.exceptions.UnauthorizedException;
 import service.DatabaseService;
 import service.UserService;
