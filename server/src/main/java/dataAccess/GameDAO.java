@@ -2,7 +2,6 @@ package dataAccess;
 
 import model.GameData;
 
-import java.util.List;
 import java.util.Set;
 
 public interface GameDAO {

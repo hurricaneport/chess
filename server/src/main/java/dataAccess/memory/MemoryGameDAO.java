@@ -4,9 +4,7 @@ import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.GameData;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class MemoryGameDAO implements GameDAO {

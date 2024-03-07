@@ -64,7 +64,7 @@ public class GameService extends Service {
     }
 
     public void joinGame(String authToken, JoinGameRequest joinGameRequest) throws BadRequestException, ServerErrorException, UnauthorizedException, AlreadyTakenException {
-        GameData gameData = null;
+        GameData gameData;
         try {
             gameData = gameDAO.getGame(joinGameRequest.gameID());
         } catch (DataAccessException e) {
