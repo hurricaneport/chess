@@ -123,7 +123,7 @@ public class DBGameDAO implements GameDAO {
     @Override
     public int createGame(GameData gameData) throws DataAccessException {
         String sql = "INSERT into `game` (game_name, game)" +
-                "values (?,?) ";
+                "values (?,?)";
 
         int gameID;
         try (Connection connection = DatabaseManager.getConnection()) {
