@@ -63,7 +63,12 @@ public class UserService extends Service {
             throw new BadRequestException("Error: bad request");
         }
 
-        UserData user = userDAO.getUser(loginRequest.username());
+        UserData user = null;
+        try {
+            user = userDAO.getUser(loginRequest.username());
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: " + e);
+        }
         if (user == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
@@ -95,12 +100,20 @@ public class UserService extends Service {
      * @param email email to check
      * @return true if user exists
      */
-    private boolean userExists(String username, String email) {
-        return userDAO.getUser(username) != null || userDAO.getUserByEmail(email) != null;
+    private boolean userExists(String username, String email) throws ServerErrorException {
+        try {
+            return userDAO.getUser(username) != null || userDAO.getUserByEmail(email) != null;
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: " + e);
+        }
     }
 
-    private boolean userExists(String username) {
-        return userDAO.getUser(username) != null;
+    private boolean userExists(String username) throws ServerErrorException {
+        try {
+            return userDAO.getUser(username) != null;
+        } catch (DataAccessException e) {
+            throw new ServerErrorException("Error: " + e);
+        }
     }
 
     /**

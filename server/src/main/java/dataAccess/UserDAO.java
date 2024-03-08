@@ -17,17 +17,17 @@ public interface UserDAO {
      * @param username username of the user to search for
      * @return UserData object if user found, otherwise null
      */
-    UserData getUser(String username);
+    UserData getUser(String username) throws DataAccessException;
 
-    UserData getUserByEmail(String email);
+    UserData getUserByEmail(String email) throws DataAccessException;
 
     /**
      * Clears User table of DB
      */
-    void clear();
+    void clear() throws DataAccessException;
 
     /**
      * @return true if user table is empty, false otherwise
      */
-    boolean isEmpty();
+    boolean isEmpty() throws DataAccessException;
 }
