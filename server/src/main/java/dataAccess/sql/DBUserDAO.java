@@ -44,7 +44,7 @@ public class DBUserDAO implements UserDAO {
         String sql = "SELECT `password`, `email`" +
                 "FROM `user`" +
                 "WHERE username = ?";
-        UserData userData;
+        UserData userData = null;
 
         try (Connection connection = DatabaseManager.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -52,11 +52,12 @@ public class DBUserDAO implements UserDAO {
 
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                resultSet.next();
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
+                if(resultSet.next()) {
+                    String password = resultSet.getString("password");
+                    String email = resultSet.getString("email");
 
-                userData = new UserData(username, password, email);
+                    userData = new UserData(username, password, email);
+                }
             }
             catch (SQLException e) {
                 throw new DataAccessException("Could not retrieve user");

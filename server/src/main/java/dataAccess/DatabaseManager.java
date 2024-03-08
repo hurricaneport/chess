@@ -55,14 +55,18 @@ public class DatabaseManager {
     private static void createTables() throws DataAccessException {
         String gameTable = "CREATE TABLE IF NOT EXISTS `game` (" +
                 "  `game_id` int NOT NULL AUTO_INCREMENT," +
-                "  `game_name` varchar(45) NOT NULL," +
                 "  `white_username` varchar(45) DEFAULT NULL," +
                 "  `black_username` varchar(45) DEFAULT NULL," +
-                "  `game` mediumtext NOT NULL," +
-                "  PRIMARY KEY (`game_id`)" +
+                "  `game_name` varchar(45) NOT NULL," +
+                "  `game` text NOT NULL," +
+                "  PRIMARY KEY (`game_id`)," +
+                "  KEY `username_idx` (`black_username`)," +
+                "  KEY `game_username_white_idx` (`white_username`)," +
+                "  CONSTRAINT `game_username_black` FOREIGN KEY (`black_username`) REFERENCES `user` (`username`) ON DELETE SET NULL ON UPDATE CASCADE," +
+                "  CONSTRAINT `game_username_white` FOREIGN KEY (`white_username`) REFERENCES `user` (`username`) ON DELETE SET NULL ON UPDATE CASCADE" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
-        String userTable = "CREATE TABLE `user` (" +
+        String userTable = "CREATE TABLE IF NOT EXISTS `user` (" +
                 "  `username` varchar(45) NOT NULL," +
                 "  `email` varchar(45) NOT NULL," +
                 "  `password` varchar(60) NOT NULL," +
@@ -70,7 +74,22 @@ public class DatabaseManager {
                 "  UNIQUE KEY `email_UNIQUE` (`email`)" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
+        String authTable = "CREATE TABLE IF NOT EXISTS `auth` (" +
+                "  `username` varchar(45) NOT NULL," +
+                "  `auth_token` varchar(45) NOT NULL," +
+                "  PRIMARY KEY (`auth_token`,`username`)," +
+                "  KEY `username_idx` (`username`)," +
+                "  CONSTRAINT `username` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+
         try (Connection connection = getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(userTable)) {
+                preparedStatement.executeUpdate();
+            }
+            catch (SQLException e) {
+                throw new DataAccessException("Could not create table: user");
+            }
+
             try (PreparedStatement preparedStatement = connection.prepareStatement(gameTable)) {
                 preparedStatement.executeUpdate();
             }
@@ -78,11 +97,11 @@ public class DatabaseManager {
                 throw new DataAccessException("Could not create table: game");
             }
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(userTable)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(authTable)) {
                 preparedStatement.executeUpdate();
             }
             catch (SQLException e) {
-                throw new DataAccessException("Could not create table: user");
+                throw new DataAccessException("Could not create table: auth");
             }
         }
         catch (SQLException e) {

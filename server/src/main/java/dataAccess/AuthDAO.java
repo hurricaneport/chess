@@ -22,10 +22,10 @@ public interface AuthDAO {
     /**
      * Clears Auth Table of DB
      */
-    void clear();
+    void clear() throws DataAccessException;
 
     /**
      * @return true if auth table is empty, false otherwise
      */
-    boolean isEmpty();
+    boolean isEmpty() throws DataAccessException;
 }
