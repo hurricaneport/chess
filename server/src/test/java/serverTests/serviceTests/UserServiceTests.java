@@ -2,6 +2,7 @@ package serverTests.serviceTests;
 
 import dataAccess.AuthDAO;
 import dataAccess.memory.MemoryAuthDAO;
+import dataAccess.sql.DBAuthDAO;
 import org.junit.jupiter.api.*;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
@@ -18,7 +19,7 @@ public class UserServiceTests {
     final UserService userService = UserService.getInstance();
     final DatabaseService databaseService = DatabaseService.getInstance();
 
-    final AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
+    final AuthDAO authDAO = DBAuthDAO.getAuthDAO();
 
     @BeforeEach
     public void clearDB() throws Exception {

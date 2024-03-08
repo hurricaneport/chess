@@ -3,6 +3,7 @@ package service;
 import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
+import dataAccess.sql.DBGameDAO;
 import model.AuthData;
 import model.GameData;
 import dataAccess.memory.MemoryGameDAO;
@@ -19,9 +20,7 @@ import service.response.Response;
 public class GameService extends Service {
     private static final GameService staticGameService = new GameService();
 
-    private final GameDAO gameDAO = MemoryGameDAO.getGameDAO();
-
-    private static int currentGameID = 0;
+    private final GameDAO gameDAO = DBGameDAO.getGameDAO();
 
     /**
      * @return Returns a static instance of GameService
@@ -51,16 +50,14 @@ public class GameService extends Service {
             throw new UnauthorizedException("Error: unauthorized");
         }
 
-
+        int gameID;
         try {
-            gameDAO.createGame(new GameData(currentGameID, null, null, createGameRequest.gameName(), new ChessGame()));
+            gameID = gameDAO.createGame(new GameData(null, null, null, createGameRequest.gameName(), new ChessGame()));
         } catch (DataAccessException e) {
             throw new ServerErrorException("Error: " + e);
         }
-        CreateGameResponse createGameResponse = new CreateGameResponse(currentGameID);
-        currentGameID++;
 
-        return createGameResponse;
+        return new CreateGameResponse(gameID);
     }
 
     public void joinGame(String authToken, JoinGameRequest joinGameRequest) throws BadRequestException, ServerErrorException, UnauthorizedException, AlreadyTakenException {

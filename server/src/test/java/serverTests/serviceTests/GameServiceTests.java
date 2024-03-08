@@ -3,6 +3,7 @@ package serverTests.serviceTests;
 import chess.ChessGame;
 import dataAccess.GameDAO;
 import dataAccess.memory.MemoryGameDAO;
+import dataAccess.sql.DBGameDAO;
 import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.*;
@@ -25,7 +26,7 @@ public class GameServiceTests {
     private final GameService gameService = GameService.getInstance();
     private final UserService userService = UserService.getInstance();
 
-    private final GameDAO gameDAO = MemoryGameDAO.getGameDAO();
+    private final GameDAO gameDAO = DBGameDAO.getGameDAO();
 
     private AuthData authData;
 

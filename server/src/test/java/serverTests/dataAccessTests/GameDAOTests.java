@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class GameDAOTests {
     final GameDAO gameDAO = DBGameDAO.getGameDAO();
-    final UserDAO userDAO = DBUserDAO.getUserDao();
+    final UserDAO userDAO = DBUserDAO.getUserDAO();
 
     @BeforeEach
     public void clearDatabase() throws Exception {

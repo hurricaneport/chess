@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserDAOTests {
-    UserDAO userDAO = DBUserDAO.getUserDao();
+    UserDAO userDAO = DBUserDAO.getUserDAO();
     @BeforeEach
     public void clearDatabase() throws Exception {
         userDAO.clear();

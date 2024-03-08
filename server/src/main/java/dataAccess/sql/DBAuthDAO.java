@@ -11,6 +11,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBAuthDAO implements AuthDAO {
+
+    private static final AuthDAO authDAO = new DBAuthDAO();
+
+    public static AuthDAO getAuthDAO() {
+        return authDAO;
+    }
     @Override
     public AuthData getAuthData(String authToken) throws DataAccessException {
         String sql = "SELECT `username`" +

@@ -3,6 +3,9 @@ package service;
 import dataAccess.*;
 import dataAccess.memory.MemoryAuthDAO;
 import dataAccess.memory.MemoryUserDAO;
+import dataAccess.sql.DBAuthDAO;
+import dataAccess.sql.DBUserDAO;
+import dataAccess.util.PasswordUtils;
 import model.AuthData;
 import model.UserData;
 import service.exceptions.AlreadyTakenException;
@@ -19,8 +22,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class UserService extends Service {
-    final UserDAO userDAO = MemoryUserDAO.getUserDAO();
-    final AuthDAO authDAO = MemoryAuthDAO.getAuthDAO();
+    final UserDAO userDAO = DBUserDAO.getUserDAO();
+    final AuthDAO authDAO = DBAuthDAO.getAuthDAO();
     static final UserService staticUserService = new UserService();
     public static UserService getInstance() {
         return staticUserService;
@@ -73,7 +76,7 @@ public class UserService extends Service {
             throw new UnauthorizedException("Error: unauthorized");
         }
 
-        if (!Objects.equals(user.password(), loginRequest.password())) {
+        if (!PasswordUtils.checkPassword(loginRequest.password(), user.password())) {
             throw new UnauthorizedException("Error: unauthorized");
         }
         AuthData authData = createAuth(loginRequest.username());

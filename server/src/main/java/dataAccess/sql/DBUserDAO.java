@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class DBUserDAO implements UserDAO {
     private static final UserDAO userDao = new DBUserDAO();
 
-    public static UserDAO getUserDao() {
+    public static UserDAO getUserDAO() {
         return userDao;
     }
     @Override
@@ -73,7 +73,7 @@ public class DBUserDAO implements UserDAO {
         String sql = "SELECT `username`, `password`" +
                 "FROM `user`" +
                 "WHERE email = ?";
-        UserData userData;
+        UserData userData = null;
 
         try (Connection connection = DatabaseManager.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -81,11 +81,12 @@ public class DBUserDAO implements UserDAO {
 
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                resultSet.next();
-                String password = resultSet.getString("password");
-                String username = resultSet.getString("username");
+                if(resultSet.next()) {
+                    String password = resultSet.getString("password");
+                    String username = resultSet.getString("username");
 
-                userData = new UserData(username, password, email);
+                    userData = new UserData(username, password, email);
+                }
             }
             catch (SQLException e) {
                 throw new DataAccessException("Could not retrieve user");
