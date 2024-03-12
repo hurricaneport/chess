@@ -6,13 +6,13 @@ import model.AuthData;
 public interface AuthDAO {
     /**
      * Gets authorization given an auth token
-     * @param authToken authtoken to check for
+     * @param authToken auth token to check for
      * @return returns AuthData if authToken found, otherwise returns null
      */
     AuthData getAuthData(String authToken) throws DataAccessException;
 
     /**
-     * Adds given authdata to the database
+     * Adds given auth data to the database
      * @param authData AuthData to be added to database
      */
     void addAuthData(AuthData authData) throws DataAccessException;
