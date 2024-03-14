@@ -3,8 +3,8 @@ package handler;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.ServerErrorException;
-import service.request.RegisterRequest;
-import service.response.Response;
+import model.request.RegisterRequest;
+import model.response.Response;
 import service.UserService;
 
 public class RegisterHandler extends Handler {

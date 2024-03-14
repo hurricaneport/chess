@@ -1,8 +1,6 @@
 package service;
 
 import dataAccess.*;
-import dataAccess.memory.MemoryAuthDAO;
-import dataAccess.memory.MemoryUserDAO;
 import dataAccess.sql.DBAuthDAO;
 import dataAccess.sql.DBUserDAO;
 import dataAccess.util.PasswordUtils;
@@ -12,13 +10,12 @@ import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.ServerErrorException;
 import service.exceptions.UnauthorizedException;
-import service.request.LoginRequest;
-import service.request.RegisterRequest;
-import service.response.LoginResponse;
-import service.response.RegisterResponse;
-import service.response.Response;
+import model.request.LoginRequest;
+import model.request.RegisterRequest;
+import model.response.LoginResponse;
+import model.response.RegisterResponse;
+import model.response.Response;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class UserService extends Service {

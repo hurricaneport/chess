@@ -3,8 +3,8 @@ package handler;
 import service.exceptions.BadRequestException;
 import service.exceptions.ServerErrorException;
 import service.exceptions.UnauthorizedException;
-import service.request.CreateGameRequest;
-import service.response.Response;
+import model.request.CreateGameRequest;
+import model.response.Response;
 import service.GameService;
 
 public class CreateGameHandler extends Handler {

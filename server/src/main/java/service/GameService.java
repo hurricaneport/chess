@@ -6,16 +6,15 @@ import dataAccess.GameDAO;
 import dataAccess.sql.DBGameDAO;
 import model.AuthData;
 import model.GameData;
-import dataAccess.memory.MemoryGameDAO;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.ServerErrorException;
 import service.exceptions.UnauthorizedException;
-import service.request.CreateGameRequest;
-import service.request.JoinGameRequest;
-import service.response.CreateGameResponse;
-import service.response.ListGamesResponse;
-import service.response.Response;
+import model.request.CreateGameRequest;
+import model.request.JoinGameRequest;
+import model.response.CreateGameResponse;
+import model.response.ListGamesResponse;
+import model.response.Response;
 
 public class GameService extends Service {
     private static final GameService staticGameService = new GameService();

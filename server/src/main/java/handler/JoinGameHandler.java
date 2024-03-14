@@ -4,7 +4,7 @@ import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.ServerErrorException;
 import service.exceptions.UnauthorizedException;
-import service.request.JoinGameRequest;
+import model.request.JoinGameRequest;
 import service.GameService;
 
 public class JoinGameHandler extends Handler{

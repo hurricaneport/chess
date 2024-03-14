@@ -1,6 +1,6 @@
 package handler;
 
-import service.response.Response;
+import model.response.Response;
 import service.exceptions.ServerErrorException;
 import service.exceptions.UnauthorizedException;
 import service.GameService;

@@ -3,8 +3,8 @@ package handler;
 import service.exceptions.BadRequestException;
 import service.exceptions.ServerErrorException;
 import service.exceptions.UnauthorizedException;
-import service.request.LoginRequest;
-import service.response.Response;
+import model.request.LoginRequest;
+import model.response.Response;
 import service.UserService;
 
 public class LoginHandler extends Handler {

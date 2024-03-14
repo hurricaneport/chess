@@ -1,8 +1,8 @@
 package handler;
 
 import com.google.gson.Gson;
-import service.response.ErrorResponse;
-import service.response.Response;
+import model.response.ErrorResponse;
+import model.response.Response;
 
 public abstract class Handler {
     private static final Gson gson = new Gson();

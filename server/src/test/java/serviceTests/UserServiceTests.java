@@ -1,16 +1,15 @@
 package serviceTests;
 
 import dataAccess.AuthDAO;
-import dataAccess.memory.MemoryAuthDAO;
 import dataAccess.sql.DBAuthDAO;
 import org.junit.jupiter.api.*;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
-import service.request.LoginRequest;
-import service.response.LoginResponse;
-import service.request.RegisterRequest;
-import service.response.RegisterResponse;
+import model.request.LoginRequest;
+import model.response.LoginResponse;
+import model.request.RegisterRequest;
+import model.response.RegisterResponse;
 import service.DatabaseService;
 import service.UserService;
 
