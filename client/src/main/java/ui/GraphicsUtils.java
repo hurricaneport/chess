@@ -48,27 +48,13 @@ public class GraphicsUtils {
         ChessGame.TeamColor teamColor = chessPiece.getTeamColor();
         String pieceChar;
         switch (chessPiece.getPieceType()) {
-            case KING -> {
-                pieceChar = "K";
-            }
-            case QUEEN -> {
-                pieceChar = "Q";
-            }
-            case BISHOP -> {
-                pieceChar = "B";
-            }
-            case KNIGHT -> {
-                pieceChar = "N";
-            }
-            case ROOK -> {
-                pieceChar = "R";
-            }
-            case PAWN -> {
-                pieceChar = "P";
-            }
-            case null -> {
-                throw new RuntimeException("Piece has color unassigned");
-            }
+            case KING -> pieceChar = "K";
+            case QUEEN -> pieceChar = "Q";
+            case BISHOP -> pieceChar = "B";
+            case KNIGHT -> pieceChar = "N";
+            case ROOK -> pieceChar = "R";
+            case PAWN -> pieceChar = "P";
+            case null -> throw new RuntimeException("Piece has color unassigned");
         }
         return getColoredPieceChar(pieceChar, teamColor);
     }
