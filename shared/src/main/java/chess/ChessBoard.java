@@ -122,4 +122,7 @@ public class ChessBoard {
         return piecesMap;
     }
 
+    public ChessPiece[][] getPieces() {
+        return pieces;
+    }
 }
