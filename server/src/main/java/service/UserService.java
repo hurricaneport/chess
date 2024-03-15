@@ -63,7 +63,7 @@ public class UserService extends Service {
             throw new BadRequestException("Error: bad request");
         }
 
-        UserData user = null;
+        UserData user;
         try {
             user = userDAO.getUser(loginRequest.username());
         } catch (DataAccessException e) {
