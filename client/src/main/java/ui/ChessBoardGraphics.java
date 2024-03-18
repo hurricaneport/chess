@@ -32,7 +32,7 @@ public class ChessBoardGraphics {
         }
 
         drawLabels(isForward);
-        System.out.print("\n");
+        System.out.print(EscapeSequences.RESET_BG_COLOR + EscapeSequences.RESET_TEXT_COLOR + "\n");
 
     }
 
