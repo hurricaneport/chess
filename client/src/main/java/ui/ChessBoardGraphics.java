@@ -32,7 +32,7 @@ public class ChessBoardGraphics {
         }
 
         drawLabels(isForward);
-        System.out.print(EscapeSequences.RESET_BG_COLOR + EscapeSequences.RESET_TEXT_COLOR + "\n");
+        System.out.print(EscapeSequences.RESET_ALL + "\n");
 
     }
 
@@ -55,10 +55,10 @@ public class ChessBoardGraphics {
         for (int i = 0; i < 8; i++) {
             System.out.print(separator + labels1[i] + separator);
         }
-        System.out.print(separator + separator + separator + "\n");
+        System.out.print(separator + separator + separator + EscapeSequences.RESET_ALL + "\n");
     }
 
-    public static void drawRows(String rowLabel, String[] pieceChars, boolean isEvenRow) {
+    private static void drawRows(String rowLabel, String[] pieceChars, boolean isEvenRow) {
         System.out.print(EscapeSequences.SET_BG_COLOR_DARK_GREY);
         System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
         System.out.print(separator + rowLabel + separator);
@@ -72,6 +72,6 @@ public class ChessBoardGraphics {
          }
         System.out.print(EscapeSequences.SET_BG_COLOR_DARK_GREY);
         System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE);
-        System.out.print(separator + rowLabel + separator + "\n");
+        System.out.print(separator + rowLabel + separator + EscapeSequences.RESET_ALL + "\n");
     }
 }
