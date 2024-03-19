@@ -2,14 +2,18 @@ package ui;
 
 import api.HTTPException;
 import api.ServerFacade;
+import chess.ChessGame;
+import model.GameData;
+import model.request.JoinGameRequest;
 import model.request.LoginRequest;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
 
     private final Scanner scanner = new Scanner(System.in);
     private final ServerFacade serverFacade = new ServerFacade();
+    private final ArrayList<GameData> games = new ArrayList<>();
     public void run() {
         System.out.print("Chess 2024\n");
         preLogin();
@@ -40,7 +44,7 @@ public class Menu {
                 register();
             }
             default -> {
-                System.out.print(result + "is not valid input, please select a valid option\n\n");
+                System.out.print("'" + result + "' is not valid input, please select a valid option or press 1 for help.\n\n");
                 preLogin();
             }
 
@@ -82,14 +86,18 @@ public class Menu {
         catch (HTTPException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Please check your username and password and try again.\n");
-                login();
+                preLogin();
             }
             else {
                 System.out.print("An error occurred, please try again.\n" +
-                        "Error " + e.getStatus() + ": " + e.getMessage());
-                login();
+                        "Error " + e.getStatus() + ": " + e.getMessage() + "\n");
+                preLogin();
             }
         }
+    }
+
+    private void register() {
+
     }
 
     private void postLogin() {
@@ -106,29 +114,170 @@ public class Menu {
 
         switch (result) {
             case "1" -> {
-
+                postLoginHelp();
             }
             case "2" -> {
-
+                logout();
             }
             case "3" -> {
-
+                listGames();
             }
             case "4" -> {
-
+                joinGameDialogue();
             }
             case "5" -> {
-
+                joinGameObserver();
             }
             default -> {
-                System.out.print(result + "is not valid input, please select a valid option\n\n");
+                System.out.print("'" + result + "' is not valid input, please select a valid option or press 1 for help\n\n");
                 postLogin();
             }
         }
 
     }
 
-    private void register() {
+    private void postLoginHelp() {
+        System.out.print("""
+                Help:
+                Please enter into the terminal the number of the option you wish to select then press 'Enter'
+                Press '1' to repeat this message
+                Press '2' to logout of your account
+                Press '3' to show a list of all active chess games
+                Press '4' to join an active chess game as a player
+                Press '5' to join an active chess game as an observer
+                
+                """);
+
+        postLogin();
+    }
+
+    private void logout() {
+        try {
+            serverFacade.logout();
+            System.out.print("Logged out. Returning to main menu.\n");
+            preLogin();
+        }
+        catch (HTTPException e) {
+            if (e.getStatus() == 401) {
+                System.out.print("Could not log out because log-in is expired. Please log in again.\n");
+            }
+            else {
+                System.out.print("An error occurred, please try again.\n" +
+                        "Error " + e.getStatus() + ": " + e.getMessage() + "\n");
+                postLogin();
+            }
+        }
+    }
+
+    private void listGames() {
+        try {
+            System.out.print("Active games:\n");
+
+            fetchGames();
+            printActiveGames();
+            postLogin();
+        }
+        catch (HTTPException e) {
+            if (e.getStatus() == 401) {
+                System.out.print("Login expired, please login again\n");
+                preLogin();
+            }
+            else {
+                System.out.print("An error occurred, please try again.\n" +
+                        "Error " + e.getStatus() + ": " + e.getMessage() + "\n");
+                postLogin();
+            }
+        }
+    }
+
+    private void fetchGames() throws HTTPException {
+        Set<GameData> gameDataSet = serverFacade.listGames();
+        for (GameData gameData : gameDataSet) {
+            boolean isInList = false;
+            for (GameData gameData1 : games) {
+                if (Objects.equals(gameData1.gameID(), gameData.gameID())) {
+                    isInList = true;
+                    break;
+                }
+            }
+
+            if (!isInList) {
+                games.add(gameData);
+            }
+        }
+    }
+
+    private void printActiveGames() {
+        for (int i = 0; i < games.size(); i++) {
+            System.out.print(i + ": " + games.get(i).gameName() + "\n");
+        }
+        System.out.print("\n");
+    }
+
+    private void joinGameDialogue() {
+        try {
+            fetchGames();
+            printActiveGames();
+
+            System.out.print("Please select which game to join\n");
+            String gameIndex = scanner.nextLine();
+            while ((!gameIndex.matches("\\d+") || Integer.parseInt(gameIndex) > games.size()) && !gameIndex.equals("BACK")) {
+                System.out.print("Please enter a valid game index or enter 'BACK' to go back to main menu.\n");
+                gameIndex = scanner.nextLine();
+
+            }
+            if (!gameIndex.equals("BACK")) {
+                System.out.print("Please choose which color to join as. Enter 'BLACK' or 'WHITE'.\n");
+                String colorSelection = scanner.nextLine();
+                while (!colorSelection.equals("BLACK") && !colorSelection.equals("WHITE") && !colorSelection.equals("BACK")) {
+                    System.out.print("Please choose a valid color. Enter 'BLACK' or 'WHITE'. Enter 'BACK' to go back to main menu.\n");
+                    colorSelection = scanner.nextLine();
+                }
+                if (!colorSelection.equals("BACK")) {
+                    joinGame(Integer.parseInt(gameIndex), colorSelection);
+                }
+            }
+            postLogin();
+        }
+        catch (HTTPException e) {
+            if (e.getStatus() == 401) {
+                System.out.print("Login expired, please login again\n");
+                preLogin();
+            }
+            else {
+                System.out.print("An error occurred, please try again.\n" +
+                        "Error " + e.getStatus() + ": " + e.getMessage() + "\n");
+                postLogin();
+            }
+        }
+
 
     }
+
+    private void joinGame(int gameIndex, String teamColor) {
+        try {
+            serverFacade.joinGame(new JoinGameRequest(teamColor, games.get(gameIndex).gameID()));
+            ChessBoardGraphics.drawChessBoard(games.get(gameIndex).game().getBoard(), true);
+            ChessBoardGraphics.drawChessBoard(games.get(gameIndex).game().getBoard(), false);
+        } catch (HTTPException e) {
+            if (e.getStatus() == 401) {
+                System.out.print("Login expired, please login again\n");
+                preLogin();
+            }
+            else if (e.getStatus() == 403) {
+                System.out.print("Spot is already taken. Please try a different color or a different gae.\n");
+            }
+            else {
+                System.out.print("An error occurred, please try again.\n" +
+                        "Error " + e.getStatus() + ": " + e.getMessage() + "\n");
+                postLogin();
+            }
+        }
+    }
+
+    private void joinGameObserver() {
+
+    }
+
+
 }
