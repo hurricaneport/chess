@@ -193,7 +193,7 @@ public class Menu {
 
     private void printActiveGames() {
         for (int i = 0; i < games.size(); i++) {
-            System.out.print(i + ": " + games.get(i).gameName() + "\n");
+            System.out.print(Integer.valueOf(i + 1).toString() + ": " + games.get(i).gameName() + "\n");
         }
         System.out.print("\n");
     }
@@ -240,9 +240,9 @@ public class Menu {
 
     private void joinGame(int gameIndex, String teamColor) {
         try {
-            serverFacade.joinGame(new JoinGameRequest(teamColor, games.get(gameIndex).gameID()));
-            ChessBoardGraphics.drawChessBoard(games.get(gameIndex).game().getBoard(), true);
-            ChessBoardGraphics.drawChessBoard(games.get(gameIndex).game().getBoard(), false);
+            serverFacade.joinGame(new JoinGameRequest(teamColor, games.get(gameIndex - 1).gameID()));
+            ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), true);
+            ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), false);
         } catch (HTTPException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Login expired, please login again\n");
@@ -260,7 +260,34 @@ public class Menu {
     }
 
     private void joinGameObserver() {
+        try {
+            fetchGames();
+            printActiveGames();
 
+            System.out.print("Please select which game to join\n");
+            String gameIndex = scanner.nextLine();
+            while ((!gameIndex.matches("\\d+") || Integer.parseInt(gameIndex) > games.size()) && !gameIndex.equals("BACK")) {
+                System.out.print("Please enter a valid game index or enter 'BACK' to go back to main menu.\n");
+                gameIndex = scanner.nextLine();
+            }
+
+            if (!gameIndex.equals("BACK")) {
+                serverFacade.joinGame(new JoinGameRequest(null, games.get(Integer.parseInt(gameIndex) - 1).gameID()));
+                ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), true);
+                ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), false);
+            }
+        }
+        catch (HTTPException e) {
+            if (e.getStatus() == 401) {
+                System.out.print("Login expired, please login again\n");
+                preLogin();
+            }
+            else {
+                System.out.print("An error occurred, please try again.\n" +
+                        "Error " + e.getStatus() + ": " + e.getMessage() + "\n");
+                postLogin();
+            }
+        }
     }
 
 
