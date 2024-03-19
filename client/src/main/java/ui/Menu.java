@@ -31,18 +31,12 @@ public class Menu {
 
         String result = scanner.nextLine();
         switch (result) {
-            case "1" -> {
-                preLoginHelp();
-            }
+            case "1" -> preLoginHelp();
             case "2" -> {
 
             }
-            case "3" -> {
-                login();
-            }
-            case "4" -> {
-                register();
-            }
+            case "3" -> login();
+            case "4" -> register();
             default -> {
                 System.out.print("'" + result + "' is not valid input, please select a valid option or press 1 for help.\n\n");
                 preLogin();
@@ -113,21 +107,11 @@ public class Menu {
         String result = scanner.nextLine();
 
         switch (result) {
-            case "1" -> {
-                postLoginHelp();
-            }
-            case "2" -> {
-                logout();
-            }
-            case "3" -> {
-                listGames();
-            }
-            case "4" -> {
-                joinGameDialogue();
-            }
-            case "5" -> {
-                joinGameObserver();
-            }
+            case "1" -> postLoginHelp();
+            case "2" -> logout();
+            case "3" -> listGames();
+            case "4" -> joinGameDialogue();
+            case "5" -> joinGameObserver();
             default -> {
                 System.out.print("'" + result + "' is not valid input, please select a valid option or press 1 for help\n\n");
                 postLogin();

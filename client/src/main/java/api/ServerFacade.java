@@ -5,18 +5,15 @@ import model.GameData;
 import model.request.JoinGameRequest;
 import model.request.LoginRequest;
 import model.request.RegisterRequest;
-import model.response.ListGamesResponse;
 import model.response.LoginResponse;
 import model.response.RegisterResponse;
-import model.response.Response;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ServerFacade {
-    public LoginResponse login(LoginRequest loginRequest) throws HTTPException {
-        return null;
+    public void login(LoginRequest loginRequest) throws HTTPException {
+
     }
 
     public RegisterResponse register(RegisterRequest registerRequest) throws HTTPException {
