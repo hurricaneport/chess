@@ -8,54 +8,54 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MemoryGameDAO implements GameDAO {
-    private static final MemoryGameDAO gameDAO = new MemoryGameDAO();
+	private static final MemoryGameDAO gameDAO = new MemoryGameDAO();
 
+	private Set<GameData> gameTable = new HashSet<>();
 
-    private Set<GameData> gameTable = new HashSet<>();
+	public static MemoryGameDAO getGameDAO() {
+		return gameDAO;
+	}
 
-    public static MemoryGameDAO getGameDAO() {
-        return gameDAO;
-    }
-    @Override
-    public void clear() {
-        gameTable = new HashSet<>();
-    }
+	@Override
+	public void clear() {
+		gameTable = new HashSet<>();
+	}
 
-    @Override
-    public boolean isEmpty() {
-        return gameTable.isEmpty();
-    }
+	@Override
+	public boolean isEmpty() {
+		return gameTable.isEmpty();
+	}
 
-    @Override
-    public Set<GameData> getGames() {
-        return gameTable;
-    }
+	@Override
+	public Set<GameData> getGames() {
+		return gameTable;
+	}
 
-    @Override
-    public GameData getGame(int gameID) {
-        for (GameData gameData : gameTable) {
-            if (gameData.gameID() == gameID) {
-                return gameData;
-            }
-        }
+	@Override
+	public GameData getGame(int gameID) {
+		for (GameData gameData : gameTable) {
+			if (gameData.gameID() == gameID) {
+				return gameData;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public int createGame(GameData gameData) {
-        gameTable.add(gameData);
-        return gameData.gameID();
-    }
+	@Override
+	public int createGame(GameData gameData) {
+		gameTable.add(gameData);
+		return gameData.gameID();
+	}
 
-    @Override
-    public void updateGame(int gameID, GameData gameData) throws DataAccessException {
-        GameData oldGameData = getGame(gameID);
-        if (oldGameData == null) {
-            throw new DataAccessException("Game does not exist");
-        }
+	@Override
+	public void updateGame(int gameID, GameData gameData) throws DataAccessException {
+		GameData oldGameData = getGame(gameID);
+		if (oldGameData == null) {
+			throw new DataAccessException("Game does not exist");
+		}
 
-        gameTable.remove(oldGameData);
-        gameTable.add(gameData);
-    }
+		gameTable.remove(oldGameData);
+		gameTable.add(gameData);
+	}
 }

@@ -11,59 +11,60 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserDAOTests {
-    UserDAO userDAO = DBUserDAO.getUserDAO();
-    @BeforeEach
-    public void clearDatabase() throws Exception {
-        userDAO.clear();
-    }
+	UserDAO userDAO = DBUserDAO.getUserDAO();
 
-    @Test
-    @DisplayName("Add user")
-    public void createUser() throws Exception {
-        userDAO.addUser(new UserData("username", "password", "email"));
+	@BeforeEach
+	public void clearDatabase() throws Exception {
+		userDAO.clear();
+	}
 
-        UserData userData = userDAO.getUser("username");
-        Assertions.assertEquals("username", userData.username());
-        Assertions.assertEquals("email", userData.email());
-        Assertions.assertTrue(PasswordUtils.checkPassword("password", userData.password()));
+	@Test
+	@DisplayName("Add user")
+	public void createUser() throws Exception {
+		userDAO.addUser(new UserData("username", "password", "email"));
 
-    }
+		UserData userData = userDAO.getUser("username");
+		Assertions.assertEquals("username", userData.username());
+		Assertions.assertEquals("email", userData.email());
+		Assertions.assertTrue(PasswordUtils.checkPassword("password", userData.password()));
 
-    @Test
-    @DisplayName("Create duplicate user")
-    public void createDuplicateUser() throws Exception {
-        userDAO.addUser(new UserData("username", "password", "email"));
+	}
 
-        Assertions.assertThrows(DataAccessException.class, () -> userDAO.addUser(new UserData("username", "password2", "email2")));
-    }
+	@Test
+	@DisplayName("Create duplicate user")
+	public void createDuplicateUser() throws Exception {
+		userDAO.addUser(new UserData("username", "password", "email"));
 
-    @Test
-    @DisplayName("Get existing user")
-    public void getExistingUser() throws Exception {
-        userDAO.addUser(new UserData("username", "password", "email"));
+		Assertions.assertThrows(DataAccessException.class, () -> userDAO.addUser(new UserData("username", "password2", "email2")));
+	}
 
-        UserData userData = userDAO.getUser("username");
-        Assertions.assertEquals("username", userData.username());
-        Assertions.assertEquals("email", userData.email());
-        Assertions.assertTrue(PasswordUtils.checkPassword("password", userData.password()));
-    }
+	@Test
+	@DisplayName("Get existing user")
+	public void getExistingUser() throws Exception {
+		userDAO.addUser(new UserData("username", "password", "email"));
 
-    @Test
-    @DisplayName("Get non-existing user")
-    public void getNonExistingUser() throws Exception {
-        userDAO.addUser(new UserData("username", "password", "email"));
+		UserData userData = userDAO.getUser("username");
+		Assertions.assertEquals("username", userData.username());
+		Assertions.assertEquals("email", userData.email());
+		Assertions.assertTrue(PasswordUtils.checkPassword("password", userData.password()));
+	}
 
-        UserData userData = userDAO.getUser("username2");
+	@Test
+	@DisplayName("Get non-existing user")
+	public void getNonExistingUser() throws Exception {
+		userDAO.addUser(new UserData("username", "password", "email"));
 
-        Assertions.assertNull(userData);
-    }
+		UserData userData = userDAO.getUser("username2");
 
-    @Test
-    @DisplayName("Clear database")
-    public void clearDatabaseTest() throws Exception{
-        userDAO.addUser(new UserData("username", "password", "email"));
-        userDAO.clear();
+		Assertions.assertNull(userData);
+	}
 
-        Assertions.assertTrue(userDAO.isEmpty());
-    }
+	@Test
+	@DisplayName("Clear database")
+	public void clearDatabaseTest() throws Exception {
+		userDAO.addUser(new UserData("username", "password", "email"));
+		userDAO.clear();
+
+		Assertions.assertTrue(userDAO.isEmpty());
+	}
 }

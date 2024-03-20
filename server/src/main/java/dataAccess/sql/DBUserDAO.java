@@ -12,121 +12,116 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBUserDAO implements UserDAO {
-    private static final UserDAO userDao = new DBUserDAO();
+	private static final UserDAO userDao = new DBUserDAO();
 
-    public static UserDAO getUserDAO() {
-        return userDao;
-    }
-    @Override
-    public void addUser(UserData userData) throws DataAccessException {
-        String sql = "INSERT into `user` (username, password, email)" +
-                "values (?,?,?)";
+	public static UserDAO getUserDAO() {
+		return userDao;
+	}
 
-        try (Connection connection = DatabaseManager.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, userData.username());
-                preparedStatement.setString(2, PasswordUtils.hashPassword(userData.password()));
-                preparedStatement.setString(3, userData.email());
+	@Override
+	public void addUser(UserData userData) throws DataAccessException {
+		String sql = "INSERT into `user` (username, password, email)" +
+				"values (?,?,?)";
 
-                preparedStatement.executeUpdate();
-            }
-            catch (SQLException e) {
-                throw new DataAccessException("Could not add user");
-            }
-        }
-        catch (SQLException e) {
-            throw new DataAccessException("Could not connect to database");
-        }
-    }
+		try (Connection connection = DatabaseManager.getConnection()) {
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				preparedStatement.setString(1, userData.username());
+				preparedStatement.setString(2, PasswordUtils.hashPassword(userData.password()));
+				preparedStatement.setString(3, userData.email());
 
-    @Override
-    public UserData getUser(String username) throws DataAccessException {
-        String sql = "SELECT `password`, `email`" +
-                "FROM `user`" +
-                "WHERE username = ?";
-        UserData userData = null;
+				preparedStatement.executeUpdate();
+			} catch (SQLException e) {
+				throw new DataAccessException("Could not add user");
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Could not connect to database");
+		}
+	}
 
-        try (Connection connection = DatabaseManager.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1,username);
+	@Override
+	public UserData getUser(String username) throws DataAccessException {
+		String sql = "SELECT `password`, `email`" +
+				"FROM `user`" +
+				"WHERE username = ?";
+		UserData userData = null;
 
-                ResultSet resultSet = preparedStatement.executeQuery();
+		try (Connection connection = DatabaseManager.getConnection()) {
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				preparedStatement.setString(1, username);
 
-                if(resultSet.next()) {
-                    String password = resultSet.getString("password");
-                    String email = resultSet.getString("email");
+				ResultSet resultSet = preparedStatement.executeQuery();
 
-                    userData = new UserData(username, password, email);
-                }
-            }
-            catch (SQLException e) {
-                throw new DataAccessException("Could not retrieve user");
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException("Could not connect to database");
-        }
-        return userData;
-    }
+				if (resultSet.next()) {
+					String password = resultSet.getString("password");
+					String email = resultSet.getString("email");
 
-    @Override
-    public UserData getUserByEmail(String email) throws DataAccessException {
-        String sql = "SELECT `username`, `password`" +
-                "FROM `user`" +
-                "WHERE email = ?";
-        UserData userData = null;
+					userData = new UserData(username, password, email);
+				}
+			} catch (SQLException e) {
+				throw new DataAccessException("Could not retrieve user");
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Could not connect to database");
+		}
+		return userData;
+	}
 
-        try (Connection connection = DatabaseManager.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, email);
+	@Override
+	public UserData getUserByEmail(String email) throws DataAccessException {
+		String sql = "SELECT `username`, `password`" +
+				"FROM `user`" +
+				"WHERE email = ?";
+		UserData userData = null;
 
-                ResultSet resultSet = preparedStatement.executeQuery();
+		try (Connection connection = DatabaseManager.getConnection()) {
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				preparedStatement.setString(1, email);
 
-                if(resultSet.next()) {
-                    String password = resultSet.getString("password");
-                    String username = resultSet.getString("username");
+				ResultSet resultSet = preparedStatement.executeQuery();
 
-                    userData = new UserData(username, password, email);
-                }
-            }
-            catch (SQLException e) {
-                throw new DataAccessException("Could not retrieve user");
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException("Could not connect to database");
-        }
-        return userData;    }
+				if (resultSet.next()) {
+					String password = resultSet.getString("password");
+					String username = resultSet.getString("username");
 
-    @Override
-    public void clear() throws DataAccessException {
-        String sql = "DELETE FROM `user`";
+					userData = new UserData(username, password, email);
+				}
+			} catch (SQLException e) {
+				throw new DataAccessException("Could not retrieve user");
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Could not connect to database");
+		}
+		return userData;
+	}
 
-        try (Connection connection = DatabaseManager.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.executeUpdate();
-            }
-            catch (SQLException e) {
-                throw new DataAccessException("Error: " + e);
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException("Error" + e);
-        }
-    }
+	@Override
+	public void clear() throws DataAccessException {
+		String sql = "DELETE FROM `user`";
 
-    @Override
-    public boolean isEmpty() throws DataAccessException{
-        String sql = "SELECT * FROM `user`";
+		try (Connection connection = DatabaseManager.getConnection()) {
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				preparedStatement.executeUpdate();
+			} catch (SQLException e) {
+				throw new DataAccessException("Error: " + e);
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Error" + e);
+		}
+	}
 
-        try(Connection connection = DatabaseManager.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                ResultSet resultSet = preparedStatement.executeQuery();
-                return !resultSet.next();
-            }
-            catch (SQLException e) {
-                throw new DataAccessException("Could not execute query");
-            }
-        }
-        catch (SQLException e) {
-            throw new DataAccessException("Could not connect to database");
-        }
-    }
+	@Override
+	public boolean isEmpty() throws DataAccessException {
+		String sql = "SELECT * FROM `user`";
+
+		try (Connection connection = DatabaseManager.getConnection()) {
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				ResultSet resultSet = preparedStatement.executeQuery();
+				return !resultSet.next();
+			} catch (SQLException e) {
+				throw new DataAccessException("Could not execute query");
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Could not connect to database");
+		}
+	}
 }

@@ -12,28 +12,29 @@ import java.util.HashSet;
  */
 public abstract class ChessPieceMoves {
 
-    final Collection<ChessMove> moves = new HashSet<>();
-    final ChessBoard chessBoard;
-    final ChessPosition position;
-    public ChessPieceMoves(ChessBoard chessBoard, ChessPosition position) {
-        this.chessBoard = chessBoard;
-        this.position = position;
-    }
+	final Collection<ChessMove> moves = new HashSet<>();
+	final ChessBoard chessBoard;
+	final ChessPosition position;
 
-    /**
-     * Gets all moves that piece can make given its current position and the layout of the board
-     *
-     * @return Collection of moves for given piece
-     */
-    public Collection<ChessMove> getMoves() {
-        if(moves.isEmpty()) {
-            findMoves();
-        }
-        return moves;
-    }
+	public ChessPieceMoves(ChessBoard chessBoard, ChessPosition position) {
+		this.chessBoard = chessBoard;
+		this.position = position;
+	}
 
-    /**
-     * Finds valid moves for given piece and position
-     */
-    public abstract void findMoves();
+	/**
+	 * Gets all moves that piece can make given its current position and the layout of the board
+	 *
+	 * @return Collection of moves for given piece
+	 */
+	public Collection<ChessMove> getMoves() {
+		if (moves.isEmpty()) {
+			findMoves();
+		}
+		return moves;
+	}
+
+	/**
+	 * Finds valid moves for given piece and position
+	 */
+	public abstract void findMoves();
 }

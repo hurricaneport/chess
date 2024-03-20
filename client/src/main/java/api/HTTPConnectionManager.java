@@ -12,79 +12,79 @@ import java.net.*;
 import java.util.Map;
 
 public class HTTPConnectionManager {
-    private final String serverUrl;
-    private static String authToken = "";
-    private final Gson gson = new Gson();
-    public HTTPConnectionManager(int port) {
-        serverUrl = "http://localhost:" + port;
-    }
+	private static String authToken = "";
+	private final String serverUrl;
+	private final Gson gson = new Gson();
 
+	public HTTPConnectionManager(int port) {
+		serverUrl = "http://localhost:" + port;
+	}
 
-    public static String getAuthToken() {
-        return authToken;
-    }
+	public static String getAuthToken() {
+		return authToken;
+	}
 
-    public static void clearAuthToken() {
-        authToken = "";
-    }
+	public static void clearAuthToken() {
+		authToken = "";
+	}
 
-    public static void updateAuthToken(String newAuthToken) {
-        authToken = newAuthToken;
-    }
+	public static void updateAuthToken(String newAuthToken) {
+		authToken = newAuthToken;
+	}
 
-    public HttpURLConnection getConnection(String endpoint, String requestMethod, Map<String, String> headers, boolean doOutput) throws IOException {
-        URL url;
-        endpoint = serverUrl + endpoint;
-        try {
-            url = (new URI(endpoint)).toURL();
-        } catch (MalformedURLException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+	public static boolean httpStatusIsOkay(HttpURLConnection connection) throws IOException {
+		return connection.getResponseCode() == 200;
+	}
 
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setReadTimeout(5000);
-        connection.setRequestMethod(requestMethod);
-        connection.setDoOutput(doOutput);
-        connection.setDoInput(true);
+	public HttpURLConnection getConnection(String endpoint, String requestMethod, Map<String, String> headers, boolean doOutput) throws IOException {
+		URL url;
+		endpoint = serverUrl + endpoint;
+		try {
+			url = (new URI(endpoint)).toURL();
+		} catch (MalformedURLException | URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
 
-        if(headers != null) {
-            for (String headerKey : headers.keySet()) {
-                if (headers.get(headerKey) != null) {
-                    connection.addRequestProperty(headerKey, headers.get(headerKey));
-                }
-            }
-        }
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setReadTimeout(5000);
+		connection.setRequestMethod(requestMethod);
+		connection.setDoOutput(doOutput);
+		connection.setDoInput(true);
 
-        connection.connect();
-        return connection;
-    }
+		if (headers != null) {
+			for (String headerKey : headers.keySet()) {
+				if (headers.get(headerKey) != null) {
+					connection.addRequestProperty(headerKey, headers.get(headerKey));
+				}
+			}
+		}
 
-    public void writeRequestBody(Request request, HttpURLConnection connection) throws IOException {
-        try(OutputStream requestBody = connection.getOutputStream()) {
-        requestBody.write(gson.toJson(request).getBytes());
-        }
-    }
+		connection.connect();
+		return connection;
+	}
 
-    public <T> T readResponseBody(Class<T> responseClass, HttpURLConnection connection) throws IOException {
-        T response;
-        try(InputStream responseBody = connection.getInputStream()) {
-            InputStreamReader reader = new InputStreamReader(responseBody);
-            response = gson.fromJson(reader, responseClass);
-        }
+	public void writeRequestBody(Request request, HttpURLConnection connection) throws IOException {
+		try (OutputStream requestBody = connection.getOutputStream()) {
+			requestBody.write(gson.toJson(request).getBytes());
+		}
+	}
 
-        return response;
-    }
+	public <T> T readResponseBody(Class<T> responseClass, HttpURLConnection connection) throws IOException {
+		T response;
+		try (InputStream responseBody = connection.getInputStream()) {
+			InputStreamReader reader = new InputStreamReader(responseBody);
+			response = gson.fromJson(reader, responseClass);
+		}
 
-    public ErrorResponse readErrorBody(HttpURLConnection connection) throws IOException {
-        ErrorResponse errorResponse;
-        try (InputStream errorBody = connection.getErrorStream()) {
-            InputStreamReader reader = new InputStreamReader(errorBody);
-            errorResponse = gson.fromJson(reader, ErrorResponse.class);
-        }
-        return errorResponse;
-    }
+		return response;
+	}
 
-    public static boolean httpStatusIsOkay(HttpURLConnection connection) throws IOException {
-        return connection.getResponseCode() == 200;
-    }
+	public ErrorResponse readErrorBody(HttpURLConnection connection) throws IOException {
+		ErrorResponse errorResponse;
+		try (InputStream errorBody = connection.getErrorStream()) {
+			InputStreamReader reader = new InputStreamReader(errorBody);
+			errorResponse = gson.fromJson(reader, ErrorResponse.class);
+		}
+		return errorResponse;
+	}
 }

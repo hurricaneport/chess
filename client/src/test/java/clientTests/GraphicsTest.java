@@ -8,15 +8,15 @@ import static ui.ChessBoardGraphics.drawChessBoard;
 
 public class GraphicsTest {
 
-    @Test
-    @DisplayName("Draw Chessboard Forward")
-    public void drawChessboardForward() {
-        drawChessBoard((new ChessGame()).getBoard(), true);
-    }
+	@Test
+	@DisplayName("Draw Chessboard Forward")
+	public void drawChessboardForward() {
+		drawChessBoard((new ChessGame()).getBoard(), true);
+	}
 
-    @Test
-    @DisplayName("Draw Chessboard Reversed")
-    public void drawChessboardReversed() {
-        drawChessBoard((new ChessGame()).getBoard(), false);
-    }
+	@Test
+	@DisplayName("Draw Chessboard Reversed")
+	public void drawChessboardReversed() {
+		drawChessBoard((new ChessGame()).getBoard(), false);
+	}
 }
