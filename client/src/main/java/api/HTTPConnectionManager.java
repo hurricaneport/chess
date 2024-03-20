@@ -36,7 +36,7 @@ public class HTTPConnectionManager {
         authToken = newAuthToken;
     }
 
-    public HttpURLConnection getConnection(String urlString, String requestMethod, Map<String, List<String>> headers, boolean doOutput, boolean doInput) throws IOException {
+    public HttpURLConnection getConnection(String urlString, String requestMethod, Map<String, String> headers, boolean doOutput, boolean doInput) throws IOException {
         URL url;
         try {
             url = (new URI(urlString)).toURL();
@@ -53,9 +53,7 @@ public class HTTPConnectionManager {
         if(headers != null) {
             for (String headerKey : headers.keySet()) {
                 if (headers.get(headerKey) != null) {
-                    for (String headerValue : headers.get(headerKey)) {
-                        connection.addRequestProperty(headerKey, headerValue);
-                    }
+                    connection.addRequestProperty(headerKey, headers.get(headerKey));
                 }
             }
         }

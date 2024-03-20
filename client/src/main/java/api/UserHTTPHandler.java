@@ -21,10 +21,8 @@ public class UserHTTPHandler {
         httpConnectionManager = new HTTPConnectionManager(port);
     }
     public void login(LoginRequest loginRequest) throws HTTPResponseException, HTTPConnectionException {
-        HashMap<String, List<String>> headers = new HashMap<>();
-        ArrayList<String> contentTypes = new ArrayList<>();
-        contentTypes.add("application/json");
-        headers.put("Content-Type", contentTypes);
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
 
         LoginResponse loginResponse;
 
@@ -51,10 +49,8 @@ public class UserHTTPHandler {
 
 
     public void register(RegisterRequest registerRequest) throws HTTPResponseException, HTTPConnectionException {
-        HashMap<String, List<String>> headers = new HashMap<>();
-        ArrayList<String> contentTypes = new ArrayList<>();
-        contentTypes.add("application/json");
-        headers.put("Content-Type", contentTypes);
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
 
         RegisterResponse registerResponse;
         try {
@@ -76,6 +72,10 @@ public class UserHTTPHandler {
         catch (IOException e) {
             throw new HTTPConnectionException(e.getMessage());
         }
+    }
+
+    public void logout() throws HTTPResponseException, HTTPConnectionException {
+
     }
 
 }
