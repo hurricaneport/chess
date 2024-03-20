@@ -109,14 +109,6 @@ public class UserService extends Service {
 		}
 	}
 
-	private boolean userExists(String username) throws ServerErrorException {
-		try {
-			return userDAO.getUser(username) != null;
-		} catch (DataAccessException e) {
-			throw new ServerErrorException("Error: " + e);
-		}
-	}
-
 	/**
 	 * Creates an authToken for given user and adds it to authTable
 	 *
