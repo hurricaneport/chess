@@ -26,7 +26,7 @@ public class UserHTTPHandler {
 
         try {
             HttpURLConnection connection = httpConnectionManager.getConnection("/session",
-                    "POST", headers, true, true);
+                    "POST", headers, true);
 
             httpConnectionManager.writeRequestBody(loginRequest, connection);
 
@@ -54,7 +54,7 @@ public class UserHTTPHandler {
         HttpURLConnection connection;
         try {
             connection = httpConnectionManager.getConnection("/user",
-                    "POST", headers, true, true);
+                    "POST", headers, true);
 
             httpConnectionManager.writeRequestBody(registerRequest, connection);
 
@@ -79,7 +79,7 @@ public class UserHTTPHandler {
         headers.put("authorization", httpConnectionManager.getAuthToken());
 
         try {
-            HttpURLConnection connection = httpConnectionManager.getConnection("/session", "DELETE", headers, false, false);
+            HttpURLConnection connection = httpConnectionManager.getConnection("/session", "DELETE", headers, false);
             if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
                 httpConnectionManager.clearAuthToken();
             }

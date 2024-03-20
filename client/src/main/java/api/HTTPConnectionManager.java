@@ -32,7 +32,7 @@ public class HTTPConnectionManager {
         authToken = newAuthToken;
     }
 
-    public HttpURLConnection getConnection(String endpoint, String requestMethod, Map<String, String> headers, boolean doOutput, boolean doInput) throws IOException {
+    public HttpURLConnection getConnection(String endpoint, String requestMethod, Map<String, String> headers, boolean doOutput) throws IOException {
         URL url;
         endpoint = serverUrl + endpoint;
         try {
@@ -45,7 +45,7 @@ public class HTTPConnectionManager {
         connection.setReadTimeout(5000);
         connection.setRequestMethod(requestMethod);
         connection.setDoOutput(doOutput);
-        connection.setDoInput(doInput);
+        connection.setDoInput(true);
 
         if(headers != null) {
             for (String headerKey : headers.keySet()) {
