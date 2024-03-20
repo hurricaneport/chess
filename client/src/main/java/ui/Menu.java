@@ -1,8 +1,8 @@
 package ui;
 
-import api.HTTPException;
+import api.HTTPConnectionException;
+import api.HTTPResponseException;
 import api.ServerFacade;
-import chess.ChessGame;
 import model.GameData;
 import model.request.JoinGameRequest;
 import model.request.LoginRequest;
@@ -77,7 +77,7 @@ public class Menu {
             serverFacade.login(new LoginRequest(username, password));
             postLogin();
         }
-        catch (HTTPException e) {
+        catch (HTTPResponseException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Please check your username and password and try again.\n");
                 preLogin();
@@ -87,6 +87,10 @@ public class Menu {
                         "Error " + e.getStatus() + ": " + e.getMessage() + "\n");
                 preLogin();
             }
+        }
+        catch (HTTPConnectionException e) {
+            System.out.print("Could not establish a connection. Please try again later.\n" +
+                    "Error: " + e);
         }
     }
 
@@ -141,7 +145,7 @@ public class Menu {
             System.out.print("Logged out. Returning to main menu.\n");
             preLogin();
         }
-        catch (HTTPException e) {
+        catch (HTTPResponseException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Could not log out because log-in is expired. Please log in again.\n");
             }
@@ -161,7 +165,7 @@ public class Menu {
             printActiveGames();
             postLogin();
         }
-        catch (HTTPException e) {
+        catch (HTTPResponseException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Login expired, please login again\n");
                 preLogin();
@@ -174,7 +178,7 @@ public class Menu {
         }
     }
 
-    private void fetchGames() throws HTTPException {
+    private void fetchGames() throws HTTPResponseException {
         Set<GameData> gameDataSet = serverFacade.listGames();
         for (GameData gameData : gameDataSet) {
             boolean isInList = false;
@@ -223,7 +227,7 @@ public class Menu {
             }
             postLogin();
         }
-        catch (HTTPException e) {
+        catch (HTTPResponseException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Login expired, please login again\n");
                 preLogin();
@@ -243,7 +247,7 @@ public class Menu {
             serverFacade.joinGame(new JoinGameRequest(teamColor, games.get(gameIndex - 1).gameID()));
             ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), true);
             ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), false);
-        } catch (HTTPException e) {
+        } catch (HTTPResponseException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Login expired, please login again\n");
                 preLogin();
@@ -277,7 +281,7 @@ public class Menu {
                 ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), false);
             }
         }
-        catch (HTTPException e) {
+        catch (HTTPResponseException e) {
             if (e.getStatus() == 401) {
                 System.out.print("Login expired, please login again\n");
                 preLogin();
