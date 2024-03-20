@@ -15,20 +15,20 @@ public class HTTPConnectionManager {
     private final String serverUrl;
     private static String authToken = "";
     private final Gson gson = new Gson();
-    HTTPConnectionManager(int port) {
+    public HTTPConnectionManager(int port) {
         serverUrl = "http://localhost:" + port;
     }
 
 
-    public String getAuthToken() {
+    public static String getAuthToken() {
         return authToken;
     }
 
-    public void clearAuthToken() {
+    public static void clearAuthToken() {
         authToken = "";
     }
 
-    public void updateAuthToken(String newAuthToken) {
+    public static void updateAuthToken(String newAuthToken) {
         authToken = newAuthToken;
     }
 
