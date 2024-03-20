@@ -5,8 +5,6 @@ import model.GameData;
 import model.request.JoinGameRequest;
 import model.request.LoginRequest;
 import model.request.RegisterRequest;
-import model.response.LoginResponse;
-import model.response.RegisterResponse;
 
 import java.util.HashSet;
 import java.util.Set;

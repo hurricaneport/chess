@@ -1,10 +1,7 @@
 package clientTests;
 
 import api.ServerFacade;
-import handler.ClearHandler;
-import model.request.LoginRequest;
 import model.request.RegisterRequest;
-import model.response.LoginResponse;
 import org.junit.jupiter.api.*;
 import server.Server;
 import service.DatabaseService;

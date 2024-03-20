@@ -1,7 +1,6 @@
 package clientTests;
 
 import chess.ChessGame;
-import ui.ChessBoardGraphics;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -7,19 +7,14 @@ import model.response.ErrorResponse;
 import model.response.LoginResponse;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import api.HTTPConnectionManager;
 import model.response.RegisterResponse;
 
 public class UserHTTPHandler {
-    Gson gson = new Gson();
     int port;
     HTTPConnectionManager httpConnectionManager;
     UserHTTPHandler(int port) {
