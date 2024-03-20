@@ -1,6 +1,5 @@
 package api;
 
-import com.google.gson.Gson;
 import model.request.LoginRequest;
 import model.request.RegisterRequest;
 import model.response.ErrorResponse;
@@ -21,7 +20,7 @@ public class UserHTTPHandler {
         this.port = port;
         httpConnectionManager = new HTTPConnectionManager(port);
     }
-    public LoginResponse login(LoginRequest loginRequest) throws HTTPResponseException, HTTPConnectionException {
+    public void login(LoginRequest loginRequest) throws HTTPResponseException, HTTPConnectionException {
         HashMap<String, List<String>> headers = new HashMap<>();
         ArrayList<String> contentTypes = new ArrayList<>();
         contentTypes.add("application/json");
@@ -47,12 +46,11 @@ public class UserHTTPHandler {
         } catch (IOException e) {
             throw new HTTPConnectionException(e.getMessage());
         }
-        return loginResponse;
     }
 
 
 
-    public RegisterResponse register(RegisterRequest registerRequest) throws HTTPResponseException, HTTPConnectionException {
+    public void register(RegisterRequest registerRequest) throws HTTPResponseException, HTTPConnectionException {
         HashMap<String, List<String>> headers = new HashMap<>();
         ArrayList<String> contentTypes = new ArrayList<>();
         contentTypes.add("application/json");
@@ -78,7 +76,6 @@ public class UserHTTPHandler {
         catch (IOException e) {
             throw new HTTPConnectionException(e.getMessage());
         }
-        return registerResponse;
     }
 
 }
