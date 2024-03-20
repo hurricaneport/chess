@@ -38,7 +38,7 @@ public class UserHTTPHandler {
                 throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
             }
 
-            httpConnectionManager.updateAuthToken(loginResponse.authToken());
+            HTTPConnectionManager.updateAuthToken(loginResponse.authToken());
         } catch (IOException e) {
             throw new HTTPConnectionException(e.getMessage());
         }
@@ -66,7 +66,7 @@ public class UserHTTPHandler {
                 throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
             }
 
-            httpConnectionManager.updateAuthToken(registerResponse.authToken());
+            HTTPConnectionManager.updateAuthToken(registerResponse.authToken());
         }
         catch (IOException e) {
             throw new HTTPConnectionException(e.getMessage());
@@ -76,12 +76,12 @@ public class UserHTTPHandler {
     public void logout() throws HTTPResponseException, HTTPConnectionException {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
-        headers.put("authorization", httpConnectionManager.getAuthToken());
+        headers.put("authorization", HTTPConnectionManager.getAuthToken());
 
         try {
             HttpURLConnection connection = httpConnectionManager.getConnection("/session", "DELETE", headers, false);
             if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
-                httpConnectionManager.clearAuthToken();
+                HTTPConnectionManager.clearAuthToken();
             }
             else {
                 ErrorResponse errorResponse = httpConnectionManager.readErrorBody(connection);
