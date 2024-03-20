@@ -1,6 +1,7 @@
 package clientTests;
 
 import api.ServerFacade;
+import model.request.LoginRequest;
 import model.request.RegisterRequest;
 import org.junit.jupiter.api.*;
 import server.Server;
@@ -35,7 +36,7 @@ public class ServerFacadeTests {
     @DisplayName("Login")
     public void loginTest() throws Exception {
         serverFacade.register(new RegisterRequest("username", "password", "email"));
-        //Assertions.assertDoesNotThrow(() -> serverFacade.login(new LoginRequest("username", "password")));
+        Assertions.assertDoesNotThrow(() -> serverFacade.login(new LoginRequest("username", "password")));
     }
 
 }

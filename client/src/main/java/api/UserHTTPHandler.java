@@ -7,9 +7,7 @@ import model.response.LoginResponse;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import model.response.RegisterResponse;
 
