@@ -24,11 +24,11 @@ public class ServerFacade {
         this.userHTTPHandler = new UserHTTPHandler(port);
     }
     public void login(LoginRequest loginRequest) throws HTTPResponseException, HTTPConnectionException {
-        LoginResponse loginResponse = userHTTPHandler.login(loginRequest);
+        userHTTPHandler.login(loginRequest);
     }
 
-    public RegisterResponse register(RegisterRequest registerRequest) throws HTTPResponseException {
-        return null;
+    public void register(RegisterRequest registerRequest) throws HTTPResponseException, HTTPConnectionException {
+        userHTTPHandler.register(registerRequest);
     }
 
     public void logout() throws HTTPResponseException {

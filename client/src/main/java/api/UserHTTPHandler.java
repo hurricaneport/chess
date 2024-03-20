@@ -35,11 +35,12 @@ public class UserHTTPHandler {
         LoginResponse loginResponse;
 
         try {
-            HttpURLConnection connection = httpConnectionManager.getConnection(httpConnectionManager.getServerURLString() + "/session", "POST", headers, true, true);
+            HttpURLConnection connection = httpConnectionManager.getConnection(httpConnectionManager.getServerURLString() + "/session",
+                    "POST", headers, true, true);
 
             httpConnectionManager.writeRequestBody(loginRequest, connection);
 
-            if (connection.getResponseCode() == 200) {
+            if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
                 loginResponse = httpConnectionManager.readResponseBody(LoginResponse.class, connection);
             }
             else {
@@ -48,13 +49,41 @@ public class UserHTTPHandler {
             }
 
             httpConnectionManager.updateAuthToken(loginResponse.authToken());
-
-
         } catch (IOException e) {
             throw new HTTPConnectionException(e.getMessage());
         }
         return loginResponse;
     }
 
+
+
+    public RegisterResponse register(RegisterRequest registerRequest) throws HTTPResponseException, HTTPConnectionException {
+        HashMap<String, List<String>> headers = new HashMap<>();
+        ArrayList<String> contentTypes = new ArrayList<>();
+        contentTypes.add("application/json");
+        headers.put("Content-Type", contentTypes);
+
+        RegisterResponse registerResponse;
+        try {
+            HttpURLConnection connection = httpConnectionManager.getConnection(httpConnectionManager.getServerURLString() + "/user",
+                    "POST", headers, true, true);
+
+            httpConnectionManager.writeRequestBody(registerRequest, connection);
+
+            if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
+                registerResponse = httpConnectionManager.readResponseBody(RegisterResponse.class, connection);
+            }
+            else {
+                ErrorResponse errorResponse = httpConnectionManager.readErrorBody(connection);
+                throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
+            }
+
+            httpConnectionManager.updateAuthToken(registerResponse.authToken());
+        }
+        catch (IOException e) {
+            throw new HTTPConnectionException(e.getMessage());
+        }
+        return registerResponse;
+    }
 
 }

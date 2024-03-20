@@ -92,4 +92,8 @@ public class HTTPConnectionManager {
         }
         return errorResponse;
     }
+
+    public static boolean httpStatusIsOkay(HttpURLConnection connection) throws IOException {
+        return connection.getResponseCode() == 200;
+    }
 }

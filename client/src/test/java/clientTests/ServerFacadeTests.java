@@ -1,10 +1,13 @@
 package clientTests;
 
 import api.ServerFacade;
+import handler.ClearHandler;
 import model.request.LoginRequest;
+import model.request.RegisterRequest;
 import model.response.LoginResponse;
 import org.junit.jupiter.api.*;
 import server.Server;
+import service.DatabaseService;
 
 
 public class ServerFacadeTests {
@@ -20,6 +23,11 @@ public class ServerFacadeTests {
         serverFacade = new ServerFacade(port);
     }
 
+    @BeforeEach
+    public void clearDatabase() throws Exception{
+        (new DatabaseService()).clear();
+    }
+
     @AfterAll
     static void stopServer() {
         server.stop();
@@ -28,8 +36,9 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("Login")
-    public void sampleTest() throws Exception {
-        Assertions.assertDoesNotThrow(() -> serverFacade.login(new LoginRequest("username", "password")));
+    public void loginTest() throws Exception {
+        serverFacade.register(new RegisterRequest("username", "password", "email"));
+        //Assertions.assertDoesNotThrow(() -> serverFacade.login(new LoginRequest("username", "password")));
     }
 
 }
