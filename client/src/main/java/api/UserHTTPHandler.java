@@ -25,7 +25,7 @@ public class UserHTTPHandler {
         LoginResponse loginResponse;
 
         try {
-            HttpURLConnection connection = httpConnectionManager.getConnection(httpConnectionManager.getServerURLString() + "/session",
+            HttpURLConnection connection = httpConnectionManager.getConnection("/session",
                     "POST", headers, true, true);
 
             httpConnectionManager.writeRequestBody(loginRequest, connection);
@@ -51,8 +51,9 @@ public class UserHTTPHandler {
         headers.put("Content-Type", "application/json");
 
         RegisterResponse registerResponse;
+        HttpURLConnection connection;
         try {
-            HttpURLConnection connection = httpConnectionManager.getConnection(httpConnectionManager.getServerURLString() + "/user",
+            connection = httpConnectionManager.getConnection("/user",
                     "POST", headers, true, true);
 
             httpConnectionManager.writeRequestBody(registerRequest, connection);
@@ -73,7 +74,22 @@ public class UserHTTPHandler {
     }
 
     public void logout() throws HTTPResponseException, HTTPConnectionException {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("authorization", httpConnectionManager.getAuthToken());
 
+        try {
+            HttpURLConnection connection = httpConnectionManager.getConnection("/session", "DELETE", headers, false, false);
+            if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
+                httpConnectionManager.clearAuthToken();
+            }
+            else {
+                ErrorResponse errorResponse = httpConnectionManager.readErrorBody(connection);
+                throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
+            }
+        } catch (IOException e) {
+            throw new HTTPConnectionException(e.getMessage());
+        }
     }
 
 }

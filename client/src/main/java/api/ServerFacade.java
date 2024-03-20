@@ -29,8 +29,8 @@ public class ServerFacade {
         userHTTPHandler.register(registerRequest);
     }
 
-    public void logout() throws HTTPResponseException {
-
+    public void logout() throws HTTPResponseException, HTTPConnectionException {
+        userHTTPHandler.logout();
     }
 
     public Set<GameData> listGames() throws HTTPResponseException {

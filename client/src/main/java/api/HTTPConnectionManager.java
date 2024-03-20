@@ -14,14 +14,11 @@ import java.util.Map;
 public class HTTPConnectionManager {
     private final String serverUrl;
     private static String authToken = "";
-    Gson gson = new Gson();
+    private final Gson gson = new Gson();
     HTTPConnectionManager(int port) {
         serverUrl = "http://localhost:" + port;
     }
 
-    public String getServerURLString() {
-        return serverUrl;
-    }
 
     public String getAuthToken() {
         return authToken;
@@ -35,10 +32,11 @@ public class HTTPConnectionManager {
         authToken = newAuthToken;
     }
 
-    public HttpURLConnection getConnection(String urlString, String requestMethod, Map<String, String> headers, boolean doOutput, boolean doInput) throws IOException {
+    public HttpURLConnection getConnection(String endpoint, String requestMethod, Map<String, String> headers, boolean doOutput, boolean doInput) throws IOException {
         URL url;
+        endpoint = serverUrl + endpoint;
         try {
-            url = (new URI(urlString)).toURL();
+            url = (new URI(endpoint)).toURL();
         } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
