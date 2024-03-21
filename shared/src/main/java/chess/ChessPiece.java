@@ -1,7 +1,6 @@
 package chess;
 
 import chess.pieceMoves.*;
-import org.springframework.lang.NonNull;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -13,10 +12,8 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public final class ChessPiece {
-
-	@NonNull
 	private final ChessGame.TeamColor pieceColor;
-	@NonNull
+
 	private final ChessPiece.PieceType type;
 
 	public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
