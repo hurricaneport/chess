@@ -3,9 +3,13 @@ package clientTests;
 import api.HTTPConnectionManager;
 import api.HTTPResponseException;
 import api.ServerFacade;
+import model.GameData;
 import org.junit.jupiter.api.*;
 import server.Server;
 import service.DatabaseService;
+
+import java.util.Iterator;
+import java.util.Set;
 
 public class ServerFacadeTests {
 
@@ -94,6 +98,47 @@ public class ServerFacadeTests {
 	@DisplayName("Create a game unauthorized")
 	public void createGameUnauthorized() {
 		Assertions.assertThrows(HTTPResponseException.class, () -> serverFacade.createGame("myGameName"));
+	}
+
+	@Test
+	@DisplayName("List all Games with auth")
+	public void listGamesAuthorized() throws Exception {
+		serverFacade.register("username", "password", "email");
+		serverFacade.createGame("gameName");
+		Set<GameData> games = serverFacade.listGames();
+		Iterator<GameData> it = games.iterator();
+		Assertions.assertEquals(it.next().gameName(), "gameName");
+	}
+
+	@Test
+	@DisplayName("List games without authorization")
+	public void listGamesUnauthorized() {
+		Assertions.assertThrows(HTTPResponseException.class, () -> serverFacade.listGames());
+	}
+
+	@Test
+	@DisplayName("Join a game with authorization")
+	public void joinGameAuthorized() throws Exception {
+		serverFacade.register("username", "password", "email");
+		serverFacade.createGame("gameName");
+		Set<GameData> games = serverFacade.listGames();
+
+		Iterator<GameData> it = games.iterator();
+		Integer gameID = it.next().gameID();
+
+		serverFacade.joinGame("BLACK", gameID);
+
+		games = serverFacade.listGames();
+
+		it = games.iterator();
+		Assertions.assertEquals("username", it.next().blackUsername());
+	}
+
+	@Test
+	@DisplayName("Join a chess game that doesn't exist")
+	public void joinChessGameNonExistent() throws Exception {
+		serverFacade.register("username", "password", "email");
+		Assertions.assertThrows(HTTPResponseException.class, () -> serverFacade.joinGame("BLACK", 1));
 	}
 
 }
