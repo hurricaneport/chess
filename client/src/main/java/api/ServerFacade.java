@@ -1,13 +1,12 @@
 package api;
 
-import chess.ChessGame;
 import model.GameData;
 import model.request.CreateGameRequest;
 import model.request.JoinGameRequest;
 import model.request.LoginRequest;
 import model.request.RegisterRequest;
+import model.response.ListGamesResponse;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class ServerFacade {
@@ -41,11 +40,9 @@ public class ServerFacade {
 		gameHTTPHandler.createGame(new CreateGameRequest(gameName));
 	}
 
-	public Set<GameData> listGames() throws HTTPResponseException {
-		HashSet<GameData> games = new HashSet<>();
-		games.add(new GameData(1, null, null, "game", new ChessGame()));
-		games.add(new GameData(2, null, null, "game2", new ChessGame()));
-		return games;
+	public Set<GameData> listGames() throws HTTPResponseException, HTTPConnectionException {
+		ListGamesResponse listGamesResponse = gameHTTPHandler.listGames();
+		return listGamesResponse.games();
 	}
 
 	public void joinGame(String userColor, int gameID) throws HTTPResponseException, HTTPConnectionException {

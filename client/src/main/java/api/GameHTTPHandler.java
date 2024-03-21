@@ -4,6 +4,7 @@ import model.request.CreateGameRequest;
 import model.request.JoinGameRequest;
 import model.response.CreateGameResponse;
 import model.response.ErrorResponse;
+import model.response.ListGamesResponse;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -58,5 +59,26 @@ public class GameHTTPHandler {
 		} catch (IOException e) {
 			throw new HTTPConnectionException(e.getMessage());
 		}
+	}
+
+	public ListGamesResponse listGames() throws HTTPResponseException, HTTPConnectionException {
+		HashMap<String, String> headers = new HashMap<>();
+		headers.put("Content-Type", "application/json");
+		headers.put("authorization", HTTPConnectionManager.getAuthToken());
+
+		ListGamesResponse listGamesResponse;
+		try {
+			HttpURLConnection connection = httpConnectionManager.getConnection("/game", "GET", headers, false);
+
+			if (connection.getResponseCode() == 200) {
+				listGamesResponse = httpConnectionManager.readResponseBody(ListGamesResponse.class, connection);
+			} else {
+				ErrorResponse errorResponse = httpConnectionManager.readErrorBody(connection);
+				throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
+			}
+		} catch (IOException e) {
+			throw new HTTPConnectionException(e.getMessage());
+		}
+		return listGamesResponse;
 	}
 }

@@ -234,10 +234,14 @@ public class Menu {
 						"Error " + e.getStatus() + ": " + e.getMessage() + "\n\n");
 				postLogin();
 			}
+		} catch (HTTPConnectionException e) {
+			System.out.print("Could not establish a connection. Please try again later.\n" +
+					"Error: " + e + "\n\n");
+			postLogin();
 		}
 	}
 
-	private void fetchGames() throws HTTPResponseException {
+	private void fetchGames() throws HTTPResponseException, HTTPConnectionException {
 		Set<GameData> gameDataSet = serverFacade.listGames();
 		for (GameData gameData : gameDataSet) {
 			boolean isInList = false;
@@ -297,6 +301,10 @@ public class Menu {
 						"Error " + e.getStatus() + ": " + e.getMessage() + "\n\n");
 				postLogin();
 			}
+		} catch (HTTPConnectionException e) {
+			System.out.print("Could not establish a connection. Please try again later.\n" +
+					"Error: " + e + "\n\n");
+			postLogin();
 		}
 
 	}
