@@ -4,7 +4,6 @@ import api.HTTPConnectionException;
 import api.HTTPResponseException;
 import api.ServerFacade;
 import model.GameData;
-import model.request.JoinGameRequest;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -304,7 +303,7 @@ public class Menu {
 
 	private void joinGame(int gameIndex, String teamColor) {
 		try {
-			serverFacade.joinGame(new JoinGameRequest(teamColor, games.get(gameIndex - 1).gameID()));
+			serverFacade.joinGame(teamColor, games.get(gameIndex - 1).gameID());
 			ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), true);
 			ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), false);
 		} catch (HTTPResponseException e) {
@@ -319,6 +318,10 @@ public class Menu {
 						"Error " + e.getStatus() + ": " + e.getMessage() + "\n\n");
 				postLogin();
 			}
+		} catch (HTTPConnectionException e) {
+			System.out.print("Could not establish a connection. Please try again later.\n" +
+					"Error: " + e + "\n\n");
+			postLogin();
 		}
 	}
 
@@ -338,7 +341,7 @@ public class Menu {
 			}
 
 			if (!gameIndex.equals("BACK")) {
-				serverFacade.joinGame(new JoinGameRequest(null, games.get(Integer.parseInt(gameIndex) - 1).gameID()));
+				serverFacade.joinGame(null, games.get(Integer.parseInt(gameIndex) - 1).gameID());
 				ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), true);
 				ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), false);
 			}
@@ -351,6 +354,10 @@ public class Menu {
 						"Error " + e.getStatus() + ": " + e.getMessage() + "\n\n");
 				postLogin();
 			}
+		} catch (HTTPConnectionException e) {
+			System.out.print("Could not establish a connection. Please try again later.\n" +
+					"Error: " + e + "\n\n");
+			postLogin();
 		}
 	}
 }

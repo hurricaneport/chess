@@ -48,7 +48,7 @@ public class ServerFacade {
 		return games;
 	}
 
-	public void joinGame(JoinGameRequest joinGameRequest) throws HTTPResponseException {
-
+	public void joinGame(String userColor, int gameID) throws HTTPResponseException, HTTPConnectionException {
+		gameHTTPHandler.joinGame(new JoinGameRequest(userColor, gameID));
 	}
 }
