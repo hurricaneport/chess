@@ -353,6 +353,7 @@ public class Menu {
 				ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), true);
 				ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), false);
 			}
+			postLogin();
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {
 				System.out.print("Login expired, please login again\n\n");
