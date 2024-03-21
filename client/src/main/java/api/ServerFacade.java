@@ -12,6 +12,7 @@ import java.util.Set;
 public class ServerFacade {
 	int port;
 	UserHTTPHandler userHTTPHandler;
+	GameHTTPHandler gameHTTPHandler;
 
 	public ServerFacade() {
 		this(8080);
@@ -20,6 +21,7 @@ public class ServerFacade {
 	public ServerFacade(int port) {
 		this.port = port;
 		this.userHTTPHandler = new UserHTTPHandler(port);
+		gameHTTPHandler = new GameHTTPHandler(port);
 	}
 
 	public void login(LoginRequest loginRequest) throws HTTPResponseException, HTTPConnectionException {
