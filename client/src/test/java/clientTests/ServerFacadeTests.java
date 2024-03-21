@@ -83,4 +83,17 @@ public class ServerFacadeTests {
 		Assertions.assertThrows(HTTPResponseException.class, () -> serverFacade.logout());
 	}
 
+	@Test
+	@DisplayName("Create a game success")
+	public void createGame() throws Exception {
+		serverFacade.register("username", "password", "email");
+		Assertions.assertDoesNotThrow(() -> serverFacade.createGame("gameName"));
+	}
+
+	@Test
+	@DisplayName("Create a game unauthorized")
+	public void createGameUnauthorized() {
+		Assertions.assertThrows(HTTPResponseException.class, () -> serverFacade.createGame("myGameName"));
+	}
+
 }

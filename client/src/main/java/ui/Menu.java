@@ -201,7 +201,7 @@ public class Menu {
 
 		try {
 			serverFacade.createGame(gameName);
-			System.out.print("Game: " + gameName + " create successfully. Please join the game from the main menu.\n\n");
+			System.out.print("Game: " + gameName + " created successfully. Please join the game from the main menu.\n\n");
 			postLogin();
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {

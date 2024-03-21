@@ -13,9 +13,10 @@ public class GameHTTPHandler {
 
 	GameHTTPHandler(int port) {
 		this.port = port;
+		httpConnectionManager = new HTTPConnectionManager(port);
 	}
 
-	HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager(port);
+	HTTPConnectionManager httpConnectionManager;
 
 	public CreateGameResponse createGame(CreateGameRequest createGameRequest) throws HTTPResponseException, HTTPConnectionException {
 		HashMap<String, String> headers = new HashMap<>();
