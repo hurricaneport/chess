@@ -5,8 +5,6 @@ import api.HTTPResponseException;
 import api.ServerFacade;
 import model.GameData;
 import model.request.JoinGameRequest;
-import model.request.LoginRequest;
-import model.request.RegisterRequest;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -77,7 +75,7 @@ public class Menu {
 		System.out.print("\n");
 
 		try {
-			serverFacade.login(new LoginRequest(username, password));
+			serverFacade.login(username, password);
 			postLogin();
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {
@@ -110,7 +108,7 @@ public class Menu {
 		System.out.print("\n");
 
 		try {
-			serverFacade.register(new RegisterRequest(username, password, email));
+			serverFacade.register(username, password, email);
 			postLogin();
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 403) {
@@ -134,9 +132,10 @@ public class Menu {
 				Please Select an Option
 				1. Help
 				2. Logout
-				3. List Games
-				4. Join Game
-				5. Join Game as Observer
+				3. Create Game
+				4. List Games
+				5. Join Game
+				6. Join Game as Observer
 				                
 				""");
 		String result = scanner.nextLine();
@@ -144,9 +143,10 @@ public class Menu {
 		switch (result) {
 			case "1" -> postLoginHelp();
 			case "2" -> logout();
-			case "3" -> listGames();
-			case "4" -> joinGameDialogue();
-			case "5" -> joinGameObserver();
+			case "3" -> createGame();
+			case "4" -> listGames();
+			case "5" -> joinGameDialogue();
+			case "6" -> joinGameObserver();
 			default -> {
 				System.out.print("'" + result + "' is not valid input, please select a valid option or press 1 for help\n\n");
 				postLogin();
@@ -161,9 +161,10 @@ public class Menu {
 				Please enter into the terminal the number of the option you wish to select then press 'Enter'
 				Press '1' to repeat this message
 				Press '2' to logout of your account
-				Press '3' to show a list of all active chess games
-				Press '4' to join an active chess game as a player
-				Press '5' to join an active chess game as an observer
+				Press '3' to create a new chess game
+				Press '4' to show a list of all active chess games
+				Press '5' to join an active chess game as a player
+				Press '6' to join an active chess game as an observer
 				                
 				""");
 
@@ -175,6 +176,33 @@ public class Menu {
 			serverFacade.logout();
 			System.out.print("Logged out. Returning to main menu.\n\n");
 			preLogin();
+		} catch (HTTPResponseException e) {
+			if (e.getStatus() == 401) {
+				System.out.print("Login expired, please login again\n\n");
+				preLogin();
+			} else {
+				System.out.print("An error occurred, please try again.\n" +
+						"Error " + e.getStatus() + ": " + e.getMessage() + "\n\n");
+				postLogin();
+			}
+		} catch (HTTPConnectionException e) {
+			System.out.print("Could not establish a connection. Please try again later.\n" +
+					"Error: " + e + "\n\n");
+			postLogin();
+		}
+	}
+
+	private void createGame() {
+		System.out.print("""
+				Create Game:
+				Please enter a name for your game:
+				""");
+		String gameName = scanner.nextLine();
+
+		try {
+			serverFacade.createGame(gameName);
+			System.out.print("Game: " + gameName + " create successfully. Please join the game from the main menu.\n\n");
+			postLogin();
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {
 				System.out.print("Login expired, please login again\n\n");
@@ -239,7 +267,10 @@ public class Menu {
 			fetchGames();
 			printActiveGames();
 
-			System.out.print("Please select which game to join\n");
+			System.out.print("""
+					Join game:
+					Please select which game to join:
+					""");
 			String gameIndex = scanner.nextLine();
 			while ((!gameIndex.matches("\\d+") || Integer.parseInt(gameIndex) > games.size()) && !gameIndex.equals("BACK")) {
 				System.out.print("Please enter a valid game index or enter 'BACK' to go back to main menu.\n\n");
@@ -296,7 +327,10 @@ public class Menu {
 			fetchGames();
 			printActiveGames();
 
-			System.out.print("Please select which game to join\n");
+			System.out.print("""
+					Join Game as Spectator:
+					Please select which game to join:
+					""");
 			String gameIndex = scanner.nextLine();
 			while ((!gameIndex.matches("\\d+") || Integer.parseInt(gameIndex) > games.size()) && !gameIndex.equals("BACK")) {
 				System.out.print("Please enter a valid game index or enter 'BACK' to go back to main menu.\n\n");
