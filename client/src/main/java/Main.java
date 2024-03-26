@@ -1,6 +1,6 @@
 import chess.ChessGame;
 import chess.ChessPiece;
-import ui.Menu;
+import client.Menu;
 
 public class Main {
 	public static void main(String[] args) {

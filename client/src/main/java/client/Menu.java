@@ -1,16 +1,18 @@
-package ui;
+package client;
 
 import api.HTTPConnectionException;
 import api.HTTPResponseException;
 import api.ServerFacade;
 import model.GameData;
+import ui.ChessBoardGraphics;
+import webSocketMessages.serverMessages.ServerMessage;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Menu {
+public class Menu implements ServerMessageObserver {
 
 	private final Scanner scanner = new Scanner(System.in);
 	private final ServerFacade serverFacade = new ServerFacade();
@@ -367,6 +369,18 @@ public class Menu {
 			System.out.print("Could not establish a connection. Please try again later.\n" +
 					"Error: " + e + "\n\n");
 			postLogin();
+		}
+	}
+
+	@Override
+	public void notify(ServerMessage serverMessage) {
+		switch (serverMessage.getServerMessageType()) {
+			case LOAD_GAME -> {
+			}
+			case ERROR -> {
+			}
+			case NOTIFICATION -> {
+			}
 		}
 	}
 }
