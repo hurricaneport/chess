@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 
-public class GameHTTPHandler {
+public class GameHTTPCommunicator {
 	int port;
 
-	GameHTTPHandler(int port) {
+	GameHTTPCommunicator(int port) {
 		this.port = port;
 		httpConnectionManager = new HTTPConnectionManager(port);
 	}

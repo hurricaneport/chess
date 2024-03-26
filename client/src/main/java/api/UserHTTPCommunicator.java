@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 
-public class UserHTTPHandler {
+public class UserHTTPCommunicator {
 	int port;
 	HTTPConnectionManager httpConnectionManager;
 
-	UserHTTPHandler(int port) {
+	UserHTTPCommunicator(int port) {
 		this.port = port;
 		httpConnectionManager = new HTTPConnectionManager(port);
 	}
