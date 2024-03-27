@@ -1,6 +1,7 @@
 package api;
 
 import com.google.gson.Gson;
+import jsonUtils.GsonFactory;
 import model.request.Request;
 import model.response.ErrorResponse;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 public class HTTPConnectionManager {
 	private static String authToken = "";
 	private final String serverUrl;
-	private final Gson gson = new Gson();
+	private final Gson gson = GsonFactory.getGson();
 
 	public HTTPConnectionManager(int port) {
 		serverUrl = "http://localhost:" + port;

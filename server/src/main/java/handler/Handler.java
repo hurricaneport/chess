@@ -1,11 +1,12 @@
 package handler;
 
 import com.google.gson.Gson;
+import jsonUtils.GsonFactory;
 import model.response.ErrorResponse;
 import model.response.Response;
 
 public abstract class Handler {
-	private static final Gson gson = new Gson();
+	private static final Gson gson = GsonFactory.getGson();
 
 	/**
 	 * turns HTTP Request body into class
