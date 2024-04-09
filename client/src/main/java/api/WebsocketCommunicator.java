@@ -6,9 +6,7 @@ import client.ServerMessageObserver;
 import com.google.gson.Gson;
 import jsonUtils.GsonFactory;
 import webSocketMessages.serverMessages.ServerMessage;
-import webSocketMessages.userCommands.JoinObserverUserGameCommand;
-import webSocketMessages.userCommands.JoinPlayerUserGameCommand;
-import webSocketMessages.userCommands.MakeMoveUserGameCommand;
+import webSocketMessages.userCommands.*;
 
 import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
@@ -71,4 +69,23 @@ public class WebsocketCommunicator extends Endpoint {
 		}
 	}
 
+	public void leave(int gameID) throws HTTPConnectionException {
+		try {
+			LeaveUserGameCommand leaveUserGameCommand = new LeaveUserGameCommand(
+					ConnectionManager.getAuthToken(), gameID);
+			session.getBasicRemote().sendText(gson.toJson(leaveUserGameCommand));
+		} catch (IOException e) {
+			throw new HTTPConnectionException("Could not send Websocket request");
+		}
+	}
+
+	public void resign(int gameID) throws HTTPConnectionException {
+		try {
+			ResignUserGameCommand resignUserGameCommand = new ResignUserGameCommand(
+					ConnectionManager.getAuthToken(), gameID);
+			session.getBasicRemote().sendText(gson.toJson(resignUserGameCommand));
+		} catch (IOException e) {
+			throw new HTTPConnectionException("Could not send websocket request");
+		}
+	}
 }
