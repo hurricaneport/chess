@@ -59,6 +59,8 @@ public class Server {
 			(new JoinGameHandler()).handleJoinGame(request, response);
 			return response.body();
 		}));
+
+		Spark.webSocket("/connect", WebSocketHandler.class);
 	}
 
 	public void stop() {
