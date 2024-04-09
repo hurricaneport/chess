@@ -1,6 +1,6 @@
 package clientTests;
 
-import api.HTTPConnectionManager;
+import api.ConnectionManager;
 import api.HTTPResponseException;
 import api.ServerFacade;
 import model.GameData;
@@ -36,7 +36,7 @@ public class ServerFacadeTests {
 
 	@BeforeEach
 	public void clearAuthToken() {
-		HTTPConnectionManager.clearAuthToken();
+		ConnectionManager.clearAuthToken();
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class ServerFacadeTests {
 	public void loginTest() throws Exception {
 		serverFacade.register("username", "password", "email");
 		Assertions.assertDoesNotThrow(() -> serverFacade.login("username", "password"));
-		Assertions.assertFalse(HTTPConnectionManager.getAuthToken().isEmpty());
+		Assertions.assertFalse(ConnectionManager.getAuthToken().isEmpty());
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class ServerFacadeTests {
 	public void registerSuccess() throws Exception {
 		serverFacade.register("username", "password", "email");
 		Assertions.assertDoesNotThrow(() -> serverFacade.login("username", "password"));
-		Assertions.assertFalse(HTTPConnectionManager.getAuthToken().isEmpty());
+		Assertions.assertFalse(ConnectionManager.getAuthToken().isEmpty());
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class ServerFacadeTests {
 		serverFacade.register("username", "password", "email");
 		serverFacade.login("username", "password");
 		serverFacade.logout();
-		Assertions.assertTrue(HTTPConnectionManager.getAuthToken().isEmpty());
+		Assertions.assertTrue(ConnectionManager.getAuthToken().isEmpty());
 	}
 
 	@Test

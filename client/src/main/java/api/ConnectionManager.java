@@ -5,6 +5,7 @@ import jsonUtils.GsonFactory;
 import model.request.Request;
 import model.response.ErrorResponse;
 
+import javax.websocket.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,13 +13,15 @@ import java.io.OutputStream;
 import java.net.*;
 import java.util.Map;
 
-public class HTTPConnectionManager {
+public class ConnectionManager {
 	private static String authToken = "";
 	private final String serverUrl;
+	private final String webSocketUri;
 	private final Gson gson = GsonFactory.getGson();
 
-	public HTTPConnectionManager(int port) {
+	public ConnectionManager(int port) {
 		serverUrl = "http://localhost:" + port;
+		webSocketUri = "ws://localhost:" + port + "/connect";
 	}
 
 	public static String getAuthToken() {
@@ -62,6 +65,20 @@ public class HTTPConnectionManager {
 
 		connection.connect();
 		return connection;
+	}
+
+	public Session getWebSocketSession(Endpoint endpoint) throws HTTPConnectionException {
+		URI uri;
+		try {
+			uri = new URI(webSocketUri);
+			WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+			return container.connectToServer(endpoint, uri);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		} catch (DeploymentException | IOException e) {
+			throw new HTTPConnectionException("Could not establish websocket connection");
+		}
+
 	}
 
 	public void writeRequestBody(Request request, HttpURLConnection connection) throws IOException {

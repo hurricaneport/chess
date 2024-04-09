@@ -12,11 +12,11 @@ import java.util.HashMap;
 
 public class UserHTTPCommunicator {
 	int port;
-	HTTPConnectionManager httpConnectionManager;
+	ConnectionManager connectionManager;
 
 	UserHTTPCommunicator(int port) {
 		this.port = port;
-		httpConnectionManager = new HTTPConnectionManager(port);
+		connectionManager = new ConnectionManager(port);
 	}
 
 	public void login(LoginRequest loginRequest) throws HTTPResponseException, HTTPConnectionException {
@@ -26,19 +26,19 @@ public class UserHTTPCommunicator {
 		LoginResponse loginResponse;
 
 		try {
-			HttpURLConnection connection = httpConnectionManager.getConnection("/session",
+			HttpURLConnection connection = connectionManager.getConnection("/session",
 					"POST", headers, true);
 
-			httpConnectionManager.writeRequestBody(loginRequest, connection);
+			connectionManager.writeRequestBody(loginRequest, connection);
 
-			if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
-				loginResponse = httpConnectionManager.readResponseBody(LoginResponse.class, connection);
+			if (ConnectionManager.httpStatusIsOkay(connection)) {
+				loginResponse = connectionManager.readResponseBody(LoginResponse.class, connection);
 			} else {
-				ErrorResponse errorResponse = httpConnectionManager.readErrorBody(connection);
+				ErrorResponse errorResponse = connectionManager.readErrorBody(connection);
 				throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
 			}
 
-			HTTPConnectionManager.updateAuthToken(loginResponse.authToken());
+			ConnectionManager.updateAuthToken(loginResponse.authToken());
 		} catch (IOException e) {
 			throw new HTTPConnectionException(e.getMessage());
 		}
@@ -51,19 +51,19 @@ public class UserHTTPCommunicator {
 		RegisterResponse registerResponse;
 		HttpURLConnection connection;
 		try {
-			connection = httpConnectionManager.getConnection("/user",
+			connection = connectionManager.getConnection("/user",
 					"POST", headers, true);
 
-			httpConnectionManager.writeRequestBody(registerRequest, connection);
+			connectionManager.writeRequestBody(registerRequest, connection);
 
-			if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
-				registerResponse = httpConnectionManager.readResponseBody(RegisterResponse.class, connection);
+			if (ConnectionManager.httpStatusIsOkay(connection)) {
+				registerResponse = connectionManager.readResponseBody(RegisterResponse.class, connection);
 			} else {
-				ErrorResponse errorResponse = httpConnectionManager.readErrorBody(connection);
+				ErrorResponse errorResponse = connectionManager.readErrorBody(connection);
 				throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
 			}
 
-			HTTPConnectionManager.updateAuthToken(registerResponse.authToken());
+			ConnectionManager.updateAuthToken(registerResponse.authToken());
 		} catch (IOException e) {
 			throw new HTTPConnectionException(e.getMessage());
 		}
@@ -72,14 +72,14 @@ public class UserHTTPCommunicator {
 	public void logout() throws HTTPResponseException, HTTPConnectionException {
 		HashMap<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json");
-		headers.put("authorization", HTTPConnectionManager.getAuthToken());
+		headers.put("authorization", ConnectionManager.getAuthToken());
 
 		try {
-			HttpURLConnection connection = httpConnectionManager.getConnection("/session", "DELETE", headers, false);
-			if (HTTPConnectionManager.httpStatusIsOkay(connection)) {
-				HTTPConnectionManager.clearAuthToken();
+			HttpURLConnection connection = connectionManager.getConnection("/session", "DELETE", headers, false);
+			if (ConnectionManager.httpStatusIsOkay(connection)) {
+				ConnectionManager.clearAuthToken();
 			} else {
-				ErrorResponse errorResponse = httpConnectionManager.readErrorBody(connection);
+				ErrorResponse errorResponse = connectionManager.readErrorBody(connection);
 				throw new HTTPResponseException(connection.getResponseCode(), errorResponse.message());
 			}
 		} catch (IOException e) {
