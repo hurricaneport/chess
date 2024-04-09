@@ -60,7 +60,7 @@ public class Server {
 			return response.body();
 		}));
 
-		Spark.webSocket("/connect", WebSocketHandler.class);
+		Spark.webSocket("/connect", new WebSocketHandler());
 	}
 
 	public void stop() {
