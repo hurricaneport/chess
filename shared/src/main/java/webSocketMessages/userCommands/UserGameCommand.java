@@ -9,10 +9,14 @@ import java.util.Objects;
  * methods.
  */
 public class UserGameCommand {
+	protected CommandType commandType;
+	private final String authToken;
+	private final Integer gameID;
 
-	public UserGameCommand(String authToken, CommandType type) {
+	public UserGameCommand(String authToken, CommandType type, Integer gameID) {
 		this.authToken = authToken;
 		this.commandType = type;
+		this.gameID = gameID;
 	}
 
 	public enum CommandType {
@@ -23,16 +27,16 @@ public class UserGameCommand {
 		RESIGN
 	}
 
-	protected CommandType commandType;
-
-	private final String authToken;
-
 	public String getAuthString() {
 		return authToken;
 	}
 
 	public CommandType getCommandType() {
 		return this.commandType;
+	}
+
+	public Integer getGameID() {
+		return gameID;
 	}
 
 	@Override
