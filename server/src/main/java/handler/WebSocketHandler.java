@@ -5,8 +5,10 @@ import jsonUtils.GsonFactory;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import webSocketMessages.serverMessages.NotificationServerMessage;
 import webSocketMessages.userCommands.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -66,5 +68,14 @@ public class WebSocketHandler {
 
 	private void handleResign(ResignUserGameCommand resignUserGameCommand) {
 
+	}
+
+	private void sendNotification(Session session, String message) {
+		try {
+			NotificationServerMessage notificationServerMessage = new NotificationServerMessage(message);
+			session.getRemote().sendString(gson.toJson(notificationServerMessage));
+		} catch (IOException e) {
+			
+		}
 	}
 }
