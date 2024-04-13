@@ -8,27 +8,39 @@ import jsonUtils.GsonFactory;
 import webSocketMessages.serverMessages.ServerMessage;
 import webSocketMessages.userCommands.*;
 
-import javax.websocket.Endpoint;
-import javax.websocket.EndpointConfig;
-import javax.websocket.MessageHandler;
-import javax.websocket.Session;
+import javax.websocket.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class WebsocketCommunicator extends Endpoint {
 	Session session;
 	ServerMessageObserver observer;
-	ConnectionManager connectionManager;
 	Gson gson = GsonFactory.getGson();
+	String webSocketUri;
 
 	public WebsocketCommunicator(ServerMessageObserver observer, int port) throws HTTPConnectionException {
 		this.observer = observer;
-		connectionManager = new ConnectionManager(port);
-		session = connectionManager.getWebSocketSession(this);
-
+		webSocketUri = "ws://localhost:" + port + "/connect";
+		session = getWebSocketSession();
 		session.addMessageHandler((MessageHandler.Whole<String>) message -> {
 			ServerMessage serverMessage = gson.fromJson(message, ServerMessage.class);
 			observer.notify(serverMessage);
 		});
+	}
+
+	public Session getWebSocketSession() throws HTTPConnectionException {
+		URI uri;
+		try {
+			uri = new URI(webSocketUri);
+			WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+			return container.connectToServer(this, ClientEndpointConfig.Builder.create().build(), uri);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		} catch (DeploymentException | IOException e) {
+			throw new HTTPConnectionException("Could not establish websocket connection");
+		}
+
 	}
 
 	@Override

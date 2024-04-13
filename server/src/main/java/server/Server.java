@@ -17,7 +17,7 @@ public class Server {
 		Spark.port(desiredPort);
 
 		Spark.staticFiles.location("web");
-		// Register your endpoints and handle exceptions here.
+
 		createRoutes();
 
 		Spark.awaitInitialization();
@@ -25,6 +25,8 @@ public class Server {
 	}
 
 	public void createRoutes() {
+		Spark.webSocket("/connect", WebSocketHandler.class);
+
 		Spark.post("/user", ((request, response) -> {
 			(new RegisterHandler()).handleRegistration(request, response);
 			return response.body();
@@ -59,8 +61,6 @@ public class Server {
 			(new JoinGameHandler()).handleJoinGame(request, response);
 			return response.body();
 		}));
-
-		Spark.webSocket("/connect", new WebSocketHandler());
 	}
 
 	public void stop() {
