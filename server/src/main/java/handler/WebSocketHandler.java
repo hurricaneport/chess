@@ -130,9 +130,9 @@ public class WebSocketHandler {
 			sendError(session, "Chess move invalid");
 			return;
 		}
-		GameData gameData1 = new GameData(gameData.gameID(), gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), game);
+
 		try {
-			gameDAO.updateGame(gameData1.gameID(), gameData1);
+			gameDAO.updateGame(gameData.gameID(), gameData);
 		} catch (DataAccessException e) {
 			sendError(session, "Move could not be made due to error, please try again");
 		}
@@ -166,8 +166,14 @@ public class WebSocketHandler {
 		}
 	}
 
-	private void handleResign(ResignUserGameCommand resignUserGameCommand) {
+	private void handleResign(ResignUserGameCommand resignUserGameCommand, Session session, String username) throws DataAccessException, IOException {
+		GameData gameData = gameDAO.getGame(resignUserGameCommand.getGameID());
+		gameData.game().endGame();
+		gameDAO.updateGame(gameData.gameID(), gameData);
 
+		for (Session session1 : activeGameSessions.get(gameData.gameID())) {
+			sendNotification(session1, username + "has resigned.");
+		}
 	}
 
 	private void sendNotification(Session session, String message) throws IOException {

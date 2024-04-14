@@ -2,8 +2,8 @@ package clientTests;
 
 import api.ConnectionManager;
 import api.HTTPResponseException;
-import api.ServerFacade;
 import api.WebsocketCommunicator;
+import api.facade.ServerFacade;
 import client.Menu;
 import model.GameData;
 import org.junit.jupiter.api.*;

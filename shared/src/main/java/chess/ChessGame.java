@@ -15,6 +15,7 @@ public class ChessGame {
 
 	private ChessMove lastMove = null;
 	private ChessPiece lastPiece = null;
+	boolean gameIsOver = false;
 
 	public ChessGame() {
 		currentTurn = TeamColor.WHITE;
@@ -99,6 +100,8 @@ public class ChessGame {
 			throw (new InvalidMoveException("Move from" + move.getStartPosition().getAlgebraicNotation() + " to " + move.getEndPosition().getAlgebraicNotation() + " is not valid."));
 		} else if (chessBoard.getPiece(move.getStartPosition()).getTeamColor() != currentTurn) {
 			throw new InvalidMoveException(chessBoard.getPiece(move.getStartPosition()).getTeamColor() + " cannot move, it is not their turn");
+		} else if (gameIsOver) {
+			throw new InvalidMoveException("Game is over");
 		} else {
 			makeTestMove(move);
 			nextTurn();
@@ -234,6 +237,14 @@ public class ChessGame {
 	 */
 	public void setBoard(ChessBoard board) {
 		chessBoard = board;
+	}
+
+	public void endGame() {
+		gameIsOver = true;
+	}
+
+	public boolean isGameIsOver() {
+		return gameIsOver;
 	}
 
 	/**

@@ -14,7 +14,7 @@ public class UserHTTPCommunicator {
 	int port;
 	ConnectionManager connectionManager;
 
-	UserHTTPCommunicator(int port) {
+	public UserHTTPCommunicator(int port) {
 		this.port = port;
 		connectionManager = new ConnectionManager(port);
 	}

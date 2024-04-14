@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class GameHTTPCommunicator {
 	int port;
 
-	GameHTTPCommunicator(int port) {
+	public GameHTTPCommunicator(int port) {
 		this.port = port;
 		connectionManager = new ConnectionManager(port);
 	}

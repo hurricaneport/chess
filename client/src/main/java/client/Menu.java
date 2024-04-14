@@ -2,9 +2,14 @@ package client;
 
 import api.HTTPConnectionException;
 import api.HTTPResponseException;
-import api.ServerFacade;
+import api.facade.ServerFacade;
+import chess.ChessGame;
 import model.GameData;
 import ui.ChessBoardGraphics;
+import ui.EscapeSequences;
+import webSocketMessages.serverMessages.ErrorServerMessage;
+import webSocketMessages.serverMessages.LoadGameServerMessage;
+import webSocketMessages.serverMessages.NotificationServerMessage;
 import webSocketMessages.serverMessages.ServerMessage;
 
 import java.util.ArrayList;
@@ -12,11 +17,15 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
+import static chess.ChessGame.TeamColor.WHITE;
+
 public class Menu implements ServerMessageObserver {
 
 	private final Scanner scanner = new Scanner(System.in);
 	private final ServerFacade serverFacade = new ServerFacade();
 	private final ArrayList<GameData> games = new ArrayList<>();
+	private ChessGame currentGame = new ChessGame();
+	private ChessGame.TeamColor teamColor = WHITE;
 
 	public void run() {
 		System.out.print("Chess 2024\n\n");
@@ -314,8 +323,6 @@ public class Menu implements ServerMessageObserver {
 	private void joinGame(int gameIndex, String teamColor) {
 		try {
 			serverFacade.joinGame(teamColor, games.get(gameIndex - 1).gameID());
-			ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), true);
-			ChessBoardGraphics.drawChessBoard(games.get(gameIndex - 1).game().getBoard(), false);
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {
 				System.out.print("Login expired, please login again\n\n");
@@ -352,8 +359,6 @@ public class Menu implements ServerMessageObserver {
 
 			if (!gameIndex.equals("BACK")) {
 				serverFacade.joinGame(null, games.get(Integer.parseInt(gameIndex) - 1).gameID());
-				ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), true);
-				ChessBoardGraphics.drawChessBoard(games.get(Integer.parseInt(gameIndex) - 1).game().getBoard(), false);
 			}
 			postLogin();
 		} catch (HTTPResponseException e) {
@@ -376,11 +381,28 @@ public class Menu implements ServerMessageObserver {
 	public void notify(ServerMessage serverMessage) {
 		switch (serverMessage.getServerMessageType()) {
 			case LOAD_GAME -> {
+				loadGame((LoadGameServerMessage) serverMessage);
 			}
 			case ERROR -> {
+				showError((ErrorServerMessage) serverMessage);
 			}
 			case NOTIFICATION -> {
+				showNotification((NotificationServerMessage) serverMessage);
 			}
 		}
+	}
+
+	private void loadGame(LoadGameServerMessage loadGameServerMessage) {
+		currentGame = loadGameServerMessage.getGame();
+		boolean isForward = (teamColor == WHITE);
+		ChessBoardGraphics.drawChessBoard(currentGame.getBoard(), isForward, null, null);
+	}
+
+	public void showNotification(NotificationServerMessage notificationServerMessage) {
+		System.out.print(notificationServerMessage.getMessage() + "\n");
+	}
+
+	private void showError(ErrorServerMessage errorServerMessage) {
+		System.out.print(EscapeSequences.SET_TEXT_COLOR_RED + errorServerMessage.getErrorMessage() + EscapeSequences.RESET_ALL + "\n");
 	}
 }

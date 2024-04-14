@@ -1,5 +1,8 @@
-package api;
+package api.facade;
 
+import api.*;
+import chess.ChessGame;
+import chess.ChessMove;
 import model.GameData;
 import model.request.CreateGameRequest;
 import model.request.JoinGameRequest;
@@ -13,6 +16,7 @@ public class ServerFacade {
 	int port;
 	UserHTTPCommunicator userHTTPCommunicator;
 	GameHTTPCommunicator gameHTTPCommunicator;
+	WebsocketCommunicator websocketCommunicator;
 
 	public ServerFacade() {
 		this(8080);
@@ -47,5 +51,22 @@ public class ServerFacade {
 
 	public void joinGame(String userColor, int gameID) throws HTTPResponseException, HTTPConnectionException {
 		gameHTTPCommunicator.joinGame(new JoinGameRequest(userColor, gameID));
+		if (userColor == null) {
+			websocketCommunicator.joinGameObserver(gameID);
+		} else {
+			websocketCommunicator.joinGame(gameID, ChessGame.TeamColor.valueOf(userColor));
+		}
+	}
+
+	public void makeMove(ChessMove move, int gameID) throws HTTPConnectionException {
+		websocketCommunicator.makeMove(gameID, move);
+	}
+
+	public void leaveGame(int gameID) throws HTTPConnectionException {
+		websocketCommunicator.leave(gameID);
+	}
+
+	public void resign(int gameID) throws HTTPConnectionException {
+		websocketCommunicator.resign(gameID);
 	}
 }
