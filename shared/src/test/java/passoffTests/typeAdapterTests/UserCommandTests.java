@@ -36,15 +36,14 @@ public class UserCommandTests {
 	@Test
 	@DisplayName("Make Move Command")
 	public void makeMoveCommand() {
-		UserGameCommand userGameCommand = new MakeMoveUserGameCommand("1234", 1234, new ChessMove(new ChessPosition(1, 1), new ChessPosition(1, 1)));
+		MakeMoveUserGameCommand userGameCommand = new MakeMoveUserGameCommand("1234", 1234, new ChessMove(new ChessPosition(1, 1), new ChessPosition(1, 1)));
 		String json = gson.toJson(userGameCommand);
 
 		UserGameCommand userGameCommand1 = gson.fromJson(json, UserGameCommand.class);
 		Assertions.assertEquals(MakeMoveUserGameCommand.class, userGameCommand1.getClass());
 
-		MakeMoveUserGameCommand makeMoveUserGameCommand = (MakeMoveUserGameCommand) userGameCommand;
 		MakeMoveUserGameCommand makeMoveUserGameCommand1 = (MakeMoveUserGameCommand) userGameCommand1;
-		Assertions.assertEquals(makeMoveUserGameCommand1.getChessMove(), makeMoveUserGameCommand.getChessMove());
+		Assertions.assertEquals(makeMoveUserGameCommand1.getChessMove(), userGameCommand.getChessMove());
 	}
 
 	@Test
