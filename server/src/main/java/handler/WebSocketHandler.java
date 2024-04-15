@@ -31,28 +31,21 @@ public class WebSocketHandler {
 
 	@OnWebSocketClose
 	public void onClose(Session session, int statusCode, String reason) {
-		synchronized (lockObject) {
-			for (Integer gameID : activeGameSessions.keySet()) {
-				for (Session session1 : activeGameSessions.get(gameID)) {
-					if (session1.equals(session)) {
-						activeGameSessions.get(gameID).remove(session);
-					}
-				}
-			}
-		}
+
 	}
 
 	@OnWebSocketConnect
 	public void onConnect(Session session) {
+
 	}
 
 	@OnWebSocketError
 	public void onError(Throwable throwable) {
+
 	}
 
 	@OnWebSocketMessage
 	public void onMessage(Session session, String message) throws IOException, ServerErrorException, DataAccessException {
-		System.out.print("onMessage");
 		UserGameCommand userGameCommand = gson.fromJson(message, UserGameCommand.class);
 		AuthData authData = (new GameService()).authorize(userGameCommand.getAuthString());
 
@@ -61,10 +54,15 @@ public class WebSocketHandler {
 			return;
 		}
 
+		GameData gameData = gameDAO.getGame(userGameCommand.getGameID());
+		if (gameData == null) {
+			sendError(session, "Error: Invalid Game ID.");
+			return;
+		}
+
 		addGameSession(userGameCommand.getGameID(), session);
 
 		String username = authData.username();
-		addSessionUsername(authData.username(), session);
 
 		ChessGame.TeamColor playerColor = findPlayerColor(username, userGameCommand.getGameID());
 
@@ -93,12 +91,6 @@ public class WebSocketHandler {
 		synchronized (lockObject) {
 			activeGameSessions.computeIfAbsent(gameID, k -> new HashSet<>());
 			activeGameSessions.get(gameID).add(session);
-		}
-	}
-
-	private void addSessionUsername(String username, Session session) {
-		synchronized (lockObject) {
-
 		}
 	}
 
@@ -139,12 +131,22 @@ public class WebSocketHandler {
 
 	private void handleMakeMove(MakeMoveUserGameCommand makeMoveUserGameCommand, Session session, String username, ChessGame.TeamColor playerColor) throws DataAccessException, IOException {
 		if (playerColor == null) {
-			sendError(session, "Cannot make moves as an observer");
+			sendError(session, "Error: Cannot make moves as an observer");
 			return;
 		}
 
 		GameData gameData = gameDAO.getGame(makeMoveUserGameCommand.getGameID());
 		ChessGame game = gameData.game();
+
+		if (game.isGameIsOver()) {
+			sendError(session, "Error: Game is over.");
+			return;
+		}
+
+		if (game.getTeamTurn() != playerColor) {
+			sendError(session, "Error: Not your turn.");
+			return;
+		}
 
 		ChessGame.TeamColor opponentColor = playerColor == ChessGame.TeamColor.BLACK ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
 		String opponentUsername = playerColor == ChessGame.TeamColor.BLACK ? gameData.whiteUsername() : gameData.blackUsername();
@@ -152,7 +154,7 @@ public class WebSocketHandler {
 		try {
 			game.makeMove(makeMoveUserGameCommand.getChessMove());
 		} catch (InvalidMoveException e) {
-			sendError(session, "Chess move invalid: " + e);
+			sendError(session, "Error: Chess move invalid: " + e);
 			return;
 		}
 
@@ -216,6 +218,12 @@ public class WebSocketHandler {
 		ChessGame.TeamColor opponentColor = playerColor == ChessGame.TeamColor.BLACK ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
 
 		GameData gameData = gameDAO.getGame(resignUserGameCommand.getGameID());
+
+		if (gameData.game().isGameIsOver()) {
+			sendError(session, "Error: Can't resign from a game that is over.");
+			return;
+		}
+
 		gameData.game().endGame();
 		gameDAO.updateGame(gameData.gameID(), gameData);
 
@@ -225,17 +233,23 @@ public class WebSocketHandler {
 	}
 
 	private void sendNotification(Session session, String message) throws IOException {
-		NotificationServerMessage notificationServerMessage = new NotificationServerMessage(message);
-		session.getRemote().sendString(gson.toJson(notificationServerMessage));
+		if (session.isOpen()) {
+			NotificationServerMessage notificationServerMessage = new NotificationServerMessage(message);
+			session.getRemote().sendString(gson.toJson(notificationServerMessage));
+		}
 	}
 
 	private void sendError(Session session, String errorMessage) throws IOException {
-		ErrorServerMessage errorServerMessage = new ErrorServerMessage(errorMessage);
-		session.getRemote().sendString(gson.toJson(errorServerMessage));
+		if (session.isOpen()) {
+			ErrorServerMessage errorServerMessage = new ErrorServerMessage(errorMessage);
+			session.getRemote().sendString(gson.toJson(errorServerMessage));
+		}
 	}
 
 	private void updateGame(Session session, ChessGame game) throws IOException {
-		LoadGameServerMessage loadGameServerMessage = new LoadGameServerMessage(game);
-		session.getRemote().sendString(gson.toJson(loadGameServerMessage));
+		if (session.isOpen()) {
+			LoadGameServerMessage loadGameServerMessage = new LoadGameServerMessage(game);
+			session.getRemote().sendString(gson.toJson(loadGameServerMessage));
+		}
 	}
 }

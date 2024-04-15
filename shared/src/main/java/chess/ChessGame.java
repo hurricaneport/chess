@@ -96,6 +96,10 @@ public class ChessGame {
 	 * @throws InvalidMoveException when move is not valid.
 	 */
 	public void makeMove(ChessMove move) throws InvalidMoveException {
+		if (move == null) {
+			throw new InvalidMoveException("Chess Move cannot be null");
+		}
+
 		if (!validMoves(move.getStartPosition()).contains(move)) {
 			throw (new InvalidMoveException("Move from" + move.getStartPosition().getAlgebraicNotation() + " to " + move.getEndPosition().getAlgebraicNotation() + " is not valid."));
 		} else if (chessBoard.getPiece(move.getStartPosition()).getTeamColor() != currentTurn) {

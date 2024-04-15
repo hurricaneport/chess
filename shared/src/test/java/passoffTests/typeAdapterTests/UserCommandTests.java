@@ -41,6 +41,10 @@ public class UserCommandTests {
 
 		UserGameCommand userGameCommand1 = gson.fromJson(json, UserGameCommand.class);
 		Assertions.assertEquals(MakeMoveUserGameCommand.class, userGameCommand1.getClass());
+
+		MakeMoveUserGameCommand makeMoveUserGameCommand = (MakeMoveUserGameCommand) userGameCommand;
+		MakeMoveUserGameCommand makeMoveUserGameCommand1 = (MakeMoveUserGameCommand) userGameCommand1;
+		Assertions.assertEquals(makeMoveUserGameCommand1.getChessMove(), makeMoveUserGameCommand.getChessMove());
 	}
 
 	@Test
