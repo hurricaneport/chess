@@ -15,6 +15,9 @@ public class ChessBoardGraphics {
 	private static final String separator = " ";
 
 	public static void drawChessBoard(ChessBoard chessBoard, boolean isForward, ChessPosition startingSpace, Set<ChessMove> legalMoves) {
+		if (legalMoves == null) {
+			legalMoves = new HashSet<>();
+		}
 		drawLabels(isForward);
 
 		String[][] pieceChars = isForward ? GraphicsUtils.getPieceCharacters(chessBoard) : GraphicsUtils.getPieceCharactersReversed(chessBoard);
@@ -96,7 +99,7 @@ public class ChessBoardGraphics {
 	}
 
 	private static ChessPosition indexToPosition(int rowIndex, int colIndex, boolean isForward) {
-
+		//TODO: Implement this
 		return null;
 	}
 }

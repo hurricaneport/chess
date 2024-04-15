@@ -380,15 +380,9 @@ public class Menu implements ServerMessageObserver {
 	@Override
 	public void notify(ServerMessage serverMessage) {
 		switch (serverMessage.getServerMessageType()) {
-			case LOAD_GAME -> {
-				loadGame((LoadGameServerMessage) serverMessage);
-			}
-			case ERROR -> {
-				showError((ErrorServerMessage) serverMessage);
-			}
-			case NOTIFICATION -> {
-				showNotification((NotificationServerMessage) serverMessage);
-			}
+			case LOAD_GAME -> loadGame((LoadGameServerMessage) serverMessage);
+			case ERROR -> showError((ErrorServerMessage) serverMessage);
+			case NOTIFICATION -> showNotification((NotificationServerMessage) serverMessage);
 		}
 	}
 
