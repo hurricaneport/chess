@@ -37,9 +37,16 @@ public final class ChessPosition {
 		}
 	}
 
-	public static ChessPosition fromCoordinates(String position) {
-		//TODO: Implement this
-		return null;
+	public static ChessPosition fromCoordinates(String position) throws IllegalArgumentException {
+		if (position.length() != 2) {
+			throw new IllegalArgumentException("String is incorrect length");
+		}
+		int col = (int) position.charAt(0) - 96;
+		int row = Integer.parseInt(String.valueOf(position.charAt(1)));
+		if (col < 1 || col > 8 || row < 1 || row > 8) {
+			throw new IllegalArgumentException("Invalid coordinates");
+		}
+		return new ChessPosition(row, col);
 	}
 
 	@Override

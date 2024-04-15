@@ -70,7 +70,7 @@ public final class ChessMove {
 		return promotionPiece;
 	}
 
-	public static ChessMove fromStringNotation(String inputMove) {
+	public static ChessMove fromStringNotation(String inputMove) throws IllegalArgumentException {
 		//TODO: Implement this
 		return null;
 	}
