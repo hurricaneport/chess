@@ -19,16 +19,12 @@ import webSocketMessages.serverMessages.NotificationServerMessage;
 import webSocketMessages.userCommands.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @WebSocket
 public class WebSocketHandler {
 	private final Map<Integer, Set<Session>> activeGameSessions = new HashMap<>();
 	private final Object lockObject = new Object();
-	private final Map<Session, String> activeUserSessions = new HashMap<>();
 	private final Gson gson = GsonFactory.getGson();
 
 	private final GameDAO gameDAO = DBGameDAO.getGameDAO();
@@ -36,7 +32,6 @@ public class WebSocketHandler {
 	@OnWebSocketClose
 	public void onClose(Session session, int statusCode, String reason) {
 		synchronized (lockObject) {
-			activeUserSessions.remove(session);
 			for (Integer gameID : activeGameSessions.keySet()) {
 				for (Session session1 : activeGameSessions.get(gameID)) {
 					if (session1.equals(session)) {
@@ -71,12 +66,26 @@ public class WebSocketHandler {
 		String username = authData.username();
 		addSessionUsername(authData.username(), session);
 
+		ChessGame.TeamColor playerColor = findPlayerColor(username, userGameCommand.getGameID());
+
 		switch (userGameCommand.getCommandType()) {
 			case JOIN_PLAYER -> handleJoinPlayer((JoinPlayerUserGameCommand) userGameCommand, session, username);
 			case JOIN_OBSERVER -> handleJoinObserver((JoinObserverUserGameCommand) userGameCommand, session, username);
-			case MAKE_MOVE -> handleMakeMove((MakeMoveUserGameCommand) userGameCommand, session, username);
+			case MAKE_MOVE -> handleMakeMove((MakeMoveUserGameCommand) userGameCommand, session, username, playerColor);
 			case LEAVE -> handleLeave((LeaveUserGameCommand) userGameCommand, session, username);
-			case RESIGN -> handleResign((ResignUserGameCommand) userGameCommand);
+			case RESIGN -> handleResign((ResignUserGameCommand) userGameCommand, session, username, playerColor);
+		}
+	}
+
+	private ChessGame.TeamColor findPlayerColor(String username, Integer gameID) throws DataAccessException {
+		GameData gameData = gameDAO.getGame(gameID);
+
+		if (Objects.equals(gameData.whiteUsername(), username)) {
+			return ChessGame.TeamColor.WHITE;
+		} else if (Objects.equals(gameData.blackUsername(), username)) {
+			return ChessGame.TeamColor.BLACK;
+		} else {
+			return null;
 		}
 	}
 
@@ -89,13 +98,20 @@ public class WebSocketHandler {
 
 	private void addSessionUsername(String username, Session session) {
 		synchronized (lockObject) {
-			activeUserSessions.put(session, username);
+
 		}
 	}
 
 	private void handleJoinPlayer(JoinPlayerUserGameCommand joinPlayerUserGameCommand, Session session, String username) throws IOException, DataAccessException {
 		GameData gameData = gameDAO.getGame(joinPlayerUserGameCommand.getGameID());
 		ChessGame game = gameData.game();
+
+		String gameDataUsername = joinPlayerUserGameCommand.getPlayerColor() == ChessGame.TeamColor.BLACK ? gameData.blackUsername() : gameData.whiteUsername();
+
+		if (!Objects.equals(gameDataUsername, username)) {
+			sendError(session, "Error: You have not been added as a player to the game. HTTP Join Game request must be sent first.");
+			return;
+		}
 
 		updateGame(session, game);
 
@@ -121,14 +137,39 @@ public class WebSocketHandler {
 		}
 	}
 
-	private void handleMakeMove(MakeMoveUserGameCommand makeMoveUserGameCommand, Session session, String username) throws DataAccessException, IOException {
+	private void handleMakeMove(MakeMoveUserGameCommand makeMoveUserGameCommand, Session session, String username, ChessGame.TeamColor playerColor) throws DataAccessException, IOException {
+		if (playerColor == null) {
+			sendError(session, "Cannot make moves as an observer");
+			return;
+		}
+
 		GameData gameData = gameDAO.getGame(makeMoveUserGameCommand.getGameID());
 		ChessGame game = gameData.game();
+
+		ChessGame.TeamColor opponentColor = playerColor == ChessGame.TeamColor.BLACK ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+		String opponentUsername = playerColor == ChessGame.TeamColor.BLACK ? gameData.whiteUsername() : gameData.blackUsername();
+
 		try {
 			game.makeMove(makeMoveUserGameCommand.getChessMove());
 		} catch (InvalidMoveException e) {
-			sendError(session, "Chess move invalid");
+			sendError(session, "Chess move invalid: " + e);
 			return;
+		}
+
+		if (game.isInCheck(opponentColor)) {
+			for (Session session1 : activeGameSessions.get(makeMoveUserGameCommand.getGameID())) {
+				sendNotification(session1, opponentUsername + " is in check and must move out of check");
+			}
+		} else if (game.isInCheckmate(opponentColor)) {
+			for (Session session1 : activeGameSessions.get(makeMoveUserGameCommand.getGameID())) {
+				sendNotification(session1, opponentUsername + " is in checkmate and the game is over. " + playerColor + " wins!");
+			}
+			game.endGame();
+		} else if (game.isInStalemate(opponentColor)) {
+			for (Session session1 : activeGameSessions.get(makeMoveUserGameCommand.getGameID())) {
+				sendNotification(session1, opponentUsername + " is in stalemate. The game has ended in a draw.");
+			}
+			game.endGame();
 		}
 
 		try {
@@ -166,13 +207,20 @@ public class WebSocketHandler {
 		}
 	}
 
-	private void handleResign(ResignUserGameCommand resignUserGameCommand, Session session, String username) throws DataAccessException, IOException {
+	private void handleResign(ResignUserGameCommand resignUserGameCommand, Session session, String username, ChessGame.TeamColor playerColor) throws DataAccessException, IOException {
+		if (playerColor == null) {
+			sendError(session, "Error: Cannot resign as an observer.");
+			return;
+		}
+
+		ChessGame.TeamColor opponentColor = playerColor == ChessGame.TeamColor.BLACK ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+
 		GameData gameData = gameDAO.getGame(resignUserGameCommand.getGameID());
 		gameData.game().endGame();
 		gameDAO.updateGame(gameData.gameID(), gameData);
 
 		for (Session session1 : activeGameSessions.get(gameData.gameID())) {
-			sendNotification(session1, username + "has resigned.");
+			sendNotification(session1, username + "has resigned. " + opponentColor + " wins!");
 		}
 	}
 
