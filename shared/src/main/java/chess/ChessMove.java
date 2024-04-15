@@ -69,4 +69,9 @@ public final class ChessMove {
 	public ChessPiece.PieceType getPromotionPiece() {
 		return promotionPiece;
 	}
+
+	public static ChessMove fromStringNotation(String inputMove) {
+		//TODO: Implement this
+		return null;
+	}
 }

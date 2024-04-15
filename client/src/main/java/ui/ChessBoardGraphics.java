@@ -4,6 +4,7 @@ import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,7 +15,7 @@ public class ChessBoardGraphics {
 	private static final String[] rowLabels = {"1", "2", "3", "4", "5", "6", "7", "8"};
 	private static final String separator = " ";
 
-	public static void drawChessBoard(ChessBoard chessBoard, boolean isForward, ChessPosition startingSpace, Set<ChessMove> legalMoves) {
+	public static void drawChessBoard(ChessBoard chessBoard, boolean isForward, ChessPosition startingSpace, Collection<ChessMove> legalMoves) {
 		if (legalMoves == null) {
 			legalMoves = new HashSet<>();
 		}

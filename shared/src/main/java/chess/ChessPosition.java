@@ -37,6 +37,11 @@ public final class ChessPosition {
 		}
 	}
 
+	public static ChessPosition fromCoordinates(String position) {
+		//TODO: Implement this
+		return null;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
