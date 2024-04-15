@@ -210,8 +210,8 @@ public class Menu implements ServerMessageObserver {
 		String gameName = scanner.nextLine();
 
 		try {
-			serverFacade.createGame(gameName);
-			System.out.print("Game: " + gameName + " created successfully. Please join the game from the main menu.\n\n");
+			int gameID = serverFacade.createGame(gameName);
+			System.out.print("Game: " + gameName + " created successfully with id" + gameID + ". Please join the game from the main menu.\n\n");
 			postLogin();
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {

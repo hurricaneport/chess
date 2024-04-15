@@ -20,7 +20,7 @@ public class GameHTTPCommunicator {
 
 	ConnectionManager connectionManager;
 
-	public void createGame(CreateGameRequest createGameRequest) throws HTTPResponseException, HTTPConnectionException {
+	public int createGame(CreateGameRequest createGameRequest) throws HTTPResponseException, HTTPConnectionException {
 		HashMap<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json");
 		headers.put("authorization", ConnectionManager.getAuthToken());
@@ -40,6 +40,8 @@ public class GameHTTPCommunicator {
 		} catch (IOException e) {
 			throw new HTTPConnectionException(e.getMessage());
 		}
+
+		return createGameResponse.gameID();
 	}
 
 	public void joinGame(JoinGameRequest joinGameRequest) throws HTTPResponseException, HTTPConnectionException {

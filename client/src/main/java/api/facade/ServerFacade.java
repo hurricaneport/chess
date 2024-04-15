@@ -40,8 +40,8 @@ public class ServerFacade {
 		userHTTPCommunicator.logout();
 	}
 
-	public void createGame(String gameName) throws HTTPResponseException, HTTPConnectionException {
-		gameHTTPCommunicator.createGame(new CreateGameRequest(gameName));
+	public int createGame(String gameName) throws HTTPResponseException, HTTPConnectionException {
+		return gameHTTPCommunicator.createGame(new CreateGameRequest(gameName));
 	}
 
 	public Set<GameData> listGames() throws HTTPResponseException, HTTPConnectionException {
