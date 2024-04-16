@@ -328,7 +328,7 @@ public class Menu {
 	private void joinGame(int gameIndex, String teamColor) {
 		try {
 			serverFacade.joinGame(teamColor, games.get(gameIndex - 1).gameID());
-			inGameMenu.inGameMenu(games.get(gameIndex - 1).gameID(), serverFacade);
+			inGameMenu.inGameMenu(games.get(gameIndex - 1).gameID(), serverFacade, false);
 
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {
@@ -366,7 +366,7 @@ public class Menu {
 
 			if (!gameIndex.equals("BACK")) {
 				serverFacade.joinGame(null, games.get(Integer.parseInt(gameIndex) - 1).gameID());
-				inGameMenu.inGameMenu(games.get(Integer.parseInt(gameIndex) - 1).gameID(), serverFacade);
+				inGameMenu.inGameMenu(games.get(Integer.parseInt(gameIndex) - 1).gameID(), serverFacade, true);
 			}
 
 		} catch (HTTPResponseException e) {

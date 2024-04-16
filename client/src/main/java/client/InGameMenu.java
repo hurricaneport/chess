@@ -13,6 +13,7 @@ import webSocketMessages.serverMessages.NotificationServerMessage;
 import webSocketMessages.serverMessages.ServerMessage;
 
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
@@ -23,6 +24,8 @@ public class InGameMenu implements ServerMessageObserver {
 	private ChessGame.TeamColor teamColor = WHITE;
 	private volatile boolean awaitBoard = false;
 	private volatile boolean awaitError = false;
+
+	CountDownLatch threadReady;
 	private boolean isSpectator = false;
 	Integer currentGameID;
 	Menu menu;
@@ -33,13 +36,7 @@ public class InGameMenu implements ServerMessageObserver {
 
 	}
 
-	public void inGameMenu(int gameID, ServerFacade serverFacade) {
-		currentGameID = gameID;
-		this.serverFacade = serverFacade;
-		inGameMenu();
-	}
-
-	private void inGameMenu() {
+	public void inGameMenu(int gameID, ServerFacade serverFacade, boolean isSpectator) {
 		awaitBoard = true;
 		awaitError = true;
 
@@ -52,6 +49,14 @@ public class InGameMenu implements ServerMessageObserver {
 		} else {
 			awaitError = false;
 		}
+
+		currentGameID = gameID;
+		this.serverFacade = serverFacade;
+		this.isSpectator = isSpectator;
+		inGameMenu();
+	}
+
+	private void inGameMenu() {
 
 		System.out.print("""
 				Please Select an Option
@@ -114,17 +119,6 @@ public class InGameMenu implements ServerMessageObserver {
 		try {
 			serverFacade.makeMove(ChessMove.fromStringNotation(input), currentGameID);
 
-			awaitError = true;
-			awaitBoard = true;
-
-			while (awaitError & awaitBoard) Thread.onSpinWait();
-
-			if (!awaitError) {
-				awaitBoard = false;
-			} else {
-				awaitError = false;
-			}
-
 			inGameMenu();
 
 		} catch (HTTPConnectionException e) {
@@ -163,16 +157,6 @@ public class InGameMenu implements ServerMessageObserver {
 
 		try {
 			serverFacade.resign(currentGameID);
-
-			awaitError = true;
-			awaitBoard = true;
-			while (awaitBoard & awaitError) Thread.onSpinWait();
-			if (!awaitError) {
-				awaitBoard = false;
-			} else {
-				awaitError = false;
-			}
-
 			inGameMenu();
 		} catch (HTTPConnectionException e) {
 			System.out.print("Could not resign, please try again");
@@ -210,6 +194,7 @@ public class InGameMenu implements ServerMessageObserver {
 		boolean isForward = (teamColor == WHITE);
 		ChessBoardGraphics.drawChessBoard(currentGame.getBoard(), isForward, null, null);
 		awaitBoard = false;
+		threadReady.countDown();
 	}
 
 	public void showNotification(NotificationServerMessage notificationServerMessage) {
@@ -218,6 +203,7 @@ public class InGameMenu implements ServerMessageObserver {
 
 	private void showError(ErrorServerMessage errorServerMessage) {
 		System.out.print(EscapeSequences.SET_TEXT_COLOR_RED + errorServerMessage.getErrorMessage() + EscapeSequences.RESET_ALL + "\n");
-		awaitError = false;
+		awaitBoard = false;
+		threadReady.countDown();
 	}
 }
