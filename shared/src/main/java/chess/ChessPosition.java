@@ -38,6 +38,9 @@ public final class ChessPosition {
 	}
 
 	public static ChessPosition fromCoordinates(String position) throws IllegalArgumentException {
+		if (position == null) {
+			throw new IllegalArgumentException("Input cannot be null");
+		}
 		if (position.length() != 2) {
 			throw new IllegalArgumentException("String is incorrect length");
 		}

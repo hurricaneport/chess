@@ -71,7 +71,25 @@ public final class ChessMove {
 	}
 
 	public static ChessMove fromStringNotation(String inputMove) throws IllegalArgumentException {
-		//TODO: Implement this
-		return null;
+		if (inputMove == null) {
+			throw new IllegalArgumentException("Input cannot be null");
+		}
+		if (inputMove.length() != 4 && inputMove.length() != 5) {
+			throw new IllegalArgumentException("Input wrong length");
+		}
+
+		ChessPosition startPosition = ChessPosition.fromCoordinates(inputMove.substring(0, 2));
+		ChessPosition endPosition = ChessPosition.fromCoordinates(inputMove.substring(2, 4));
+		ChessPiece.PieceType promotionPiece = null;
+		if (inputMove.length() == 5) {
+			switch (inputMove.substring(4, 5)) {
+				case "q" -> promotionPiece = ChessPiece.PieceType.QUEEN;
+				case "b" -> promotionPiece = ChessPiece.PieceType.BISHOP;
+				case "n" -> promotionPiece = ChessPiece.PieceType.KNIGHT;
+				case "r" -> promotionPiece = ChessPiece.PieceType.ROOK;
+				default -> throw new IllegalArgumentException("Promotion piece must be a valid piece type");
+			}
+		}
+		return new ChessMove(startPosition, endPosition, promotionPiece);
 	}
 }

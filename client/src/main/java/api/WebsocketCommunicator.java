@@ -23,10 +23,14 @@ public class WebsocketCommunicator extends Endpoint {
 		this.observer = observer;
 		webSocketUri = "ws://localhost:" + port + "/connect";
 		session = getWebSocketSession();
-		session.addMessageHandler((MessageHandler.Whole<String>) message -> {
-			ServerMessage serverMessage = gson.fromJson(message, ServerMessage.class);
-			observer.notify(serverMessage);
+		session.addMessageHandler(new MessageHandler.Whole<String>() {
+			@Override
+			public void onMessage(String message) {
+				ServerMessage serverMessage = gson.fromJson(message, ServerMessage.class);
+				observer.notify(serverMessage);
+			}
 		});
+
 	}
 
 	public Session getWebSocketSession() throws HTTPConnectionException {

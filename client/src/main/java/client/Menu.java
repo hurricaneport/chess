@@ -24,8 +24,16 @@ import static chess.ChessGame.TeamColor.WHITE;
 
 public class Menu implements ServerMessageObserver {
 
+	public Menu() {
+		try {
+			serverFacade = new ServerFacade(this);
+		} catch (HTTPConnectionException e) {
+			serverFacade = null;
+		}
+	}
+
 	private final Scanner scanner = new Scanner(System.in);
-	private final ServerFacade serverFacade = new ServerFacade();
+	private ServerFacade serverFacade;
 	private final ArrayList<GameData> games = new ArrayList<>();
 	private ChessGame currentGame = new ChessGame();
 	private ChessGame.TeamColor teamColor = WHITE;
@@ -36,6 +44,10 @@ public class Menu implements ServerMessageObserver {
 	Integer currentGameID;
 
 	public void run() {
+		if (serverFacade == null) {
+			System.out.print("Server could not be reached. Please try again later.\n\n");
+			return;
+		}
 		System.out.print("Chess 2024\n\n");
 		preLogin();
 	}
@@ -474,18 +486,25 @@ public class Menu implements ServerMessageObserver {
 			inGameMenu();
 
 		} catch (HTTPConnectionException e) {
-			throw new RuntimeException(e);
+			System.out.print("Connection error, please try again\n\n");
+			inGameMenu();
+		} catch (IllegalArgumentException e) {
+			System.out.print(e.getMessage() + " Please enter a valid move.\n\n");
+			inGameMenu();
 		}
 	}
 
 	private void highlightLegalMoves() {
 		System.out.print("Please enter the coordinates of the starting space you would like to see valid moves for.\n\n");
 		String position = scanner.nextLine();
+		try {
+			ChessPosition startingSpace = ChessPosition.fromCoordinates(position);
+			ChessBoardGraphics.drawChessBoard(currentGame.getBoard(), teamColor != BLACK, startingSpace, currentGame.validMoves(startingSpace));
+			inGameMenu();
+		} catch (IllegalArgumentException e) {
+			System.out.print(e.getMessage() + " Please enter a valid position.\n\n");
+		}
 
-		ChessPosition startingSpace = ChessPosition.fromCoordinates(position);
-		ChessBoardGraphics.drawChessBoard(currentGame.getBoard(), teamColor != BLACK, startingSpace, currentGame.validMoves(startingSpace));
-
-		inGameMenu();
 	}
 
 	private void redrawBoard() {
@@ -509,10 +528,10 @@ public class Menu implements ServerMessageObserver {
 			currentGameID = null;
 			isSpectator = false;
 
-			System.out.print("Left game, returning to main menu");
+			System.out.print("Left game, returning to main menu.\n\n");
 			postLogin();
 		} catch (HTTPConnectionException e) {
-			System.out.print("Could not leave game, please try again.");
+			System.out.print("Could not leave game, please try again.\n\n");
 			inGameMenu();
 		}
 	}
@@ -539,5 +558,7 @@ public class Menu implements ServerMessageObserver {
 
 	private void showError(ErrorServerMessage errorServerMessage) {
 		System.out.print(EscapeSequences.SET_TEXT_COLOR_RED + errorServerMessage.getErrorMessage() + EscapeSequences.RESET_ALL + "\n");
+		awaitError = false;
 	}
+
 }
