@@ -393,7 +393,19 @@ public class Menu implements ServerMessageObserver {
 				serverFacade.joinGame(null, games.get(Integer.parseInt(gameIndex) - 1).gameID());
 			}
 			currentGameID = games.get(Integer.parseInt(gameIndex) - 1).gameID();
-			postLogin();
+
+			awaitError = true;
+			awaitBoard = true;
+			while (awaitBoard & awaitError) Thread.onSpinWait();
+			if (!awaitError) {
+				awaitBoard = false;
+				postLogin();
+			} else {
+				awaitError = false;
+				inGameMenu();
+			}
+
+			inGameMenu();
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {
 				System.out.print("Login expired, please login again\n\n");
@@ -516,6 +528,26 @@ public class Menu implements ServerMessageObserver {
 	private void resign() {
 		if (isSpectator) {
 			System.out.print("Spectators cannot resign. Please join a game as a player to play the game.\n\n");
+			inGameMenu();
+		}
+
+		try {
+			serverFacade.resign(currentGameID);
+
+			awaitError = true;
+			awaitBoard = true;
+			while (awaitBoard & awaitError) Thread.onSpinWait();
+			if (!awaitError) {
+				awaitBoard = false;
+				postLogin();
+			} else {
+				awaitError = false;
+				inGameMenu();
+			}
+
+			inGameMenu();
+		} catch (HTTPConnectionException e) {
+			System.out.print("Could not resign, please try again");
 			inGameMenu();
 		}
 	}

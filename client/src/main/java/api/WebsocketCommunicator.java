@@ -53,6 +53,7 @@ public class WebsocketCommunicator extends Endpoint {
 	}
 
 	public void joinGame(int gameID, ChessGame.TeamColor playerColor) throws HTTPConnectionException {
+		reopenSession();
 		try {
 			JoinPlayerUserGameCommand joinPlayerUserGameCommand = new JoinPlayerUserGameCommand(
 					ConnectionManager.getAuthToken(), gameID, playerColor);
@@ -64,6 +65,7 @@ public class WebsocketCommunicator extends Endpoint {
 	}
 
 	public void joinGameObserver(int gameID) throws HTTPConnectionException {
+		reopenSession();
 		try {
 			JoinObserverUserGameCommand joinObserverUserGameCommand = new JoinObserverUserGameCommand(
 					ConnectionManager.getAuthToken(), gameID);
@@ -75,6 +77,7 @@ public class WebsocketCommunicator extends Endpoint {
 	}
 
 	public void makeMove(int gameID, ChessMove chessMove) throws HTTPConnectionException {
+		reopenSession();
 		try {
 			MakeMoveUserGameCommand makeMoveUserGameCommand = new MakeMoveUserGameCommand(
 					ConnectionManager.getAuthToken(), gameID, chessMove);
@@ -86,6 +89,7 @@ public class WebsocketCommunicator extends Endpoint {
 	}
 
 	public void leave(int gameID) throws HTTPConnectionException {
+		reopenSession();
 		try {
 			LeaveUserGameCommand leaveUserGameCommand = new LeaveUserGameCommand(
 					ConnectionManager.getAuthToken(), gameID);
@@ -96,12 +100,19 @@ public class WebsocketCommunicator extends Endpoint {
 	}
 
 	public void resign(int gameID) throws HTTPConnectionException {
+		reopenSession();
 		try {
 			ResignUserGameCommand resignUserGameCommand = new ResignUserGameCommand(
 					ConnectionManager.getAuthToken(), gameID);
 			session.getBasicRemote().sendText(gson.toJson(resignUserGameCommand));
 		} catch (IOException e) {
 			throw new HTTPConnectionException("Could not send websocket request");
+		}
+	}
+
+	private void reopenSession() throws HTTPConnectionException {
+		if (!session.isOpen()) {
+			session = getWebSocketSession();
 		}
 	}
 }
