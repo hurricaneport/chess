@@ -16,12 +16,11 @@ import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
 import static chess.ChessGame.TeamColor.BLACK;
-import static chess.ChessGame.TeamColor.WHITE;
 
 public class InGameMenu implements ServerMessageObserver {
 	Scanner scanner = new Scanner(System.in);
 	private ChessGame currentGame = new ChessGame();
-	private ChessGame.TeamColor teamColor = WHITE;
+	private ChessGame.TeamColor teamColor;
 	private volatile boolean awaitBoard = false;
 	private volatile boolean awaitError = false;
 
@@ -36,7 +35,7 @@ public class InGameMenu implements ServerMessageObserver {
 
 	}
 
-	public void inGameMenu(int gameID, ServerFacade serverFacade, boolean isSpectator) {
+	public void inGameMenu(int gameID, ServerFacade serverFacade, boolean isSpectator, ChessGame.TeamColor teamColor) {
 		awaitBoard = true;
 		awaitError = true;
 
@@ -53,6 +52,7 @@ public class InGameMenu implements ServerMessageObserver {
 		currentGameID = gameID;
 		this.serverFacade = serverFacade;
 		this.isSpectator = isSpectator;
+		this.teamColor = teamColor;
 		inGameMenu();
 	}
 
@@ -191,7 +191,7 @@ public class InGameMenu implements ServerMessageObserver {
 
 	private void loadGame(LoadGameServerMessage loadGameServerMessage) {
 		currentGame = loadGameServerMessage.getGame();
-		boolean isForward = (teamColor == WHITE);
+		boolean isForward = (teamColor != BLACK);
 		ChessBoardGraphics.drawChessBoard(currentGame.getBoard(), isForward, null, null);
 		awaitBoard = false;
 		threadReady.countDown();

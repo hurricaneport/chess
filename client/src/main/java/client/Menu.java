@@ -3,6 +3,7 @@ package client;
 import api.HTTPConnectionException;
 import api.HTTPResponseException;
 import api.facade.ServerFacade;
+import chess.ChessGame;
 import model.GameData;
 
 import java.util.ArrayList;
@@ -328,7 +329,7 @@ public class Menu {
 	private void joinGame(int gameIndex, String teamColor) {
 		try {
 			serverFacade.joinGame(teamColor, games.get(gameIndex - 1).gameID());
-			inGameMenu.inGameMenu(games.get(gameIndex - 1).gameID(), serverFacade, false);
+			inGameMenu.inGameMenu(games.get(gameIndex - 1).gameID(), serverFacade, false, ChessGame.TeamColor.valueOf(teamColor));
 
 		} catch (HTTPResponseException e) {
 			if (e.getStatus() == 401) {
@@ -366,7 +367,7 @@ public class Menu {
 
 			if (!gameIndex.equals("BACK")) {
 				serverFacade.joinGame(null, games.get(Integer.parseInt(gameIndex) - 1).gameID());
-				inGameMenu.inGameMenu(games.get(Integer.parseInt(gameIndex) - 1).gameID(), serverFacade, true);
+				inGameMenu.inGameMenu(games.get(Integer.parseInt(gameIndex) - 1).gameID(), serverFacade, true, null);
 			}
 
 		} catch (HTTPResponseException e) {
