@@ -100,7 +100,11 @@ public class ChessBoardGraphics {
 	}
 
 	private static ChessPosition indexToPosition(int rowIndex, int colIndex, boolean isForward) {
-		//TODO: Implement this
-		return null;
+		if (!isForward) {
+			rowIndex = 7 - rowIndex;
+			colIndex = 7 - colIndex;
+		}
+
+		return new ChessPosition(rowIndex + 1, colIndex + 1);
 	}
 }

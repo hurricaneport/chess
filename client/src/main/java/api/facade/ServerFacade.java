@@ -3,6 +3,7 @@ package api.facade;
 import api.*;
 import chess.ChessGame;
 import chess.ChessMove;
+import client.ServerMessageObserver;
 import model.GameData;
 import model.request.CreateGameRequest;
 import model.request.JoinGameRequest;
@@ -18,14 +19,15 @@ public class ServerFacade {
 	GameHTTPCommunicator gameHTTPCommunicator;
 	WebsocketCommunicator websocketCommunicator;
 
-	public ServerFacade() {
-		this(8080);
+	public ServerFacade(ServerMessageObserver observer) throws HTTPConnectionException {
+		this(8080, observer);
 	}
 
-	public ServerFacade(int port) {
+	public ServerFacade(int port, ServerMessageObserver observer) throws HTTPConnectionException {
 		this.port = port;
 		this.userHTTPCommunicator = new UserHTTPCommunicator(port);
-		gameHTTPCommunicator = new GameHTTPCommunicator(port);
+		this.gameHTTPCommunicator = new GameHTTPCommunicator(port);
+		this.websocketCommunicator = new WebsocketCommunicator(observer, port);
 	}
 
 	public void login(String username, String password) throws HTTPResponseException, HTTPConnectionException {

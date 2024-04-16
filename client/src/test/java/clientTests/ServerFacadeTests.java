@@ -3,6 +3,8 @@ package clientTests;
 import api.ConnectionManager;
 import api.HTTPResponseException;
 import api.facade.ServerFacade;
+import client.InGameMenu;
+import client.Menu;
 import model.GameData;
 import org.junit.jupiter.api.*;
 import server.Server;
@@ -17,11 +19,11 @@ public class ServerFacadeTests {
 	private static ServerFacade serverFacade;
 
 	@BeforeAll
-	public static void init() {
+	public static void init() throws Exception {
 		server = new Server();
 		var port = server.run(0);
 		System.out.println("Started test HTTP server on " + port);
-		serverFacade = new ServerFacade(port);
+		serverFacade = new ServerFacade(port, new InGameMenu(new Menu()));
 	}
 
 	@AfterAll
