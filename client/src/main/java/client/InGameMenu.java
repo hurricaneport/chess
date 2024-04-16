@@ -28,7 +28,7 @@ public class InGameMenu implements ServerMessageObserver {
 	Menu menu;
 	ServerFacade serverFacade;
 
-	protected InGameMenu(Menu menu) {
+	public InGameMenu(Menu menu) {
 		this.menu = menu;
 
 	}
